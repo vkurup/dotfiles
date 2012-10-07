@@ -1,0 +1,25 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("Passwords"
+ (filename . "~/Dropbox/website-ids.gpg")
+ (front-context-string . "-*- mode: org; e")
+ (rear-context-string)
+ (position . 1))
+("Ledger"
+ (filename . "~/Dropbox/ledger.dat")
+ (front-context-string . "2012/04/08 Achie")
+ (rear-context-string . "First Internet\n\n")
+ (position . 3045810))
+("org-refile-last-stored"
+ (filename . "~/Dropbox/org/gtd.org")
+ (front-context-string . "** TODO ledger l")
+ (rear-context-string . "2-03 Fri 06:37]\n")
+ (position . 919))
+("org-capture-last-stored"
+ (filename . "~/Dropbox/org/notes.org")
+ (front-context-string . "** <2012-09-10 M")
+ (rear-context-string . "he kids again. \n")
+ (position . 56694))
+)

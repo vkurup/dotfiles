@@ -1,0 +1,19 @@
+Config { font = "xft:Consolas:size=10:Bold"
+       , bgColor = "#333333"
+       , fgColor = "papayawhip"
+       , position = TopW L 90
+       , commands = [ Run Weather "KIGX" ["-t","<tempF>°F, <skyCondition> <rh>%","-L","45","-H","80","--normal","papayawhip","--high","orangered","--low","cyan1"] 6000
+                    , Run Network "wlan0" ["-t","<rx>/<tx>","-L","0","-H","32","--normal","papayawhip","--high","tomato"] 10
+                    , Run Wireless "wlan0" ["-t","<essid>"] 600
+                    , Run Cpu ["-t","CPU: <total>%","-L","3","-H","50","--normal","gold1","--high","red"] 10
+                    , Run ThermalZone 0 ["-t","<temp>°C","-H","50","--high","red"] 100
+                    , Run Memory ["-t","Mem: <usedratio>%"] 100
+                    , Run BatteryP ["BAT0"] ["-t","Batt: <acstatus>(<left>%)","-L","10","-H","80","-p","3","--low","red","--","-O","<fc=green>On</fc> ","-o","","-L","-15","-H","-5","-l","red","-m","blue","-h","green"] 60
+                    , Run Com "/home/vinod/bin/getvolume.sh" [] "myVolume" 10
+                    , Run Date "%a %b %_d %l:%M" "date" 10
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %wlan0wi% %wlan0% | %cpu% (%thermal0%) | %memory% | %battery% | <fc=#daa520>%date%</fc> | %KIGX% | Vol: %myVolume%"
+       }

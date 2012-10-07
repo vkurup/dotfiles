@@ -1,0 +1,15 @@
+*.elc
+/.emacs.d/.smex-items
+/.emacs.d/auto-save-list
+/.emacs.d/backups
+/.emacs.d/elpa
+/.emacs.d/eshell
+/.emacs.d/places
+/.emacs.d/tmp
+/.emacs.d/tramp
+/.emacs.d/url
+/.emacs.d/ac-comphist.dat
+/.xmonad/xmonad-x86_64-linux
+/.xmonad/xmonad.errors
+/.xmonad/xmonad.hi
+/.xmonad/xmonad.o

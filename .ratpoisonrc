@@ -1,0 +1,62 @@
+#unmanage Top Expanded Edge Panel
+#unmanage Bottom Expanded Edge Panel
+#unmanage Netbook Launcher EFL
+unmanage x-nautilus-desktop
+
+# trayer setup
+unmanage panel
+set padding 0 0 0 26
+
+# use Del as prefix key instead of Ctrl-T
+escape Delete
+
+# use global cursor positioning (not per-frame)
+warp off
+
+# move cursor out of the way when task switching
+addhook key banish
+
+# set appearance of ratpoison status messages and input line
+set bgcolor black
+set fgcolor grey95
+#set font -b&h-lucidatypewriter-bold-r-normal-sans-18-180-75-75-m-110-iso8859-1
+set font -unknown-Ubuntu Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1
+set inputwidth 800
+set bargravity nw
+set barpadding 4 4
+msgwait 3
+
+# common programs
+bind e exec emacs
+bind f exec chromium
+unbind c
+bind c exec lxterminal
+
+# top-level shortcuts (don't require prefix key)
+#definekey top C-space exec
+#definekey top Print exec ksnapshot
+#definekey top F12 exec /home/mark/bin/f12
+#definekey top C-M-Up focusup
+#definekey top C-M-Down focusdown
+#definekey top C-M-Left focusleft
+#definekey top C-M-Right focusright
+
+# split the bottom frame off for trayer
+frestore (frame :number 1 :x 0 :y 0 :width 1024 :height 574 :screenw 1024 :screenh 600 :window 18874439 :last-access 23 :dedicated 0)
+
+# set nice wallpaper and cursor
+exec xsetroot -solid '#073642' -cursor_name left_ptr
+#exec xli -onroot /home/mark/dogs-1400.jpg
+#exec osd_clock -s 0 -c '#839496' -F "%a %F    %R" -f "-*-helvetica-medium-r-normal-*-20-*-75-70-p-*-iso8859-1"
+exec trayer --align right --transparent true --padding 10 --width 50
+#exec nm-applet --sm-disable
+exec wicd-client --tray
+#exec system-config-printer-applet
+#exec eee-control-tray
+#exec gnome-settings-daemon
+#exec gnome-power-manager
+#exec gnome-volume-control-applet
+exec dropboxd
+exec emacs
+exec chromium
+exec lxterminal

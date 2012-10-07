@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "Symlinking dotfiles..."
+
+# if [ -r $HOME/.bashrc ] && [ ! -h $HOME/.bashrc ] ; then
+#   rm $HOME/.bashrc # blow away the stock one
+# fi
+
+# if [ -r $HOME/.profile ] && [ ! -h $HOME/.profile ] ; then
+#   rm $HOME/.profile # blow away the stock one
+# fi
+
+for f in $(ls -a ~/.dotfiles) ; do
+  if [ ! -r "$HOME/$f" ] &&
+    [ $f != "." ] && [ $f != ".." ] &&
+    [ "$f" != ".git" ] && [ $f != ".gitignore" ] ; then
+    ln -s "$HOME/.dotfiles/$f" "$HOME/$f"
+  fi
+done
+
+mkdir -p $HOME/.ssh
+if [ ! -r "$HOME/.ssh/config" ]; then
+  ln -s "$HOME/.dotfiles/.sshconfig" "$HOME/.ssh/config"
+fi
