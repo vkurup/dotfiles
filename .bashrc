@@ -52,6 +52,11 @@ if [ -d "$HOME/opt/android-sdk-linux/tools" ] ; then
     PATH="$HOME/opt/android-sdk-linux/platform-tools:$HOME/opt/android-sdk-linux/tools:$PATH"
 fi
 
+# add cope
+if [ -d "/usr/share/perl5/vendor_perl/auto/share/dist/Cope" ] ; then
+    PATH="/usr/share/perl5/vendor_perl/auto/share/dist/Cope:$PATH"
+fi
+
 TIME_STYLE=long-iso
 
 export LEDGER_FILE=${HOME}/Dropbox/ledger.dat
