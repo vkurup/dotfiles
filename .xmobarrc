@@ -15,5 +15,5 @@ Config { font = "xft:Consolas:size=10:Bold"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %wlan0wi% %wlan0% | %cpu% (%thermal0%) | %memory% | %battery% | <fc=#daa520>%date%</fc> | %KIGX% | Vol: %myVolume%"
+       , template = "%StdinReader% }{ %wlan0wi% %wlan0% | %cpu% (%thermal0%) | %memory% | %battery% | %KIGX% | Vol: %myVolume% | <fc=#daa520>%date%</fc>"
        }
