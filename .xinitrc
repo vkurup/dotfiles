@@ -13,4 +13,5 @@ xsetroot -solid black
 xsetroot -cursor_name left_ptr
 xcompmgr -c -f -D 5 &
 unclutter &
+xbindkeys
 exec ck-launch-session xmonad
