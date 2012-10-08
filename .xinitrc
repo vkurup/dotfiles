@@ -12,4 +12,5 @@ trayer --edge top --align right --SetDockType true --SetPartialStrut true --expa
 xsetroot -solid black
 xsetroot -cursor_name left_ptr
 xcompmgr -c -f -D 5 &
+unclutter &
 exec ck-launch-session xmonad
