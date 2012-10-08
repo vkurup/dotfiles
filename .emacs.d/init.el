@@ -174,6 +174,9 @@
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
+(setq-default default-tab-width 4)
+(set-frame-font "Ubuntu Mono-14")
+
 ;; emacsclient
 (server-start)
 
@@ -205,11 +208,7 @@ Anika's favorite: %^{Anika's favorite}
  '(pony-server-host "0.0.0.0")
  '(py-smart-operator-mode-p t)
  '(ropemacs-enable-autoimport t)
- '(temporary-file-directory (concat user-emacs-directory "tmp"))
- '(weblogger-config-alist (quote (("default" "http://www.blogger.com/api" "vvkurup@gmail.com" "" "6482582243742832795")))))
-
-(setq-default default-tab-width 4)
-(set-frame-font "Ubuntu Mono-14")
+ '(temporary-file-directory (concat user-emacs-directory "tmp")))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
