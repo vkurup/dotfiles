@@ -9,6 +9,8 @@
 /.emacs.d/tramp
 /.emacs.d/url
 /.emacs.d/ac-comphist.dat
+/.emacs.d/semanticdb
+/.emacs.d/ac-dict
 /.xmonad/xmonad-x86_64-linux
 /.xmonad/xmonad.errors
 /.xmonad/xmonad.hi
