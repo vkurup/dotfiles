@@ -24,7 +24,7 @@ main = do
             , handleEventHook = fullscreenEventHook
             } `additionalKeys`
             [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
-            , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
+            , ((controlMask, xK_Print), spawn "sleep 0.2; screenshot-window.sh")
             , ((0, xK_Print), spawn "scrot")
             , ((mod4Mask, xK_b), sendMessage ToggleStruts)
             ]
