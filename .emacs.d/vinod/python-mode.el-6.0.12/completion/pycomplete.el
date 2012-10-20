@@ -403,7 +403,7 @@ Should be called from python-mode-hook. Keys are set when
   (cond
    ((fboundp 'auto-complete-mode)
     (require 'auto-complete-pycomplete)
-    (setq ac-sources '(ac-source-pycomplete)))
+    (add-to-list 'ac-sources 'ac-source-pycomplete))
    ((fboundp 'company-mode)
     (company-mode t)
     (require 'company-pycomplete)
