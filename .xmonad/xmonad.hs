@@ -1,5 +1,6 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
@@ -20,8 +21,10 @@ main = do
             , modMask = mod4Mask
             , terminal = "urxvt"
             , startupHook = myStartupHook
+            , handleEventHook = fullscreenEventHook
             } `additionalKeys`
             [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
             , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
             , ((0, xK_Print), spawn "scrot")
+            , ((mod4Mask, xK_b), sendMessage ToggleStruts)
             ]
