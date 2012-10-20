@@ -1,6 +1,7 @@
 (require 'package)
 (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/")
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
@@ -28,19 +29,19 @@
 (require 'projectile)
 (projectile-global-mode)
 
+;; autocomplete
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
+
 ;; python-mode
 (setq py-install-directory "~/.emacs.d/vinod/python-mode.el-6.0.12/")
 (add-to-list 'load-path py-install-directory)
 (require 'python-mode)
-(setq py-load-pymacs-p t)
 (virtualenv-workon "default/")
-(require 'python-mode) ; reload to reload pymacs
-(require 'auto-complete-config)
-(ac-config-default)
+(py-load-pymacs)
 
-
-;;(require 'pymacs)
-;;(pymacs-load "ropemacs" "rope-")
+(ac-ropemacs-initialize)
 
 ;; pyflakes flymake integration
 ;; http://stackoverflow.com/a/1257306/347942
@@ -143,6 +144,7 @@
 (setq calendar-location-name "Chapel Hill, NC")
 
 (setq-default kill-whole-line t)        ; ctrl-k kills whole line if at col 0
+(menu-bar-mode)
 
 ;; Delete old backup versions silently
 (setq delete-old-versions t)
@@ -175,7 +177,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Ubuntu Mono-14")
+(set-default-font "Consolas-12")
 
 ;; emacsclient
 (server-start)
@@ -185,10 +187,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ac-dictionary-files (quote ("~/.emacs.d/.dict")))
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
- '(completion-cycle-threshold 5)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
  '(org-agenda-files (quote ("~/org/gtd.org")))
@@ -206,7 +208,8 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(py-smart-operator-mode-p t)
+ '(py-electric-comment-add-space-p t)
+ '(py-set-complete-keymap-p t)
  '(ropemacs-enable-autoimport t)
  '(temporary-file-directory (concat user-emacs-directory "tmp")))
 
