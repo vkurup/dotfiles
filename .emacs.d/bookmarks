@@ -18,8 +18,8 @@
  (rear-context-string . "2-03 Fri 06:37]\n")
  (position . 919))
 ("org-capture-last-stored"
- (filename . "~/Dropbox/org/notes.org")
- (front-context-string . "** <2012-09-10 M")
- (rear-context-string . "he kids again. \n")
- (position . 56694))
+ (filename . "~/Dropbox/org/gtd.org")
+ (front-context-string . "** TODO Switch n")
+ (rear-context-string . "0-21 Sun 15:22]\n")
+ (position . 1752))
 )

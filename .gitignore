@@ -15,3 +15,6 @@
 /.xmonad/xmonad.errors
 /.xmonad/xmonad.hi
 /.xmonad/xmonad.o
+/.emacs.d/projectile.cache
+/.emacs.d/vinod/python-mode/.bzr
+/.emacs.d/vinod/python-mode/.bzrignore

@@ -12,7 +12,9 @@ binutils
 bison
 boost
 bzip2
+bzr
 cabextract
+calibre
 cheese
 chromium
 cmake
@@ -29,10 +31,10 @@ dmenu
 dmidecode
 e2fsprogs
 emacs
-epdfview
-epiphany
 ethtool
+evince
 fakeroot
+feh
 file
 filesystem
 findutils
@@ -118,10 +120,11 @@ pkgfile
 ppp
 procps-ng
 psmisc
+python-virtualenvwrapper
 python2-dbus
-python2-virtualenvwrapper
+python2-pip
 qt
-reflector
+redis
 reiserfsprogs
 rfkill
 rsync
@@ -164,7 +167,6 @@ wpa_actiond
 wpa_supplicant
 xbindkeys
 xcompmgr
-xdg-user-dirs-gtk
 xdotool
 xf86-input-synaptics
 xf86-video-intel
@@ -180,5 +182,4 @@ xorg-xclock
 xorg-xinit
 xorg-xmessage
 xscreensaver
-xterm
 yelp
