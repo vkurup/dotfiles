@@ -12,8 +12,9 @@ trayer --edge top --align right --SetDockType true --SetPartialStrut true --expa
 xsetroot -solid black
 xsetroot -cursor_name left_ptr
 xcompmgr -c -f -D 5 &
-#feh --bg-max $HOME/Downloads/IMG_0509.JPG
+feh --bg-max $HOME/Downloads/IMAG0213.jpg
 unclutter &
 xbindkeys
+xmodmap $HOME/.xmodmaprc
 udiskie &
 xmonad
