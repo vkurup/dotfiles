@@ -9,39 +9,55 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings
-                                  starter-kit-js zenburn-theme projectile
-                                  autopair yasnippet markdown-mode
-                                  pony-mode
-                                  haskell-mode auto-complete)
+(defvar my-packages '(starter-kit
+                      starter-kit-lisp
+                      starter-kit-bindings
+                      starter-kit-js
+                      projectile
+                      autopair
+                      yasnippet
+                      markdown-mode
+                      pony-mode
+                      fuzzy
+                      haskell-mode
+                      auto-complete)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
-(require 'autopair)
 (autopair-global-mode)
-
-(require 'yasnippet)
-(yas-global-mode 1)
-
-(require 'projectile)
 (projectile-global-mode)
+(yas-global-mode 1)
 
 ;; autocomplete
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(setq ac-dictionary-files (list (concat user-emacs-directory ".dict")))
 (ac-config-default)
+;; hack to fix ac-sources after pycomplete.el breaks it
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (setq ac-sources '(ac-source-pycomplete
+                                ac-source-abbrev
+                                ac-source-dictionary
+                                ac-source-words-in-same-mode-buffers))))
+
 
 ;; python-mode
-(setq py-install-directory "~/.emacs.d/vinod/python-mode.el-6.0.12/")
+;; first load pymacs (so python-mode won't try to load broken one)
+(add-to-list 'load-path esk-user-dir)
+(require 'pymacs)
+;; install trunk version
+(setq py-install-directory (concat esk-user-dir "/python-mode/"))
 (add-to-list 'load-path py-install-directory)
+;; this will show method signatures while typing
+(setq py-set-complete-keymap-p t)
+(setq py-split-windows-on-execute-p nil)
 (require 'python-mode)
-(virtualenv-workon "default/")
+;; activate the virtualenv where Pymacs is located
+(virtualenv-workon "default2")
 (py-load-pymacs)
-
-(ac-ropemacs-initialize)
 
 ;; pyflakes flymake integration
 ;; http://stackoverflow.com/a/1257306/347942
@@ -105,7 +121,6 @@
   (interactive)
   (find-file (concat org-directory "gtd.org")))
 
-
 (fset 'vk-process-movie-list
       [?\C-a down ?\C-s ?2 ?0 ?1 ?1 left left left left ?\C-  ?\C-s ?  ?\C-s left ?\M-w right ?\C-y ?- left left left backspace ?- left left left backspace ?- right right right right right right ?\C-  ?\C-e ?\C-w ?. ?a ?v ?i left left left left ?\C-x ?o ?m ?p ?l ?a ?y ?e ?r ?  ?\C-y return ?\C-x ?o])
 
@@ -149,7 +164,7 @@
 ;; Delete old backup versions silently
 (setq delete-old-versions t)
 
-(load-theme 'zenburn t)
+(load-theme 'adwaita t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -187,7 +202,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-dictionary-files (quote ("~/.emacs.d/.dict")))
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
@@ -208,9 +222,6 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(py-electric-comment-add-space-p t)
- '(py-set-complete-keymap-p t)
- '(ropemacs-enable-autoimport t)
  '(temporary-file-directory (concat user-emacs-directory "tmp")))
 
 (custom-set-faces
