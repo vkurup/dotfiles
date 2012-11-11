@@ -1,1 +1,1 @@
-exec ck-launch-session gnome-session
+exec gnome-session
