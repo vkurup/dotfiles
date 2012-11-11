@@ -31,6 +31,9 @@
 (projectile-global-mode)
 (yas-global-mode 1)
 
+;; open a shell
+(shell)
+
 ;; autocomplete
 (require 'auto-complete-config)
 (setq ac-dictionary-files (list (concat user-emacs-directory ".dict")))
