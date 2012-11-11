@@ -27,6 +27,7 @@
 
 (setq python-mode-tests
       (list
+       'py-down-statement-test
        'py-fill-string-django-test
        'py-fill-string-onetwo-test
        'py-fill-string-pep-257-test
@@ -1210,7 +1211,6 @@ somme errors
 
 (defun py-end-of-print-statement-base ()
   (goto-char 66)
-  (sit-for 0.2)
   (assert (eq 146 (py-end-of-statement)) nil "py-end-of-print-statement-test failed"))
 
 (defun nested-try-test (&optional arg load-branch-function)
@@ -1764,6 +1764,8 @@ foo "))
     (py-bug-tests-intern 'py-bol-moves-base arg teststring)))
 
 (defun py-bol-moves-base ()
+  (describe-mode)
+  (message "comment-start: %s" comment-start)
   (goto-char 592)
   (assert (eq 561 (py-up-clause-bol)) nil "py-up-clause-bol-test of `py-moves-test' failed")
   (goto-char 410)
@@ -1874,13 +1876,13 @@ def fooBaz( bar ):  # version 2003/9/7
 
 (defun py-guess-indent-offset-base ()
   (goto-char 49)
-  (assert (eq (default-value 'py-indent-offset) (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
+  (assert (eq 2 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
   (goto-char 168)
   (assert (eq 2 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
   (goto-char 251)
-  (assert (eq 2 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
+  (assert (eq 4 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
   (goto-char 279)
-  (assert (eq 2 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
+  (assert (eq 4 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed")
   (goto-char 298)
   ;; indent might be eithe 4 or 2
   (assert (eq 2 (py-guess-indent-offset)) nil "py-guess-indent-offset-test #1 failed"))
@@ -1998,7 +2000,6 @@ def fooBaz( bar ):  # version 2003/9/7
   (re-search-forward "py-string-delim-re" nil t 1)
   (assert (not (empty-line-p))  nil "py-fill-string-pep-257-non-nil-test #2 failed"))
 
-
 (defun py-fill-string-symmetric-test (&optional arg)
   (interactive "p")
   (let ((teststring "#! /usr/bin/env python
@@ -2022,6 +2023,30 @@ asdf' asdf asdf asdf asdf asdfasdf asdfasdf a asdf asdf asdf asdfasdfa asdf asdf
   (goto-char (match-beginning 0))
   (assert (looking-at (concat py-string-delim-re "$"))  nil "py-fill-string-symmetric-test failed")
 )
+
+(defun py-electric-yank-test (&optional arg)
+  (interactive "p")
+  (let ((teststring python-mode-teststring))
+    (py-bug-tests-intern 'py-electric-yank-base arg teststring)))
+
+(defun py-electric-yank-base ()
+  (let ((py-electric-yank-active-p t)
+        (kill-new "asdf"))
+    (goto-char 610)
+    (py-electric-delete)
+    (assert (eq 8 (current-indentation))  nil "py-electric-yank-test #1 failed, `py-electric-delete' ")
+    (end-of-line)
+    (py-electric-yank)
+    (assert (eq 12 (current-indentation))  nil "py-electric-yank-test #2 failed")))
+
+(defun py-down-statement-test (&optional arg)
+  (interactive "p")
+  (let ((teststring python-mode-teststring))
+  (py-bug-tests-intern 'py-down-statement-base arg teststring)))
+
+(defun py-down-statement-base ()
+    (goto-char (point-min))
+    (assert (eq 146 (py-down-statement)) nil "py-down-statement-test failed"))
 
 ;; imenu--subalist-p
 (provide 'python-mode-test)

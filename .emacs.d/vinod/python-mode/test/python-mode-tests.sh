@@ -128,7 +128,7 @@ fi
 echo "\$PYMACS: $PYMACS"
 echo "\$PYTHONMODE: $PYTHONMODE"
 echo "\$PDIR/\$TESTFILE: $PDIR/$TESTFILE"
-$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p t)" -load $CCCMDS -load $COMINT -load $ANSICOLOR -load $CLMACS -load $BYTECOMP -load $CUSTOM -load $SKEL -load $PYCO -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT$TESTFILE -load $PCOT$TESTFILE2 -load $PCOT$TESTFILE3 -load $PCOT$TESTFILE4 -load $PCOT$TESTFILE5 \
+$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p t)" -load $CCCMDS -load $COMINT -load $ANSICOLOR -load $CLMACS -load $BYTECOMP -load $CUSTOM -load $SKEL -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT$TESTFILE -load $PCOT$TESTFILE2 -load $PCOT$TESTFILE3 -load $PCOT$TESTFILE4 -load $PCOT$TESTFILE5 \
 --eval "(when (file-exists-p \"~/.abbrev_defs\") (quietly-read-abbrev-file (expand-file-name \"~/.abbrev_defs\")))" \
 \
 -eval "(assert (functionp 'word-at-point) nil \"new completion bug, lp:1034656, word-at-point not known\")" \
@@ -782,8 +782,9 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-fill-string-pep-257) nil \"py-fill-string-pep-257 not detected as command\")" \
 -eval "(assert (commandp 'py-fill-string-pep-257-nn) nil \"py-fill-string-pep-257-nn not detected as command\")" \
 -eval "(assert (commandp 'py-fill-string-symmetric) nil \"py-fill-string-symmetric not detected as command\")" \
---funcall py-moves-test \
---funcall stalls-emacs-probably-due-to-syntax-highlighting-lp-1058261-test \
+-eval "(setq enable-local-variables :all)" \
+--funcall does-not-dedent-regions-lp-1072869-test \
+--funcall py-down-statement-test \
 --funcall several-new-bugs-with-paragraph-filling-lp-1066489-test \
 --funcall impossible-to-execute-a-buffer-with-from-future-imports-lp-1063884-test \
 --funcall py-indent-after-assigment-test \
@@ -805,14 +806,12 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall split-windows-on-execute-p-test \
 --funcall key-binding-tests \
 --funcall py-narrow-to-defun-lp-1020531-test \
---funcall pycomplete-imports-not-found-error-when-no-symbol-lp:1019791-test \
 --funcall return-statement-indented-incorrectly-lp-1019601.py-test \
 --funcall converts-tabs-to-spaces-in-indent-tabs-mode-t-lp-1019128.py-test \
 --funcall empty-triple-quote-lp:1009318-test \
 --funcall spurious-trailing-whitespace-lp-1008679-test \
 --funcall py-end-of-statement-test \
 --funcall shebang-interpreter-not-detected-lp:1001327-test \
---funcall pycomplete-same-folder-def-lp:889052-test \
 --funcall new-problem-with-py-temp-directory-lp:965762-test \
 --funcall nested-dictionaries-indent-lp:328791-test \
 --funcall new-problem-with-py-temp-directory-lp:965762-test \
@@ -823,7 +822,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall flexible-indentation-lp:328842-test \
 --funcall hungry-delete-backwards-lp:328853-test \
 --funcall hungry-delete-forward-lp:328853-test \
---funcall beg-end-of-defun-lp:303622-test \
 --funcall bullet-lists-in-comments-lp:328782-test \
 --funcall imenu-newline-arglist-lp:328783-test \
 --funcall nested-indents-lp:328775-test \
@@ -906,9 +904,7 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall py-end-of-block-test \
 --funcall py-beginning-of-block-or-clause-test \
 --funcall py-beginning-of-def-test \
---funcall py-end-of-def-test \
 --funcall py-beginning-of-def-or-class-test \
---funcall py-end-of-def-or-class-test \
 --funcall py-electric-delete-test \
 --funcall near-bob-beginning-of-statement-test \
 --funcall honor-comments-indent-test \
@@ -1025,8 +1021,6 @@ est \
 --funcall py-execute-region-python3-noswitch-test \
 --funcall py-end-of-print-statement-test \
 --funcall py-describe-symbol-fails-on-modules-lp:919719-test \
---funcall tqs-list-error-test \
---funcall python-mode-slow-lp:803275-test \
 --funcall py-find-imports-lp-1023236-test \
 --funcall execute-indented-code-lp:828314-test \
 --funcall py-execute-region-python2.7-switch-test \
@@ -1034,15 +1028,12 @@ est \
 --funcall py-beginning-of-expression-test \
 --funcall py-end-of-expression-test \
 --funcall py-partial-expression-test \
---funcall py-completion-at-point-test \
 --funcall bob-beginning-of-statement-test \
---funcall tqs-lp:302834-lp:1018994-test \
 --funcall infinite-loop-after-tqs-lp:826044-test \
 --funcall completion-at-gentoo-lp-1008842-test \
 --funcall indent-triplequoted-to-itself-lp:752252-test \
 --funcall complaint-about-non-ASCII-character-lp-1042949-test \
 --funcall py-beginning-of-block-test \
---funcall py-smart-operator-test \
 --funcall augmented-assigment-test \
 --funcall py-fill-string-django-test \
 --funcall py-fill-string-onetwo-test \
@@ -1072,3 +1063,12 @@ est \
 --funcall UnicodeEncodeError-python3-test
 --funcall indent-region-lp:997958-test \
 --funcall not-that-useful-completion-lp:1003580-test \
+--funcall stalls-emacs-probably-due-to-syntax-highlighting-lp-1058261-test \
+--funcall tqs-lp:302834-lp:1018994-test \
+--funcall py-moves-test \
+--funcall py-end-of-def-test \
+--funcall py-end-of-def-or-class-test \
+--funcall tqs-list-error-test \
+--funcall python-mode-slow-lp:803275-test \
+--funcall beg-end-of-defun-lp:303622-test \
+--funcall py-smart-operator-test \

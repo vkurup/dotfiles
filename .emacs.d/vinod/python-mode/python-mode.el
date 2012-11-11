@@ -105,15 +105,15 @@ Default is nil. "
   :type 'boolean
   :group 'python-mode)
 
-(defcustom py-load-pymacs-p nil
-  "If Pymacs as delivered with python-mode.el shall be loaded.
-Default is nil.
-
-Pymacs has been written by François Pinard and many others.
-See original source: http://pymacs.progiciels-bpi.ca"
-
-  :type 'boolean
-  :group 'python-mode)
+;; (defcustom py-load-pymacs-p nil
+;;   "If Pymacs as delivered with python-mode.el shall be loaded.
+;; Default is nil.
+;;
+;; Pymacs has been written by François Pinard and many others.
+;; See original source: http://pymacs.progiciels-bpi.ca"
+;;
+;;   :type 'boolean
+;;   :group 'python-mode)
 
 (defcustom py-smart-operator-mode-p nil
   "If python-mode calls (smart-operator-mode-on)
@@ -2731,13 +2731,6 @@ Includes def and class. ")
      (and (eq (char-before (point)) ?\\ )
           (py-escaped))))
 
-(defmacro py-continuation-line-p ()
-  "Return t iff current line is a continuation line."
-  `(save-excursion
-     (beginning-of-line)
-     (or (py-preceding-line-backslashed-p)
-         (< 0 (nth 0 (syntax-ppss))))))
-
 ;;;
 (defun empty-line-p ()
   "Returns t if cursor is at an line with nothing but whitespace-characters, nil otherwise."
@@ -4170,47 +4163,70 @@ Returns `py-indent-offset'"
   (save-excursion
     (let* ((orig (or orig (point)))
            (origline (or origline (py-count-lines)))
-           last down done
-           (firstindent
-            (cond ((and (py-beginning-of-statement-p) (looking-at py-extended-block-or-clause-re))
-                   (current-indentation))
-                  ((and (py-beginning-of-statement)(looking-at py-extended-block-or-clause-re))
-                   (current-indentation))
-                  (t (while (and (setq last (py-beginning-of-statement))(not (looking-at py-extended-block-or-clause-re))))
-                     (if last
-                         (progn
-                           (setq last (point))
-                           (setq down t)
-                           (current-indentation))
-                       (if (and (goto-char orig)
-                                (py-end-of-statement)
-                                (py-end-of-statement)
-                                (py-beginning-of-statement)
-                                (looking-at py-extended-block-or-clause-re))
-
+           last down done firstindent secondindent
+           (count 0)
+           guessed)
+      (back-to-indentation)
+      (when (looking-at py-block-closing-keywords-re)
+        (setq count (1+ count)))
+      (forward-line -1)
+      (back-to-indentation)
+      (when (looking-at py-block-closing-keywords-re)
+        (setq count (1+ count)))
+      (when (< 0 count)
+        (while (and (< 0 count)(re-search-backward py-block-re nil t 1)(or (nth 8 (syntax-ppss)) (progn (setq count (1- count)) t))))
+        (setq firstindent (current-indentation)))
+      (unless firstindent
+        (setq firstindent
+              (cond ((and (py-beginning-of-statement-p) (looking-at py-extended-block-or-clause-re))
+                     (current-indentation))
+                    ((and (py-beginning-of-statement-p)(looking-at py-block-closing-keywords-re))
+                     (while (and (re-search-backward py-extended-block-or-clause-re nil t 1)(nth 8 (syntax-ppss))))
+                     ;; (py-beginning-of-statement)
+                     (when (py-beginning-of-statement-p) (current-indentation)))
+                    ((and (py-beginning-of-statement)(looking-at py-extended-block-or-clause-re))
+                     (current-indentation))
+                    (t (while (and (setq last (py-beginning-of-statement))(not (looking-at py-extended-block-or-clause-re))))
+                       (if last
                            (progn
                              (setq last (point))
-                             (current-indentation)
-                             (goto-char orig))
-                         (while (and (setq last (py-down-statement))(not (looking-at py-extended-block-or-clause-re)))
-                           (if last
-                               (progn (setq last (point))
-                                      (setq down t)
-                                      (current-column))
-                             ;; if nothing suitable around, us default
-                             (setq done t)
-                             (default-value 'py-indent-offset))))))))
-           (secondindent
+                             (setq down t)
+                             (current-indentation))
+                         (if (and (goto-char orig)
+                                  (py-end-of-statement)
+                                  (py-end-of-statement)
+                                  (py-beginning-of-statement)
+                                  (looking-at py-extended-block-or-clause-re))
+
+                             (prog1
+                                 (current-indentation)
+                               (setq last (point))
+                               (goto-char orig))
+                           (while (and (setq last (py-down-statement))(not (looking-at py-extended-block-or-clause-re)))
+                             (if last
+                                 (progn (setq last (point))
+                                        (setq down t)
+                                        (current-column))
+                               ;; if nothing suitable around, us default
+                               (setq done t)
+                               (default-value 'py-indent-offset)))))))))
+      (setq secondindent
             (unless done
               (if firstindent
-                  (if (progn (setq orig (point)) (while (and (py-beginning-of-statement)(>= firstindent (current-indentation)) (setq last (point)) (not (looking-at py-extended-block-or-clause-re)))) last)
-                      (current-indentation)
-                    (goto-char orig)
-                    (while (and (not (eobp))(py-end-of-statement)(setq last (point))
-                                (save-excursion (or (>= firstindent (progn (py-beginning-of-statement)(current-indentation)))(eq last (line-beginning-position))))
-                                (py-end-of-statement-p)))
-                    (when last (py-beginning-of-statement) (current-indentation))))))
-           guessed)
+                  ;; let's look if inside a clause
+                  (cond ((and
+                          ;; (goto-char orig)
+                          (not (eobp))(py-end-of-statement)(py-end-of-statement)(setq last (point))
+                          (save-excursion (< firstindent (progn (py-beginning-of-statement)(current-indentation))))
+                          (py-end-of-statement-p))
+                         (py-beginning-of-statement) (current-indentation))
+                        (t (if (progn (setq orig (point)) (while (and (py-beginning-of-statement)(>= firstindent (current-indentation)) (setq last (point)) (not (looking-at py-extended-block-or-clause-re)))) last)
+                               (current-indentation)
+                             (goto-char orig)
+                             (while (and (not (eobp))(py-end-of-statement)(setq last (point))
+                                         (save-excursion (or (>= firstindent (progn (py-beginning-of-statement)(current-indentation)))(eq last (line-beginning-position))))
+                                         (py-end-of-statement-p)))
+                             (when last (py-beginning-of-statement) (current-indentation))))))))
       (unless (or done secondindent)
         (setq secondindent
               (when (and (py-end-of-statement)
@@ -6650,6 +6666,7 @@ http://docs.python.org/reference/compound_stmts.html"
   (interactive "P")
   (let ((erg (ignore-errors (cdr (py-go-to-keyword py-def-or-class-re indent))))
         (py-mark-decorators (or arg py-mark-decorators)))
+    (when (and py-verbose-p (interactive-p)) (message "%s" erg))
     erg))
 
 (defun py-end-of-def-or-class (&optional arg indent)
@@ -7291,6 +7308,11 @@ http://docs.python.org/reference/compound_stmts.html
         (goto-char (1- (nth 1 pps)))
         (setq done t)
         (py-beginning-of-statement orig done))
+       ((py-preceding-line-backslashed-p)
+        (forward-line -1)
+        (back-to-indentation)
+        (setq done t)
+        (py-beginning-of-statement orig done))
        ((looking-at py-string-delim-re)
         (when (< 0 (abs (skip-chars-backward " \t\r\n\f")))
           (setq done t))
@@ -7316,10 +7338,6 @@ http://docs.python.org/reference/compound_stmts.html
           (py-beginning-of-statement orig done)))
        ((looking-at "[ \t]*#")
         (skip-chars-backward " \t\r\n\f")
-        (setq done t)
-        (py-beginning-of-statement orig done))
-       ((py-continuation-line-p)
-        (forward-line -1)
         (setq done t)
         (py-beginning-of-statement orig done)))
       (unless (and (looking-at "[ \t]*#") (looking-back "^[ \t]*"))
@@ -7373,6 +7391,33 @@ http://docs.python.org/reference/compound_stmts.html
               )))
     erg))
 
+
+(defun py-eos-handle-comment-start ()
+  (end-of-line)
+  (forward-comment 99999)
+  (skip-chars-forward (concat "^" comment-start) (line-end-position))
+  (skip-chars-backward " \t\r\n\f" (line-beginning-position))
+  (unless (progn (setq pps (syntax-ppss))(or (nth 8 pps)(nth 1 pps))) (setq done t)))
+
+(defun py-eos-handle-doublequoted-string-start ()
+  "Internal use, find possible end of statement from string start. "
+  (when
+      (and (setq this (point)) (progn (while (and (not (eobp)) (search-forward (match-string-no-properties 0) nil t 1) (nth 8 (syntax-ppss)))) (< this (point))))
+    (skip-chars-forward (concat "^" comment-start) (line-end-position))
+    (skip-chars-backward " \t\r\n\f")))
+
+(defun py-eos-handle-singlequoted-string-start ()
+  "Internal use, find possible end of statement from string start. "
+  (when
+      (and (setq this (point)) (progn (ignore-errors (forward-sexp)) (< this (point))))
+    (skip-chars-forward (concat "^" comment-start) (line-end-position))
+    (skip-chars-backward " \t\r\n\f")))
+
+(defun py-handle-eol ()
+  (skip-chars-backward " \t\r\n\f" (line-beginning-position))
+  (when (py-beginning-of-comment)
+    (skip-chars-backward " \t\r\n\f" (line-beginning-position))))
+
 (defalias 'py-statement-forward 'py-end-of-statement)
 (defalias 'py-next-statement 'py-end-of-statement)
 (defalias 'py-forward-statement 'py-end-of-statement)
@@ -7385,10 +7430,12 @@ To go just beyond the final line of the current statement, use `py-down-statemen
     (let ((pps (syntax-ppss))
           (origline (or origline (py-count-lines)))
           (orig (or orig (point)))
+          erg this
           ;; use by scan-lists
           parse-sexp-ignore-comments
           forward-sexp-function
-          erg stringchar)
+          stringchar stm)
+
       (cond
        ((nth 1 pps)
         (when (< orig (point))
@@ -7406,51 +7453,66 @@ To go just beyond the final line of the current statement, use `py-down-statemen
             (goto-char orig))))
        ((and (nth 8 pps)(nth 3 pps))
         (goto-char (nth 8 pps))
-        (when (looking-at py-string-delim-re)
-          (forward-sexp)
-          (setq done nil)
+        (unless (looking-back "^[ \t]*")
+          (setq stm t))
+        ;; (when (looking-at py-string-delim-re)
+        ;; (py-eos-handle-string-start))
+        (when (looking-at "'''\\|'")
+          (py-eos-handle-singlequoted-string-start))
+        (when (looking-at "\"\"\"\\|\"")
+          (py-eos-handle-doublequoted-string-start))
+        (when stm (setq done t))
+        (setq stm nil)
+        (unless (nth 3 (syntax-ppss))
           (py-end-of-statement orig done origline)))
        ;; in comment
        ((nth 4 pps)
         (unless (eobp)
           (skip-chars-forward (concat "^" comment-start) (line-end-position))
           (forward-comment 99999)
-          (skip-chars-backward " \t\r\n\f" (line-beginning-position))
-          (when (py-beginning-of-comment)
-            (skip-chars-backward " \t\r\n\f" (line-beginning-position)))
+          (py-handle-eol)
           (py-end-of-statement orig done origline)))
-       ((looking-at "#")
+       ((py-current-line-backslashed-p)
         (end-of-line)
-        (forward-comment 99999)
-        (setq done t)
-        (skip-chars-forward (concat "^" comment-start) (line-end-position))
-        (skip-chars-backward " \t\r\n\f" (line-beginning-position))
+        (py-handle-eol)
+        (when (and (eq (char-before (point)) ?\\ )
+                   (py-escaped))
+          (forward-line 1))
         (py-end-of-statement orig done origline))
+       ((and (not done)(looking-at "[ \t]*#"))
+        (py-eos-handle-comment-start)
+        (py-end-of-statement orig done origline))
+       ((looking-at "'''\\|'")
+        (py-eos-handle-singlequoted-string-start)
+        ;; string not terminated
+        (unless (nth 3 (syntax-ppss))
+          (py-end-of-statement orig done origline)))
+       ((looking-at "\"\"\"\\|\"")
+        (py-eos-handle-doublequoted-string-start)
+        ;; string not terminated
+        (unless (nth 3 (syntax-ppss))
+          (py-end-of-statement orig done origline)))
        ((looking-at py-string-delim-re)
-        (forward-sexp)
-        (setq done nil)
+        (py-eos-handle-string-start)
         (py-end-of-statement orig done origline))
+       ((and (looking-at py-no-outdent-re)(not (nth 8 pps)))
+        (end-of-line)
+        (py-handle-eol))
        ((and (not done)
              (< 0 (abs (skip-chars-forward (concat "^" comment-start) (line-end-position)))))
-        (if (or (< origline (py-count-lines)) (looking-back ":[ \t]*"))
-            (progn
-              (skip-chars-backward " \t\r\n\f")
-              (py-beginning-of-comment)
-              (skip-chars-backward " \t\r\n\f" (line-beginning-position))
-              (if (eq orig (point))
-                  (forward-line 1)
-                (setq done t))
-              (py-end-of-statement orig done origline))
-          (unless (looking-at "#")
-            (skip-chars-backward " \t\r\n\f")
-            (py-beginning-of-comment)
-            (skip-chars-backward " \t\r\n\f" (line-beginning-position))
-            (setq done t))
-          (py-end-of-statement orig done origline)))
-
-       ((and (not done) (< 0 (skip-chars-forward " \t\r\n\f")))
+        (py-handle-eol)
+        ;; with trailing whitespaces at orig
+        (if (and (< orig (point)) (not (progn (setq pps (syntax-ppss))(or (nth 8 pps)(nth 1 pps)))))
+            (setq done t)
+          (if (or (nth 8 pps)(nth 1 pps))
+              (py-end-of-statement orig done origline)
+            (forward-line 1)
+            (py-handle-eol)))
         (setq done t)
-        (py-beginning-of-comment)
+        (py-end-of-statement orig done origline))
+       ((and (not done) (< 0 (skip-chars-forward " \t\r\n\f")))
+        (when (looking-at "[ \t]*#")
+          (py-eos-handle-comment-start))
         (py-end-of-statement orig done origline))
        ((py-current-line-backslashed-p)
         (skip-chars-forward " \t\r\n\f")
@@ -8753,15 +8815,17 @@ Return position if statement found, nil otherwise. "
     erg))
 
 (defun py-down-statement ()
-  "Go to the end of next statement downwards in buffer.
+  "Go to the beginning of next statement downwards in buffer.
 
 Return position if statement found, nil otherwise. "
   (interactive)
-  (let ((orig (point))
-        erg)
-    (if (py-end-of-statement-p)
-        (setq erg (and (py-end-of-statement) (py-beginning-of-statement)))
-      (setq erg (and (py-end-of-statement) (py-end-of-statement)(py-beginning-of-statement))))
+  (let* ((orig (point))
+         (erg
+          (cond ((py-end-of-statement-p)
+                 (setq erg (and (py-end-of-statement) (py-beginning-of-statement))))
+                ((ignore-errors (< orig (progn (py-end-of-statement) (py-beginning-of-statement))))
+                 (point))
+                (t (goto-char orig) (and (py-end-of-statement) (py-end-of-statement)(py-beginning-of-statement))))))
     (when (and py-verbose-p (interactive-p)) (message "%s" erg))
     erg))
 
@@ -9830,8 +9894,8 @@ Ignores setting of `py-switch-buffers-on-execute-p', output-buffer will being sw
 (defun py-execute-region (start end &optional shell dedicated switch)
   "Send the region to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -9855,8 +9919,8 @@ See also `py-execute-region'. "
 (defun py-execute-region-dedicated (start end &optional shell)
   "Get the region processed by an unique Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument. "
   (interactive "r\nP")
@@ -10031,12 +10095,14 @@ Inserts an incentive true form \"if 1:\\n.\" "
 (defun py-fix-start (start end)
   "Internal use by py-execute... functions.
 Avoid empty lines at the beginning. "
+  (python-mode)
   (goto-char start)
   (let ((beg (copy-marker start)))
     (while (empty-line-p)
       (delete-region (line-beginning-position) (1+ (line-end-position))))
     (back-to-indentation)
-    (unless (eq (current-indentation) 0)
+    (py-down-statement)
+    (while (not (eq (current-indentation) 0))
       (py-shift-left (current-indentation) start end))
     (setq py-line-number-offset (count-lines 1 start))
     beg))
@@ -10128,7 +10194,7 @@ named file instead of the buffer's file.
 
 If a clipping restriction is in effect, only the accessible portion of the buffer is sent. A trailing newline will be supplied if needed.
 
-With \\[univeral-argument] user is prompted to specify another then default shell.
+With \\[universal-argument] user is prompted to specify another then default shell.
 See also `\\[py-execute-region]'. "
   (interactive "P")
   (py-execute-buffer-base shell t))
@@ -10141,7 +10207,7 @@ named file instead of the buffer's file.
 If there is a *Python* process buffer, it is used.
 If a clipping restriction is in effect, only the accessible portion of the buffer is sent. A trailing newline will be supplied if needed.
 
-With \\[univeral-argument] user is prompted to specify another then default shell.
+With \\[universal-argument] user is prompted to specify another then default shell.
 See also `\\[py-execute-region]'. "
   (interactive "P")
   (py-execute-buffer-base shell dedicated 'switch))
@@ -10156,7 +10222,7 @@ named file instead of the buffer's file.
 
 If a clipping restriction is in effect, only the accessible portion of the buffer is sent. A trailing newline will be supplied if needed.
 
-With \\[univeral-argument] user is prompted to specify another then default shell.
+With \\[universal-argument] user is prompted to specify another then default shell.
 See also `\\[py-execute-region]'. "
   (interactive "P")
   (py-execute-buffer-base shell t 'switch))
@@ -10164,8 +10230,8 @@ See also `\\[py-execute-region]'. "
 (defun py-execute-buffer (&optional shell dedicated switch)
   "Send the contents of the buffer to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 If the file local variable `py-master-file' is non-nil, execute the
 named file instead of the buffer's file.
@@ -10208,7 +10274,7 @@ named file instead of the buffer's file.
 If there is a *Python* process buffer, it is used.
 If a clipping restriction is in effect, only the accessible portion of the buffer is sent. A trailing newline will be supplied if needed.
 
-With \\[univeral-argument] user is prompted to specify another then default shell.
+With \\[universal-argument] user is prompted to specify another then default shell.
 See also `\\[py-execute-region]'. "
   (interactive "P")
   (py-execute-buffer-base shell dedicated 'noswitch))
@@ -10406,7 +10472,7 @@ If an exception occurred return t, otherwise return nil.  BUF must exist."
 (defun py-down-exception (&optional bottom)
   "Go to the next line down in the traceback.
 
-With \\[univeral-argument] (programmatically, optional argument
+With \\[universal-argument] (programmatically, optional argument
 BOTTOM), jump to the bottom (innermost) exception in the exception
 stack."
   (interactive "P")
@@ -15480,10 +15546,10 @@ as it leaves your system default unchanged."
 (defun py-execute-statement (&optional shell dedicated switch)
   "Send statement at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15499,10 +15565,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-block (&optional shell dedicated switch)
   "Send block at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15518,10 +15584,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-block-or-clause (&optional shell dedicated switch)
   "Send block-or-clause at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15537,10 +15603,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-def (&optional shell dedicated switch)
   "Send def at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15556,10 +15622,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-class (&optional shell dedicated switch)
   "Send class at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15575,10 +15641,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-def-or-class (&optional shell dedicated switch)
   "Send def-or-class at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15594,10 +15660,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-expression (&optional shell dedicated switch)
   "Send expression at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -15613,10 +15679,10 @@ Optional arguments DEDICATED (boolean) and SWITCH (symbols 'noswitch/'switch)"
 (defun py-execute-partial-expression (&optional shell dedicated switch)
   "Send partial-expression at point to a Python interpreter.
 
-When called with \\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+When called with \\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -18267,46 +18333,46 @@ Keep current buffer. Ignores `py-shell-switch-buffers-on-execute-p' "
 (defalias 'py-ipython-shell-command-on-region 'py-execute-region-ipython)
 
 ;;; Pymacs
-(defun py-load-pymacs ()
-  "Load Pymacs as delivered with python-mode.el.
-
-Pymacs has been written by François Pinard and many others.
-See original source: http://pymacs.progiciels-bpi.ca"
-  (interactive)
-  (let* ((pyshell (py-choose-shell))
-         (path (getenv "PYTHONPATH"))
-         (py-install-directory (cond ((string= "" py-install-directory)
-                                      (py-guess-py-install-directory))
-                                     (t (py-normalize-directory py-install-directory))))
-         (pymacs-installed-p
-          (ignore-errors (string-match (expand-file-name (concat py-install-directory "Pymacs")) path))))
-    ;; Python side
-    (unless pymacs-installed-p
-      (setenv "PYTHONPATH" (concat
-                            (expand-file-name py-install-directory)
-                            path-separator
-                            (expand-file-name py-install-directory) "completion"
-                            (if path (concat path-separator path)))))
-
-    (if (py-install-directory-check)
-        (progn
-          ;; don't interfere with already installed Pymacs
-          (unless (featurep 'pymacs)
-            (load (concat py-install-directory "pymacs.el") nil t))
-          (setenv "PYMACS_PYTHON" (if (string-match "IP" pyshell)
-                                      "python"
-                                    pyshell))
-          (autoload 'pymacs-apply "pymacs")
-          (autoload 'pymacs-call "pymacs")
-          (autoload 'pymacs-eval "pymacs")
-          (autoload 'pymacs-exec "pymacs")
-          (autoload 'pymacs-load "pymacs")
-          (require 'pymacs)
-          (load (concat py-install-directory "completion/pycomplete.el") nil t)
-          (add-hook 'python-mode-hook 'py-complete-initialize))
-      (error "`py-install-directory' not set, see INSTALL"))))
-
-(when py-load-pymacs-p (py-load-pymacs))
+;; (defun py-load-pymacs ()
+;;   "Load Pymacs as delivered with python-mode.el.
+;;
+;; Pymacs has been written by François Pinard and many others.
+;; See original source: http://pymacs.progiciels-bpi.ca"
+;;   (interactive)
+;;   (let* ((pyshell (py-choose-shell))
+;;          (path (getenv "PYTHONPATH"))
+;;          (py-install-directory (cond ((string= "" py-install-directory)
+;;                                       (py-guess-py-install-directory))
+;;                                      (t (py-normalize-directory py-install-directory))))
+;;          (pymacs-installed-p
+;;           (ignore-errors (string-match (expand-file-name (concat py-install-directory "Pymacs")) path))))
+;;     ;; Python side
+;;     (unless pymacs-installed-p
+;;       (setenv "PYTHONPATH" (concat
+;;                             (expand-file-name py-install-directory)
+;;                             path-separator
+;;                             (expand-file-name py-install-directory) "completion"
+;;                             (if path (concat path-separator path)))))
+;;
+;;     (if (py-install-directory-check)
+;;         (progn
+;;           ;; don't interfere with already installed Pymacs
+;;           (unless (featurep 'pymacs)
+;;             (load (concat py-install-directory "pymacs.el") nil t))
+;;           (setenv "PYMACS_PYTHON" (if (string-match "IP" pyshell)
+;;                                       "python"
+;;                                     pyshell))
+;;           (autoload 'pymacs-apply "pymacs")
+;;           (autoload 'pymacs-call "pymacs")
+;;           (autoload 'pymacs-eval "pymacs")
+;;           (autoload 'pymacs-exec "pymacs")
+;;           (autoload 'pymacs-load "pymacs")
+;;           (require 'pymacs)
+;;           (load (concat py-install-directory "completion/pycomplete.el") nil t)
+;;           (add-hook 'python-mode-hook 'py-complete-initialize))
+;;       (error "`py-install-directory' not set, see INSTALL"))))
+;;
+;; (when py-load-pymacs-p (py-load-pymacs))
 
 ;;; Hooks
 (add-hook 'comint-output-filter-functions 'py-pdbtrack-track-stack-file)
@@ -18526,12 +18592,10 @@ py-beep-if-tab-change\t\tring the bell if `tab-width' is changed
    (py-complete-function
     (add-hook 'completion-at-point-functions
               py-complete-function nil 'local))
-   (py-load-pymacs-p
-    (add-hook 'completion-at-point-functions
-              'py-complete-completion-at-point nil 'local))
-   (t
-    (add-hook 'completion-at-point-functions
-              'py-shell-complete nil 'local)))
+   (t (add-hook 'completion-at-point-functions
+                'py-complete-completion-at-point nil 'local)
+      (add-hook 'completion-at-point-functions
+                'py-shell-complete nil 'local)))
   (when (and py-imenu-create-index-p (fboundp 'imenu-add-to-menubar)(ignore-errors (require 'imenu)))
     (set (make-local-variable 'imenu-create-index-function) 'py-imenu-create-index-function)
     (imenu-add-to-menubar "PyIndex"))

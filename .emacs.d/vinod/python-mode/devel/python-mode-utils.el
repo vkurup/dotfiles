@@ -99,10 +99,10 @@
       (insert (concat "(defun py-execute-" ele " (&optional shell dedicated switch)"))
       (insert (concat "
   \"Send " ele " at point to a Python interpreter.\n\n"))
-      (insert "When called with \\\\[univeral-argument], execution through `default-value' of `py-shell-name' is forced.
+      (insert "When called with \\\\[universal-argument], execution through `default-value' of `py-shell-name' is forced.
 See also `py-force-py-shell-name-p'.
 
-When called with \\\\[univeral-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with \\\\[universal-argument] followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
 
 When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
 
@@ -889,7 +889,8 @@ http://docs.python.org/reference/compound_stmts.html\"\n")
     ;; (insert "  (interactive)"))
     (insert (concat "\n (let ((erg (ignore-errors (cdr (py-go-to-keyword py-" ele "-re indent))))"))
     (when (string-match "def\\|class" ele)
-      (insert "\n (py-mark-decorators (or arg py-mark-decorators))"))
+      (insert "\n   (py-mark-decorators (or arg py-mark-decorators))
+    (when (and py-verbose-p (interactive-p)) (message \"%s\" erg))"))
     (insert ")")
     (insert "\n erg))\n")
 
@@ -1928,16 +1929,19 @@ Return position if statement found, nil otherwise. \"
   erg))
 
 \(defun py-down-statement ()
-  \"Go to the end of next statement downwards in buffer.
+  \"Go to the beginning of next statement downwards in buffer.
 
 Return position if statement found, nil otherwise. \"
   (interactive)
-  (let ((orig (point))
-        erg)
-    (if (py-end-of-statement-p)
-        (setq erg (and (py-end-of-statement) (py-beginning-of-statement)))
-      (setq erg (and (py-end-of-statement) (py-end-of-statement)(py-beginning-of-statement))))
-    (when (and py-verbose-p (interactive-p)) (message \"%s\" erg))
+  (let\* ((orig (point))
+           (erg 
+            (cond ((py-end-of-statement-p)
+                   (setq erg (and (py-end-of-statement) (py-beginning-of-statement))))
+                  ((< orig (progn (py-end-of-statement) (py-beginning-of-statement)))
+                   (point)) 
+                  (t (and (py-end-of-statement) (py-end-of-statement)(py-beginning-of-statement))))))
+            (when (and py-verbose-p (interactive-p)) (message \"%s\" erg))
+            erg)
     erg))
 
 \(defun py-up-base (regexp)
