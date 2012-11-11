@@ -18,10 +18,10 @@ calibre
 cheese
 chromium
 cmake
-consolekit
 coreutils
 cronie
 cryptsetup
+ctags
 cups
 device-mapper
 dhcpcd
@@ -31,6 +31,7 @@ dmenu
 dmidecode
 e2fsprogs
 emacs
+epiphany
 ethtool
 evince
 fakeroot
@@ -42,6 +43,7 @@ flex
 gawk
 gcc
 gcc-libs
+gdm
 gettext
 ghostscript
 gimp
@@ -83,6 +85,7 @@ libtool
 licenses
 linux
 linux-headers
+linux-lts
 logrotate
 lvm2
 lxrandr
@@ -117,6 +120,7 @@ perl-list-moreutils
 perl-params-util
 pkg-config
 pkgfile
+powertop
 ppp
 procps-ng
 psmisc
@@ -167,6 +171,7 @@ wpa_actiond
 wpa_supplicant
 xbindkeys
 xcompmgr
+xdg-user-dirs-gtk
 xdotool
 xf86-input-synaptics
 xf86-video-intel
