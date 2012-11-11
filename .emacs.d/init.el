@@ -139,7 +139,7 @@
   "Create a new blog post."
   (interactive "sPost Title: ")
   (let ((slug (vk-slugify title)))
-    (find-file (concat "~/web/kurup.org/source/_posts/"
+    (find-file (concat "~/dev/kurup.org/source/_posts/"
                        (format-time-string "%Y-%m-%d")
                        "-" slug ".markdown"))
     (insert "---\n")
