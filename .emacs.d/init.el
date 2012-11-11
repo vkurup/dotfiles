@@ -20,6 +20,8 @@
                       pony-mode
                       fuzzy
                       haskell-mode
+                      rainbow-mode
+                      twittering-mode
                       auto-complete)
   "A list of packages to ensure are installed at launch.")
 
@@ -72,6 +74,8 @@
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pyflakes-init)))
 (add-hook 'python-mode-hook 'flymake-mode)
+
+(add-hook 'css-mode-hook 'rainbow-mode)
 
 ;; ledger
 ;; make cleared items green, uncleared pink
@@ -147,8 +151,8 @@
 
 ;; twitter mode
 ;; http://www.emacswiki.org/emacs/TwitteringMode
-;;(require 'twittering-mode)
-;;(setq twittering-use-master-password t)
+(require 'twittering-mode)
+(setq twittering-use-master-password t)
 
 
 ;; vinod customizations
