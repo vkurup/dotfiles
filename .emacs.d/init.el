@@ -46,21 +46,38 @@
                                 ac-source-dictionary
                                 ac-source-words-in-same-mode-buffers))))
 
-
 ;; python-mode
-;; first load pymacs (so python-mode won't try to load broken one)
-(add-to-list 'load-path esk-user-dir)
-(require 'pymacs)
-;; install trunk version
 (setq py-install-directory (concat esk-user-dir "/python-mode/"))
 (add-to-list 'load-path py-install-directory)
 ;; this will show method signatures while typing
 (setq py-set-complete-keymap-p t)
-(setq py-split-windows-on-execute-p nil)
+(setq py-use-current-dir-when-execute-p t)
 (require 'python-mode)
 ;; activate the virtualenv where Pymacs is located
-(virtualenv-workon "default2")
-(py-load-pymacs)
+(virtualenv-workon "vkinvest")
+
+(defun load-pycomplete ()
+  "Load and initialize pycomplete."
+  (interactive)
+  (let* ((pyshell (py-choose-shell))
+         (path (getenv "PYTHONPATH")))
+    (setenv "PYTHONPATH" (concat
+                          (expand-file-name py-install-directory) "completion"
+                          (if path (concat path-separator path))))
+    (if (py-install-directory-check)
+        (progn
+          (setenv "PYMACS_PYTHON" (if (string-match "IP" pyshell)
+                                      "python"
+                                    pyshell))
+          (autoload 'pymacs-apply "pymacs")
+          (autoload 'pymacs-call "pymacs")
+          (autoload 'pymacs-eval "pymacs")
+          (autoload 'pymacs-exec "pymacs")
+          (autoload 'pymacs-load "pymacs")
+          (load (concat py-install-directory "completion/pycomplete.el") nil t)
+          (add-hook 'python-mode-hook 'py-complete-initialize))
+      (error "`py-install-directory' not set, see INSTALL"))))
+(eval-after-load 'pymacs '(load-pycomplete))
 
 ;; pyflakes flymake integration
 ;; http://stackoverflow.com/a/1257306/347942
