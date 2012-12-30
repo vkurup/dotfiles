@@ -154,7 +154,8 @@
 ;; Delete old backup versions silently
 (setq delete-old-versions t)
 
-(load-theme 'adwaita t)
+;; (load-theme 'adwaita t)
+(load-theme 'zenburn t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
