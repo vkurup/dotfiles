@@ -30,6 +30,9 @@
 (autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
+(add-hook 'find-file-hook 'flycheck-mode)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; open a shell
 (shell)
