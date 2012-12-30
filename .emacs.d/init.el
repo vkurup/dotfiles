@@ -10,7 +10,6 @@
 (defvar my-packages '(starter-kit
                       starter-kit-lisp
                       starter-kit-bindings
-                      starter-kit-js
                       projectile
                       autopair
                       yasnippet
