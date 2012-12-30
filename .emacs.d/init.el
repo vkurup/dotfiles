@@ -91,7 +91,6 @@
     (forward-char)))
 
 ;; org mode
-(require 'org-install)
 (setq org-directory "~/Dropbox/org/")
 (setq org-default-notes-file (concat org-directory "todo.org"))
 (define-key global-map "\C-cl" 'org-store-link)
