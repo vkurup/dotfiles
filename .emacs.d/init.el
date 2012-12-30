@@ -59,6 +59,9 @@
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
+;; For running tests easily
+(global-set-key [f6] 'recompile)
+
 ;; ledger
 ;; make cleared items green, uncleared pink
 (add-hook 'ledger-mode-hook
