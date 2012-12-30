@@ -1,6 +1,7 @@
 a2ps
 acpi
 alsa-utils
+arandr
 artwiz-fonts
 aspell
 aspell-en
@@ -19,6 +20,7 @@ cheese
 chromium
 cmake
 coreutils
+cpio
 cronie
 cryptsetup
 ctags
@@ -31,7 +33,6 @@ dmenu
 dmidecode
 e2fsprogs
 emacs
-epiphany
 ethtool
 evince
 fakeroot
@@ -39,6 +40,7 @@ feh
 file
 filesystem
 findutils
+firefox
 flex
 gawk
 gcc
@@ -71,6 +73,7 @@ htop
 inetutils
 iputils
 jfsutils
+jre7-openjdk
 keychain
 less
 lib32-intel-dri
@@ -105,6 +108,7 @@ nautilus
 net-tools
 netcfg
 network-manager-applet
+nodejs
 notification-daemon
 nss-mdns
 openssh
@@ -120,6 +124,7 @@ perl-list-moreutils
 perl-params-util
 pkg-config
 pkgfile
+postgresql
 powertop
 ppp
 procps-ng
@@ -138,6 +143,7 @@ scons
 scrot
 sed
 shadow
+skype
 sshfs
 sudo
 sysfsutils
@@ -149,6 +155,7 @@ tar
 tcl
 tcsh
 texinfo
+tinyxml
 tp_smapi
 trayer
 ttf-dejavu
@@ -170,6 +177,7 @@ wireless_tools
 wpa_actiond
 wpa_supplicant
 xbindkeys
+xchat
 xcompmgr
 xdg-user-dirs-gtk
 xdotool
@@ -184,6 +192,7 @@ xorg-server
 xorg-server-utils
 xorg-twm
 xorg-xclock
+xorg-xev
 xorg-xinit
 xorg-xmessage
 xscreensaver
