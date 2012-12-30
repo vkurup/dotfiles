@@ -165,6 +165,16 @@
 (setq-default default-tab-width 4)
 (set-default-font "Consolas-12")
 
+;; erc
+(setq erc-server "chat.caktusgroup.com"
+       erc-port 6697
+       erc-nick "vkurup"
+       erc-user-full-name user-full-name)
+; Disable autopair in erc
+(add-hook 'erc-mode-hook
+          (lambda ()
+              (setq autopair-dont-activate t)))
+
 ;; emacsclient
 (server-start)
 
@@ -176,6 +186,10 @@
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
+ '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#screenerapp"))))
+ '(erc-autojoin-mode t)
+ '(js2-auto-indent-p t)
+ '(js2-enter-indents-newline t)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
  '(org-agenda-files (quote ("~/org/gtd.org")))
