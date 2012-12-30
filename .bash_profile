@@ -31,6 +31,11 @@ if [ -d "/usr/share/perl5/vendor_perl/auto/share/dist/Cope" ] ; then
     PATH="/usr/share/perl5/vendor_perl/auto/share/dist/Cope:$PATH"
 fi
 
+# add node.js
+if [ -d "$HOME/node_modules/.bin" ] ; then
+    PATH="$HOME/node_modules/.bin:$PATH"
+fi
+
 # rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
