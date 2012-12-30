@@ -67,7 +67,8 @@
 (add-hook 'ledger-mode-hook
           (lambda ()
             (highlight-lines-matching-regexp "^..\\(..\\)?/..?/..?[        ]+[^\\*]" (quote hi-pink))
-            (highlight-lines-matching-regexp "^..\\(..\\)?/..?/..?[        ]+\\*" (quote hi-green))))
+            (highlight-lines-matching-regexp "^..\\(..\\)?/..?/..?[        ]+\\*" (quote hi-green))
+            (auto-fill-mode -1)))
 
 (defun ledger ()
   "Open my ledger file and go to today"
