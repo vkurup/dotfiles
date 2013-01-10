@@ -41,6 +41,9 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; make moving around windows easier
+(windmove-default-keybindings)
+
 ;; open a shell
 (shell)
 
