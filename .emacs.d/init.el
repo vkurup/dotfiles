@@ -43,6 +43,7 @@
 
 ;; make moving around windows easier
 (windmove-default-keybindings)
+(setq org-replace-disputed-keys t)
 
 ;; open a shell
 (shell)
