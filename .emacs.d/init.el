@@ -168,8 +168,6 @@
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 ;; thanks johnw: https://gist.github.com/1198329
 (defun find-grep-in-project (command-args)
   (interactive
