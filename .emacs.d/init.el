@@ -26,6 +26,7 @@
                       diminish
                       org
                       js2-mode
+                      erc-hl-nicks
                       auto-complete)
   "A list of packages to ensure are installed at launch.")
 
