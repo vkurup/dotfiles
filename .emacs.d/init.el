@@ -97,6 +97,7 @@
     (beginning-of-line)
     (copy-region-as-kill beg (point))
     (goto-char (point-max))
+    (newline)
     (yank '(non nil list))
     (forward-word)
     (forward-char)))
