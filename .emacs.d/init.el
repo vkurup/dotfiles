@@ -72,7 +72,7 @@
 (ac-config-default)
 
 ;; ;; activate the virtualenv where Pymacs is located
-(virtualenv-workon "moodhacker")
+(virtualenv-workon "canonrun")
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
