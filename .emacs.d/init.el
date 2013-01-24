@@ -27,6 +27,7 @@
                       org
                       js2-mode
                       erc-hl-nicks
+                      expand-region
                       auto-complete)
   "A list of packages to ensure are installed at launch.")
 
@@ -45,6 +46,10 @@
 ;; make moving around windows easier
 (windmove-default-keybindings)
 (setq org-replace-disputed-keys t)
+
+;; http://emacsrocks.com/e09.html
+(global-set-key (kbd "C-=") 'er/expand-region)
+(pending-delete-mode t)
 
 ;; open a shell
 (shell)
