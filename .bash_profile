@@ -40,4 +40,4 @@ fi
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-startx
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx
