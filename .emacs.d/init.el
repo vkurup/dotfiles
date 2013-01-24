@@ -133,7 +133,7 @@
 
 (defun vk-slugify (title)
   "Convert a normal Title string to something that can be used in a blog slug."
-  (replace-regexp-in-string "[\\. ]+" "-"
+  (replace-regexp-in-string "[\\., ]+" "-"
                             (replace-regexp-in-string "['\?]" ""
                                                       (downcase title))))
 
