@@ -1,14 +1,16 @@
 acpi_call-git
 aurget
 brother-mfc-j825dw
+cacheclean
 chromium-pepper-flash
 cope-git
 crashplan
 deb2targz
 dropbox
-garminplugin
-garmintools
+google-talkplugin
+hsqldb-java
 ledger-git
+mx
 perl-env-path
 perl-io-stty
 perl-regexp-common
@@ -16,4 +18,3 @@ thinkfan
 tlp
 ttf-ms-fonts
 ttf-vista-fonts
-xmonad-gnome3

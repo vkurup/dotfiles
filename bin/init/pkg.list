@@ -33,6 +33,7 @@ dmenu
 dmidecode
 e2fsprogs
 emacs
+erlang
 ethtool
 evince
 fakeroot
@@ -69,6 +70,7 @@ gstreamer0.10-bad-plugins
 gzip
 hdparm
 heirloom-mailx
+html2text
 htop
 inetutils
 iputils
@@ -77,6 +79,7 @@ jre7-openjdk
 keychain
 less
 lib32-intel-dri
+libpng12
 libreoffice-base
 libreoffice-calc
 libreoffice-draw
@@ -90,6 +93,7 @@ linux
 linux-headers
 linux-lts
 logrotate
+lsb-release
 lvm2
 lxrandr
 m4
@@ -113,6 +117,7 @@ notification-daemon
 nss-mdns
 openssh
 pacman
+pacmatic
 patch
 pciutils
 pcmciautils
@@ -132,7 +137,7 @@ psmisc
 python-virtualenvwrapper
 python2-dbus
 python2-pip
-qt
+qt4
 redis
 reiserfsprogs
 rfkill
@@ -169,6 +174,7 @@ upower
 usbutils
 util-linux
 vi
+vim
 virtualbox
 virtualbox-guest-iso
 wget
