@@ -28,6 +28,7 @@
                       js2-mode
                       erc-hl-nicks
                       expand-region
+                      yaml-mode
                       auto-complete)
   "A list of packages to ensure are installed at launch.")
 
