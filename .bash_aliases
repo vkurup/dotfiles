@@ -13,12 +13,12 @@ alias grep="grep --color=auto"
 alias f="find"
 
 # package management
-alias pmi="sudo pacman -S"
-alias pmr="sudo pacman -Rs"
-alias pmu="sudo pacman -Syu"
-alias pms="pacman -Ss"
-alias pmsh="pacman -Qi"
-alias pmclean='sudo pacman -Rsn $(pacman -Qdtq)'
+alias pmi="sudo pacmatic -S"
+alias pmr="sudo pacmatic -Rs"
+alias pmu="sudo cacheclean 1 && sudo pacmatic -Syu"
+alias pms="pacmatic -Ss"
+alias pmsh="pacmatic -Qi"
+alias pmclean='sudo pacmatic -Rsn $(pacmatic -Qdtq)'
 
 # git
 alias gst="git status"
