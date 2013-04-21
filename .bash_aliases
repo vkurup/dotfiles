@@ -18,7 +18,7 @@ alias pmr="sudo pacmatic -Rs"
 alias pmu="sudo cacheclean 1 && sudo pacmatic -Syu"
 alias pms="pacmatic -Ss"
 alias pmsh="pacmatic -Qi"
-alias pmclean='sudo pacmatic -Rsn $(pacmatic -Qdtq)'
+alias pmclean='sudo pacmatic -Rsn $(pacman -Qdtq)'
 
 # git
 alias gst="git status"
