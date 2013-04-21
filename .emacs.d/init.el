@@ -29,6 +29,7 @@
                       erc-hl-nicks
                       expand-region
                       yaml-mode
+                      zencoding-mode
                       auto-complete)
   "A list of packages to ensure are installed at launch.")
 
