@@ -18,7 +18,8 @@ URxvt*urlLauncher: /usr/bin/chromium
 
 ! Zenburn color-scheme
 !http://git.sysphere.org/dotfiles/tree/Xdefaults
-urxvt*background:  #3f3f3f
+!urxvt*background:  #3f3f3f
+urxvt*background:  #111111
 urxvt*foreground:  #dcdccc
 ! black + red
 !urxvt*color0:     #3f3f3f
