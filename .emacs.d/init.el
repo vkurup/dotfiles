@@ -6,34 +6,29 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; Add in your own as you wish:
 (defvar my-packages '(starter-kit
                       starter-kit-lisp
                       starter-kit-bindings
                       projectile
                       autopair
-                      yasnippet
                       markdown-mode
-                      pony-mode
-                      fuzzy
                       haskell-mode
                       rainbow-mode
                       twittering-mode
                       zenburn-theme
+                      color-theme-solarized
                       flycheck
-                      python
                       virtualenv
+                      elpy
                       diminish
                       org
                       js2-mode
                       erc-hl-nicks
                       expand-region
                       yaml-mode
-                      zencoding-mode
-                      auto-complete)
+                      zencoding-mode)
   "A list of packages to ensure are installed at launch.")
 
-(require 'python)
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
@@ -44,6 +39,13 @@
 (add-hook 'find-file-hook 'flycheck-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; open a shell
+(shell)
+
+(require 'python)
+(virtualenv-workon "effectivedjango")
+(elpy-enable)
 
 ;; make moving around windows easier
 (windmove-default-keybindings)
@@ -67,14 +69,6 @@
         (linum-mode 1)
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
-
-;; autocomplete
-(require 'auto-complete-config)
-(setq ac-dictionary-files (list (concat user-emacs-directory ".dict")))
-(ac-config-default)
-
-;; ;; activate the virtualenv where Pymacs is located
-(virtualenv-workon "canonrun")
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
@@ -199,7 +193,9 @@
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
- '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#screenerapp"))))
+ '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
+ '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio"))))
  '(erc-autojoin-mode t)
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
