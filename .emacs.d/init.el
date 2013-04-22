@@ -33,6 +33,11 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;;; Disable autopair-global-mode in calc-mode
+;;; https://github.com/capitaomorte/autopair/issues/17
+(add-hook 'calc-mode-hook
+           #'(lambda ()
+               (autopair-global-mode -1)))
 (autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
