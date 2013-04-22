@@ -60,9 +60,6 @@
 (global-set-key (kbd "C-=") 'er/expand-region)
 (pending-delete-mode t)
 
-;; open a shell
-(shell)
-
 ;; http://whattheemacsd.com//key-bindings.el-01.html
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 
@@ -149,7 +146,8 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-(load-theme 'zenburn t)
+;;(load-theme 'zenburn t)
+(load-theme 'solarized-dark t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -175,7 +173,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-default-font "Consolas-12")
+(set-frame-font "Consolas-12")
 
 ;; erc
 (setq erc-server "chat.caktusgroup.com"
