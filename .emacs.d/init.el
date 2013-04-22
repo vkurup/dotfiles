@@ -82,33 +82,9 @@
 (global-set-key [f6] 'recompile)
 
 ;; ledger
-;; make cleared items green, uncleared pink
-(add-hook 'ledger-mode-hook
-          (lambda ()
-            (highlight-lines-matching-regexp "^..\\(..\\)?/..?/..?[        ]+[^\\*]" (quote hi-pink))
-            (highlight-lines-matching-regexp "^..\\(..\\)?/..?/..?[        ]+\\*" (quote hi-green))
-            (auto-fill-mode -1)))
-
-(defun ledger ()
-  "Open my ledger file and go to today"
-  (interactive)
-  (find-file "~/Dropbox/ledger.dat")
-  (ledger-find-slot (current-time)))
-
-(defun vk-copy-ledger-entry-to-bottom ()
-  "Copy the current transaction to the bottom of the ledger"
-  (interactive)
-  (re-search-backward "^[12][09]")
-  (let ((beg (point)))
-    (forward-char)
-    (re-search-forward "^[12][09]")
-    (beginning-of-line)
-    (copy-region-as-kill beg (point))
-    (goto-char (point-max))
-    (newline)
-    (yank '(non nil list))
-    (forward-word)
-    (forward-char)))
+(add-to-list 'load-path (expand-file-name (concat esk-user-dir "/ledger/")))
+(load "ldg-new")
+(add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
 
 ;; org mode
 (setq org-directory "~/Dropbox/org/")
