@@ -34,6 +34,7 @@ dmidecode
 e2fsprogs
 emacs
 erlang
+erlang-docs
 ethtool
 evince
 fakeroot
@@ -79,6 +80,8 @@ jre7-openjdk
 keychain
 less
 lib32-intel-dri
+lib32-libpulse
+libdvdcss
 libpng12
 libreoffice-base
 libreoffice-calc
@@ -177,6 +180,7 @@ vi
 vim
 virtualbox
 virtualbox-guest-iso
+vlc
 wget
 which
 wireless_tools

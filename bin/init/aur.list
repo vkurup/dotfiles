@@ -8,13 +8,12 @@ crashplan
 deb2targz
 dropbox
 google-talkplugin
-hsqldb-java
 ledger-git
-mx
 perl-env-path
 perl-io-stty
 perl-regexp-common
 thinkfan
 tlp
+tpacpi-bat
 ttf-ms-fonts
 ttf-vista-fonts
