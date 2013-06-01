@@ -24,6 +24,8 @@
                       org
                       js2-mode
                       erc-hl-nicks
+                      erlang
+                      nrepl
                       expand-region
                       yaml-mode
                       zencoding-mode)
@@ -37,13 +39,16 @@
 ;;; https://github.com/capitaomorte/autopair/issues/17
 (add-hook 'calc-mode-hook
            #'(lambda ()
-               (autopair-global-mode -1)))
+               (autopair-mode -1)))
 (autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
 (add-hook 'find-file-hook 'flycheck-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; map RET to newline-and-indent
+;(define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; open a shell
 (shell)
@@ -131,7 +136,6 @@
 (require 'twittering-mode)
 (setq twittering-use-master-password t)
 
-
 ;; vinod customizations
 (setq user-mail-address "vinod@kurup.com")
 ;; set calendar's location (for sunrise sunset)
@@ -146,8 +150,8 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-;;(load-theme 'zenburn t)
-(load-theme 'solarized-dark t)
+(load-theme 'zenburn t)
+;;(load-theme 'solarized-dark t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -196,10 +200,11 @@
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
- '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(custom-safe-themes (quote ("f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
  '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio"))))
  '(erc-autojoin-mode t)
+ '(fci-rule-color "#383838")
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
  '(nxml-bind-meta-tab-to-complete-flag t)
@@ -219,7 +224,11 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(temporary-file-directory (concat user-emacs-directory "tmp")))
+ '(safe-local-variable-values (quote ((encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
+ '(temporary-file-directory (concat user-emacs-directory "tmp"))
+ '(vc-annotate-background "#2b2b2b")
+ '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
+ '(vc-annotate-very-old-color "#dc8cc3"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
