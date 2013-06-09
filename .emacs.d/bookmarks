@@ -8,7 +8,7 @@
  (rear-context-string)
  (position . 1))
 ("Ledger"
- (filename . "~/Dropbox/ledger.dat")
+ (filename . "~/Dropbox/data/finance/ledger.dat")
  (front-context-string . "2012/04/08 Achie")
  (rear-context-string . "First Internet\n\n")
  (position . 3045810))
@@ -18,8 +18,8 @@
  (rear-context-string . "2-03 Fri 06:37]\n")
  (position . 919))
 ("org-capture-last-stored"
- (filename . "~/Dropbox/org/gtd.org")
- (front-context-string . "** TODO Switch n")
- (rear-context-string . "0-21 Sun 15:22]\n")
- (position . 1752))
+ (filename . "~/org/notes.org")
+ (front-context-string . "* <2013-05-29 We")
+ (rear-context-string . "beautiful wife.\n")
+ (position . 6572))
 )
