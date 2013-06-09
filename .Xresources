@@ -45,3 +45,7 @@ urxvt*color13:     #ec93d3
 ! bright-cyan + bright-white
 urxvt*color14:     #93e0e3
 urxvt*color15:     #ffffff
+
+urxvt.depth: 32
+urxvt.background: [75]#000000
+
