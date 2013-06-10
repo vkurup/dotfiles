@@ -31,6 +31,7 @@ dialog
 diffutils
 dmenu
 dmidecode
+dnsutils
 e2fsprogs
 emacs
 erlang
@@ -68,6 +69,7 @@ gnome-themes-standard
 gnome-user-docs
 grep
 gstreamer0.10-bad-plugins
+gtk-recordmydesktop
 gzip
 hdparm
 heirloom-mailx
@@ -113,7 +115,6 @@ mutter
 nano
 nautilus
 net-tools
-netcfg
 network-manager-applet
 nodejs
 notification-daemon
@@ -140,8 +141,8 @@ psmisc
 python-virtualenvwrapper
 python2-dbus
 python2-pip
+python2-pygame
 qt4
-redis
 reiserfsprogs
 rfkill
 rsync
