@@ -45,10 +45,17 @@
 (defconst ledger-comment-regex
   "^[;#|\\*%].*\\|[ \t]+;.*")
 
-(defconst ledger-payee-any-status-regex 
+(defconst ledger-multiline-comment-start-regex
+  "^!comment$")
+(defconst ledger-multiline-comment-end-regex
+  "^!end_comment$")
+(defconst ledger-multiline-comment-regex
+  "^!comment\n\\(.*\n\\)*?!end_comment$")
+
+(defconst ledger-payee-any-status-regex
   "^[0-9]+[-/][-/.=0-9]+\\(\\s-+\\*\\)?\\(\\s-+(.*?)\\)?\\s-+\\(.+?\\)\\s-*\\(;\\|$\\)")
 
-(defconst ledger-payee-pending-regex 
+(defconst ledger-payee-pending-regex
   "^[0-9]+[-/][-/.=0-9]+\\s-\\!\\s-+\\(([^)]+)\\s-+\\)?\\([^*].+?\\)\\s-*\\(;\\|$\\)")
 
 (defconst ledger-payee-cleared-regex
@@ -61,7 +68,10 @@
   "^--.+?\\($\\|[ ]\\)")
 
 (defconst ledger-account-any-status-regex
-  "^[ \t]+\\(?1:[*!]\\s-*\\)?\\(?2:[^ ;].*?\\)\\(  \\|\t\\|$\\)")
+	"^[ \t]+\\([*!]\\s-+\\)?\\([[(]?.+?\\)\\(\t\\|\n\\| [ \t]\\)")
+
+(defun ledger-account-any-status-with-seed-regex (seed)
+	(concat "^[ \t]+\\([*!]\\s-+\\)?\\([[(]?" seed ".+?\\)\\(\t\\|\n\\| [ \t]\\)"))
 
 (defconst ledger-account-pending-regex
   "\\(^[ \t]+\\)\\(!\\s-*.*?\\)\\(  \\|\t\\|$\\)")
@@ -69,20 +79,6 @@
 (defconst ledger-account-cleared-regex
   "\\(^[ \t]+\\)\\(*\\s-*.*?\\)\\(  \\|\t\\|$\\)")
 
-(defconst ledger-metadata-regex
-  "[ \t]+\\(?2:;[ \t]+.+\\)$")
-
-(defconst ledger-account-or-metadata-regex
-  (concat
-   ledger-account-any-status-regex
-   "\\|"
-   ledger-metadata-regex))
-
-(defmacro rx-static-or (&rest rx-strs)
-  "Returns rx union of regexps which can be symbols that eval to strings."
-  `(rx (or ,@(mapcar #'(lambda (rx-str)
-                         `(regexp ,(eval rx-str)))
-                     rx-strs))))
 
 (defmacro ledger-define-regexp (name regex docs &rest args)
   "Simplify the creation of a Ledger regex and helper functions."
@@ -119,7 +115,7 @@
                 ,(intern (concat "ledger-regex-" (symbol-name name)
                                  "-group"))
                 string)))))
-	
+
 	(dolist (arg args)
 	  (let (var grouping target)
 	    (if (symbolp arg)
@@ -180,7 +176,7 @@
 (put 'ledger-define-regexp 'lisp-indent-function 1)
 
 (ledger-define-regexp iso-date
-  ( let ((sep '(or ?-  ?/)))    
+  ( let ((sep '(or ?-  ?/)))
     (rx (group
          (and (group (? (= 4 num)))
 	      (eval sep)
@@ -332,7 +328,7 @@
   (concat "\\(Y\\s-+\\([0-9]+\\)\\|"  ;; Catches a Y directive
 	  ledger-iso-date-regexp
 	  "\\([ *!]+\\)"  ;; mark
-	  "\\((.*)\\)"  ;; code
+	  "\\((.*)\\)?"  ;; code
 	  "\\(.*\\)"   ;; desc
 	  "\\)"))
 

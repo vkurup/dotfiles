@@ -111,26 +111,27 @@
 
 
 (defvar ledger-font-lock-keywords
-  `( ;; (,ledger-other-entries-regex 1 
+  `( ;; (,ledger-other-entries-regex 1
      ;; 				  ledger-font-other-face)
      (,ledger-comment-regex 0
 			    'ledger-font-comment-face)
-     (,ledger-payee-pending-regex 2 
+     (,ledger-multiline-comment-regex 0 'ledger-font-comment-face)
+     (,ledger-payee-pending-regex 2
 				  'ledger-font-payee-pending-face) ; Works
-     (,ledger-payee-cleared-regex 2 
+     (,ledger-payee-cleared-regex 2
  				  'ledger-font-payee-cleared-face) ; Works
-     (,ledger-payee-uncleared-regex 2 
+     (,ledger-payee-uncleared-regex 2
  				    'ledger-font-payee-uncleared-face) ; Works
-     (,ledger-account-cleared-regex 2 
+     (,ledger-account-cleared-regex 2
  	      			    'ledger-font-posting-account-cleared-face) ; Works
-     (,ledger-account-pending-regex 2 
+     (,ledger-account-pending-regex 2
  	      			    'ledger-font-posting-account-pending-face) ; Works
-     (,ledger-account-any-status-regex 2 
+     (,ledger-account-any-status-regex 2
 				       'ledger-font-posting-account-face) ; Works
-     (,ledger-other-entries-regex 1 
+     (,ledger-other-entries-regex 1
 				  'ledger-font-other-face))
   "Expressions to highlight in Ledger mode.")
-    
+
 
 (provide 'ldg-fonts)
 
