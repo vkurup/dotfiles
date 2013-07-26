@@ -11,7 +11,8 @@
  (filename . "~/Dropbox/data/finance/ledger.dat")
  (front-context-string . "2012/04/08 Achie")
  (rear-context-string . "First Internet\n\n")
- (position . 3045810))
+ (position . 3045810)
+ (annotation . ""))
 ("org-refile-last-stored"
  (filename . "~/Dropbox/org/gtd.org")
  (front-context-string . "** TODO ledger l")
@@ -19,7 +20,7 @@
  (position . 919))
 ("org-capture-last-stored"
  (filename . "~/org/notes.org")
- (front-context-string . "* <2013-05-29 We")
- (rear-context-string . "beautiful wife.\n")
- (position . 6572))
+ (front-context-string . "* <2013-07-06 Sa")
+ (rear-context-string . "t stub function\n")
+ (position . 155749))
 )
