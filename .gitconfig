@@ -12,6 +12,7 @@
 	default = tracking
 [core]
 	autocrlf = input
+	excludesfile = /home/vinod/.gitignore-global
 [core "safe"]
 	crlf = true
 [alias]
