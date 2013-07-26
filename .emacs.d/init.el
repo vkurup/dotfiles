@@ -179,7 +179,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Consolas-12")
+(set-frame-font "Consolas-10")
 
 ;; erc
 (setq erc-server "chat.caktusgroup.com"
