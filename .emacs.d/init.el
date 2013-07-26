@@ -28,6 +28,8 @@
                       nrepl
                       expand-region
                       yaml-mode
+                      emms
+                      web-mode
                       zencoding-mode)
   "A list of packages to ensure are installed at launch.")
 
@@ -54,8 +56,18 @@
 (shell)
 
 (require 'python)
-(virtualenv-workon "effectivedjango")
+(virtualenv-workon "raspberryio")
 (elpy-enable)
+
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 
 ;; make moving around windows easier
 (windmove-default-keybindings)
@@ -190,6 +202,30 @@
 (add-hook 'erc-mode-hook
           (lambda ()
               (setq autopair-dont-activate t)))
+
+;; EMMS
+(require 'emms-setup)
+(emms-standard)
+(emms-default-players)
+
+;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
+(defun visit-term-buffer ()
+  "Create or visit a terminal buffer."
+  (interactive)
+  (if (not (get-buffer "*ansi-term*"))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (ansi-term (getenv "SHELL")))
+    (switch-to-buffer-other-window "*ansi-term*")))
+(add-hook 'term-mode-hook
+          (lambda ()
+            (autopair-mode -1)) ;; for emacsen >= 24
+          )
+(global-set-key (kbd "C-c t") 'visit-term-buffer)
+
+;; http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation/
+(electric-indent-mode 0)
 
 ;; emacsclient
 (server-start)
