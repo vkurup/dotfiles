@@ -34,3 +34,7 @@ alias gitrd='git rm $(git ls-files -d)'
 alias pm='python manage.py'
 
 alias less='most'
+
+# emacs
+alias e="emacsclient -t"
+alias E="SUDO_EDITOR=\"emacsclient -t -a emacs\" sudoedit"
