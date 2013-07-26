@@ -1,11 +1,11 @@
-personal_ws-1.1 en 86
+personal_ws-1.1 en 86 
 SHA
 Compojure
 Mala
 parens
 Sonian
-http
 Kavi
+http
 rubygems
 Ubuntu
 Elisp
@@ -45,6 +45,7 @@ caffeinated
 rdoc
 clojure
 https
+Django
 résumé
 Radagast
 Evrinid
