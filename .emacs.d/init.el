@@ -90,8 +90,10 @@
 ;; org mode
 (setq org-directory "~/Dropbox/org/")
 (setq org-default-notes-file (concat org-directory "todo.org"))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-cc" 'org-capture)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
 (define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
 ;;(define-key global-map [f9] 'remember-region)
 (setq org-log-done t)
@@ -217,6 +219,7 @@ Kavi's favorite: %^{Kavi's favorite}
 Anika's favorite: %^{Anika's favorite}
 
 %?"))))
+ '(org-completion-use-ido t)
  '(org-velocity-allow-regexps t)
  '(org-velocity-always-use-bucket t)
  '(org-velocity-bucket "~/Dropbox/org/bucket.org")
