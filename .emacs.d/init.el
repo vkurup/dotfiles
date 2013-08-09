@@ -198,6 +198,7 @@
        erc-port 6697
        erc-nick "vkurup"
        erc-user-full-name user-full-name)
+(require 'secrets)
 ; Disable autopair in erc
 (add-hook 'erc-mode-hook
           (lambda ()
