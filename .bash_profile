@@ -2,8 +2,6 @@
 # ~/.bash_profile
 #
 
-eval $(keychain --eval -Q --quiet id_rsa)
-
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 # set PATH so it includes user's private bin if it exists
