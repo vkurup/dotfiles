@@ -15,6 +15,6 @@ xcompmgr -c -f -D 5 &
 feh --bg-max $HOME/Downloads/archlinux.png
 unclutter &
 xbindkeys
-xmodmap $HOME/.xmodmaprc
+xmodmap $HOME/.Xmodmap
 udiskie &
 exec xmonad
