@@ -1,6 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -28,7 +28,6 @@
                       nrepl
                       expand-region
                       yaml-mode
-                      emms
                       web-mode
                       zencoding-mode)
   "A list of packages to ensure are installed at launch.")
@@ -42,7 +41,7 @@
 (add-hook 'calc-mode-hook
            #'(lambda ()
                (autopair-mode -1)))
-(autopair-global-mode)
+;;(autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
 (add-hook 'find-file-hook 'flycheck-mode)
@@ -56,7 +55,7 @@
 (shell)
 
 (require 'python)
-(virtualenv-workon "raspberryio")
+(virtualenv-workon "oberlin")
 (elpy-enable)
 
 
@@ -191,7 +190,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Consolas-10")
+(set-frame-font "Ubuntu Mono-12")
 
 ;; erc
 (setq erc-server "chat.caktusgroup.com"
@@ -203,11 +202,6 @@
 (add-hook 'erc-mode-hook
           (lambda ()
               (setq autopair-dont-activate t)))
-
-;; EMMS
-(require 'emms-setup)
-(emms-standard)
-(emms-default-players)
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
@@ -241,7 +235,7 @@
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
- '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#timepiece"))))
+ '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#timepiece" "#oberlin"))))
  '(erc-autojoin-mode t)
  '(fci-rule-color "#383838")
  '(js2-auto-indent-p t)
