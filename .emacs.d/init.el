@@ -237,6 +237,8 @@
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
  '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#timepiece" "#oberlin"))))
  '(erc-autojoin-mode t)
+ '(erc-log-channels-directory "~/.erc/logs")
+ '(erc-log-insert-log-on-open t)
  '(fci-rule-color "#383838")
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
