@@ -65,26 +65,25 @@
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-engines-alist
+      '(("django" . "\\.html\\'")))
+(add-hook 'web-mode-hook
+           #'(lambda ()
+               (autopair-mode -1)
+               (auto-fill-mode -1)))
+
+;; js2
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; make moving around windows easier
-(windmove-default-keybindings)
+(require 'windmove)
+(windmove-default-keybindings 'super)
 (setq org-replace-disputed-keys t)
 
 ;; http://emacsrocks.com/e09.html
 (global-set-key (kbd "C-=") 'er/expand-region)
 (pending-delete-mode t)
-
-;; http://whattheemacsd.com//key-bindings.el-01.html
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
-
-(defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input"
-  (interactive)
-  (unwind-protect
-      (progn
-        (linum-mode 1)
-        (goto-line (read-number "Goto line: ")))
-    (linum-mode -1)))
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
