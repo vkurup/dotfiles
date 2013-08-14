@@ -16,11 +16,9 @@
                       rainbow-mode
                       twittering-mode
                       zenburn-theme
-                      color-theme-solarized
                       flycheck
                       virtualenv
                       elpy
-                      diminish
                       org
                       js2-mode
                       erc-hl-nicks
