@@ -39,15 +39,15 @@
 (add-hook 'calc-mode-hook
            #'(lambda ()
                (autopair-mode -1)))
-;;(autopair-global-mode)
+(require 'autopair)
+(autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
-(add-hook 'find-file-hook 'flycheck-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; map RET to newline-and-indent
-;(define-key global-map (kbd "RET") 'newline-and-indent)
+(define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; open a shell
 (shell)
