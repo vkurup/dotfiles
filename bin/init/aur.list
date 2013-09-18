@@ -8,6 +8,8 @@ deb2targz
 dropbox
 google-talkplugin
 ledger-git
+lib32-llvm-amdgpu-lib-snapshot
+llvm-amdgpu-lib-snapshot
 thinkfan
 tlp
 tpacpi-bat
