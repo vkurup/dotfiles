@@ -13,6 +13,7 @@
 /.emacs.d/ac-comphist.dat
 /.emacs.d/semanticdb
 /.emacs.d/ac-dict
+/.emacs.d/session
 /.xmonad/xmonad-x86_64-linux
 /.xmonad/xmonad.errors
 /.xmonad/xmonad.hi
