@@ -19,5 +19,6 @@
 /.xmonad/xmonad.hi
 /.xmonad/xmonad.o
 /.emacs.d/projectile.cache
+/.emacs.d/projectile-bookmarks.eld
 /.emacs.d/vinod/python-mode/.bzr
 /.emacs.d/vinod/python-mode/.bzrignore
