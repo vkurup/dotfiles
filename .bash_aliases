@@ -32,6 +32,7 @@ alias top="htop"
 alias github='br=$(git branch --contains HEAD | sed -rn "s/^\* //p"); if ! git ls-remote . | grep -q -e "refs/remotes/.*/${br}"; then br="master"; fi; xdg-open $(git config -l | sed -rn "s%remote.origin.url=git(@|://)(github.com)(:|/)(.+/.+).git%https://\2/\4/tree/${br}%p")'
 alias gitrd='git rm $(git ls-files -d)'
 alias pm='python manage.py'
+alias pmt='REUSE_DB=1 python manage.py test'
 
 alias less='most'
 
