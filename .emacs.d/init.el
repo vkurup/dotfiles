@@ -12,9 +12,7 @@
                       projectile
                       autopair
                       markdown-mode
-                      haskell-mode
                       rainbow-mode
-                      twittering-mode
                       zenburn-theme
                       flycheck
                       virtualenv
@@ -22,9 +20,6 @@
                       org
                       js2-mode
                       erc-hl-nicks
-                      erlang
-                      nrepl
-                      expand-region
                       yaml-mode
                       web-mode
                       zencoding-mode)
@@ -80,10 +75,6 @@
 (require 'windmove)
 (windmove-default-keybindings 'super)
 (setq org-replace-disputed-keys t)
-
-;; http://emacsrocks.com/e09.html
-(global-set-key (kbd "C-=") 'er/expand-region)
-(pending-delete-mode t)
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
@@ -141,11 +132,6 @@
     (insert "categories: \n")
     (insert "---\n\n")))
 
-;; twitter mode
-;; http://www.emacswiki.org/emacs/TwitteringMode
-(require 'twittering-mode)
-(setq twittering-use-master-password t)
-
 ;; vinod customizations
 (setq user-mail-address "vinod@kurup.com")
 ;; set calendar's location (for sunrise sunset)
@@ -160,7 +146,8 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-(load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
+(load-theme 'wombat t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -169,14 +156,15 @@
 
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4)
 (set-frame-font "Ubuntu Mono-12")
 
 ;; erc
-(setq erc-server "chat.caktusgroup.com"
+(setq erc-server "71.70.185.213"
        erc-port 6697
-       erc-nick "vkurup"
+       erc-nick "vkurup/caktus"
        erc-user-full-name user-full-name)
 (require 'secrets)
 ; Disable autopair in erc
@@ -214,9 +202,9 @@
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
- '(custom-safe-themes (quote ("f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
- '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#timepiece" "#oberlin"))))
+ '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#libya" "#rsvp" "#caktus" "#raspberryio" "#timepiece" "#oberlin"))))
  '(erc-autojoin-mode t)
  '(erc-log-channels-directory "~/.erc/logs")
  '(erc-log-insert-log-on-open t)
