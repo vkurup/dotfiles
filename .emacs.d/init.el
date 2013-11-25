@@ -164,13 +164,26 @@
 ;; erc
 (setq erc-server "71.70.185.213"
        erc-port 6697
-       erc-nick "vkurup/caktus"
+       erc-nick1 "vkurup/caktus"
+       erc-nick2 "vkurup/freenode"
        erc-user-full-name user-full-name)
 (require 'secrets)
 ; Disable autopair in erc
 (add-hook 'erc-mode-hook
           (lambda ()
               (setq autopair-dont-activate t)))
+
+(erc-tls
+ :server erc-server
+ :port "6697"
+ :nick erc-nick1
+ :password (concat erc-nick1 ":" erc-password-suffix))
+
+(erc-tls
+ :server erc-server
+ :port "6697"
+ :nick erc-nick2
+ :password (concat erc-nick2 ":" erc-password-suffix))
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
