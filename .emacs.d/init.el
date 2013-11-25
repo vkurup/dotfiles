@@ -48,7 +48,7 @@
 (shell)
 
 (require 'python)
-(virtualenv-workon "oberlin")
+(virtualenv-workon "libya-elections")
 (elpy-enable)
 
 
@@ -217,10 +217,13 @@
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
- '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#libya" "#rsvp" "#caktus" "#raspberryio" "#timepiece" "#oberlin"))))
+ '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#oberlin" "#libya" "#rsvp"))))
  '(erc-autojoin-mode t)
+ '(erc-enable-logging (quote erc-log-all-but-server-buffers))
  '(erc-log-channels-directory "~/.erc/logs")
  '(erc-log-insert-log-on-open t)
+ '(erc-log-write-after-insert t)
+ '(erc-log-write-after-send t)
  '(fci-rule-color "#383838")
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
@@ -246,7 +249,9 @@ Anika's favorite: %^{Anika's favorite}
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
- '(vc-annotate-very-old-color "#dc8cc3"))
+ '(vc-annotate-very-old-color "#dc8cc3")
+ '(web-mode-code-indent-offset 4)
+ '(web-mode-css-indent-offset 4))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
