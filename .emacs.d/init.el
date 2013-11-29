@@ -16,6 +16,7 @@
                       zenburn-theme
                       flycheck
                       virtualenv
+                      virtualenvwrapper
                       elpy
                       org
                       js2-mode
@@ -44,11 +45,17 @@
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-;; open a shell
-(shell)
-
-(require 'python)
-(virtualenv-workon "libya-elections")
+(add-hook 'python-mode-hook (lambda ()
+                              (hack-local-variables)
+                              (venv-workon project-venv-name)))
+(add-hook 'shell-mode-hook (lambda ()
+                              (hack-local-variables)
+                              (venv-workon project-venv-name)))
+(require 'virtualenvwrapper)
+(venv-initialize-interactive-shells)
+(venv-initialize-eshell)
+(setq venv-location "~/.virtualenvs/")
+(setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 (elpy-enable)
 
 
@@ -85,6 +92,10 @@
 (add-to-list 'load-path (expand-file-name (concat esk-user-dir "/ledger/")))
 (load "ldg-new")
 (add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
+(add-hook 'ledger-mode-hook
+          #'(lambda ()
+              (autopair-mode -1)
+              (auto-fill-mode -1)))
 
 ;; org mode
 (setq org-directory "~/Dropbox/org/")
@@ -146,8 +157,8 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-;; (load-theme 'zenburn t)
-(load-theme 'wombat t)
+(load-theme 'zenburn t)
+;; (load-theme 'wombat t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -156,32 +167,30 @@
 
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4)
 (set-frame-font "Ubuntu Mono-12")
 
 ;; erc
-(setq erc-server "71.70.185.213"
+(setq erc-server "vkurup.asuscomm.com"
        erc-port 6697
        erc-nick1 "vkurup/caktus"
        erc-nick2 "vkurup/freenode"
        erc-user-full-name user-full-name)
 (require 'secrets)
-; Disable autopair in erc
-(add-hook 'erc-mode-hook
-          (lambda ()
-              (setq autopair-dont-activate t)))
+(add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
 (erc-tls
  :server erc-server
- :port "6697"
+ :port erc-port
  :nick erc-nick1
  :password (concat erc-nick1 ":" erc-password-suffix))
 
 (erc-tls
  :server erc-server
- :port "6697"
+ :port erc-port
  :nick erc-nick2
  :password (concat erc-nick2 ":" erc-password-suffix))
 
@@ -217,7 +226,6 @@
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
- '(erc-autojoin-channels-alist (quote (("caktusgroup.com" "#caktus" "#raspberryio" "#oberlin" "#libya" "#rsvp"))))
  '(erc-autojoin-mode t)
  '(erc-enable-logging (quote erc-log-all-but-server-buffers))
  '(erc-log-channels-directory "~/.erc/logs")
@@ -245,7 +253,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(safe-local-variable-values (quote ((encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
+ '(safe-local-variable-values (quote ((project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
