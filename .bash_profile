@@ -2,7 +2,7 @@
 # ~/.bash_profile
 #
 
-eval `keychain --eval id_rsa 66832BC1`
+eval `keychain --clear --eval id_rsa 66832BC1`
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
