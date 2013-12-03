@@ -2,6 +2,7 @@
 # ~/.bash_profile
 #
 
+eval `keychain --eval id_rsa 66832BC1`
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -31,5 +32,8 @@ fi
 # rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# jmeter
+export PATH="/usr/local/apache-jmeter-2.9/bin:$PATH"
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx

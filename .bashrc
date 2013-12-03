@@ -36,9 +36,6 @@ PS1="\u@\h:\w\$(parse_git_branch) $ "
 
 TIME_STYLE=long-iso
 
-keychain id_rsa
-. ~/.keychain/`uname -n`-sh
-
 export LEDGER_FILE=${HOME}/Dropbox/data/finance/ledger.dat
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
@@ -50,6 +47,3 @@ export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=`which python`
 export PROJECT_HOME=$HOME/dev
 #source /usr/bin/virtualenvwrapper.sh
-
-# jmeter
-export PATH="${PATH}:/usr/local/apache-jmeter-2.9/bin"
