@@ -33,6 +33,7 @@ alias github='br=$(git branch --contains HEAD | sed -rn "s/^\* //p"); if ! git l
 alias gitrd='git rm $(git ls-files -d)'
 alias pm='python manage.py'
 alias pmt='REUSE_DB=1 python manage.py test'
+alias hpr='hub pull-request -b develop -i '
 
 alias less='most'
 
