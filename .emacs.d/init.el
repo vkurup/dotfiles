@@ -19,6 +19,7 @@
                       org
                       projectile
                       rainbow-mode
+                      smart-mode-line
                       virtualenv
                       virtualenvwrapper
                       web-mode
@@ -65,6 +66,10 @@
 (global-git-gutter-mode +1)
 (setq-default indicate-buffer-boundaries 'left)
 (setq-default indicate-empty-lines +1)
+
+;; modeline
+(require 'smart-mode-line)
+(sml/setup)
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
