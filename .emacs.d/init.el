@@ -9,20 +9,21 @@
 (defvar my-packages '(starter-kit
                       starter-kit-lisp
                       starter-kit-bindings
-                      projectile
                       autopair
-                      markdown-mode
-                      rainbow-mode
-                      zenburn-theme
+                      elpy
+                      erc-hl-nicks
                       flycheck
+                      git-gutter-fringe
+                      js2-mode
+                      markdown-mode
+                      org
+                      projectile
+                      rainbow-mode
                       virtualenv
                       virtualenvwrapper
-                      elpy
-                      org
-                      js2-mode
-                      erc-hl-nicks
-                      yaml-mode
                       web-mode
+                      yaml-mode
+                      zenburn-theme
                       zencoding-mode)
   "A list of packages to ensure are installed at launch.")
 
@@ -58,6 +59,12 @@
 (setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 (elpy-enable)
 
+;; fringe
+(when (window-system)
+  (require 'git-gutter-fringe))
+(global-git-gutter-mode +1)
+(setq-default indicate-buffer-boundaries 'left)
+(setq-default indicate-empty-lines +1)
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
