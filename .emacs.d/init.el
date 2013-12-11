@@ -253,7 +253,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(safe-local-variable-values (quote ((project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
+ '(safe-local-variable-values (quote ((project-venv-name . "oberlin") (project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
