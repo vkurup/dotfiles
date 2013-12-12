@@ -244,6 +244,7 @@
  '(erc-log-write-after-send t)
  '(erc-track-position-in-mode-line t)
  '(fci-rule-color "#383838")
+ '(fill-column 100)
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
  '(nxml-bind-meta-tab-to-complete-flag t)
