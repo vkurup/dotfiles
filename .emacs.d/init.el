@@ -13,7 +13,6 @@
                       elpy
                       erc-hl-nicks
                       flycheck
-                      git-gutter-fringe
                       js2-mode
                       markdown-mode
                       org
@@ -60,16 +59,8 @@
 (setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 (elpy-enable)
 
-;; fringe
-(when (window-system)
-  (require 'git-gutter-fringe))
-(global-git-gutter-mode +1)
-(setq-default indicate-buffer-boundaries 'left)
-(setq-default indicate-empty-lines +1)
-
 ;; modeline
-(require 'smart-mode-line)
-(sml/setup)
+;;(sml/setup)
 
 ;; scrolling
 (setq redisplay-dont-pause t
@@ -251,6 +242,7 @@
  '(erc-log-insert-log-on-open t)
  '(erc-log-write-after-insert t)
  '(erc-log-write-after-send t)
+ '(erc-track-position-in-mode-line t)
  '(fci-rule-color "#383838")
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
