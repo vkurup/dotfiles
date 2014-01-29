@@ -15,7 +15,7 @@ alias f="find"
 # package management
 alias pmi="sudo pacmatic -S"
 alias pmr="sudo pacmatic -Rs"
-alias pmu="sudo cacheclean 1 && sudo pacmatic -Syu"
+alias pmu="sudo pacman -Sc && sudo pacmatic -Syu"
 alias pms="pacmatic -Ss"
 alias pmsh="pacmatic -Qi"
 alias pmclean='sudo pacmatic -Rsn $(pacman -Qdtq)'
