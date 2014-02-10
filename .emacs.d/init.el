@@ -184,25 +184,24 @@
 (set-frame-font "Ubuntu Mono-12")
 
 ;; erc
-(setq erc-server "vkurup.asuscomm.com"
-       erc-port 6697
-       erc-nick1 "vkurup/caktus"
-       erc-nick2 "vkurup/freenode"
-       erc-user-full-name user-full-name)
 (require 'secrets)
 (add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
-(erc-tls
- :server erc-server
- :port erc-port
- :nick erc-nick1
- :password (concat erc-nick1 ":" erc-password-suffix))
+(setq erc-autojoin-channels-alist
+      '(("freenode.net" "#ledger" "#vumi-libya" "#tripython")
+        ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
 
-(erc-tls
- :server erc-server
- :port erc-port
- :nick erc-nick2
- :password (concat erc-nick2 ":" erc-password-suffix))
+(progn
+  (erc-tls
+   :server "chat.caktusgroup.com"
+   :port 6697
+   :nick "vkurup"
+   :password erc-password)
+  (erc
+   :server "irc.freenode.net"
+   :port 6667
+   :nick "vkurup"
+   :password erc-freenode-password))
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
