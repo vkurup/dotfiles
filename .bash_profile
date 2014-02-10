@@ -34,6 +34,6 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # jmeter
-export PATH="/usr/local/apache-jmeter-2.9/bin:$PATH"
+export PATH="/usr/local/apache-jmeter-2.11/bin:$PATH"
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx
