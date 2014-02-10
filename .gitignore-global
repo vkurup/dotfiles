@@ -1,3 +1,4 @@
 .ropeproject
 requirements/local.txt
 .dir-locals.el
+.noseids
