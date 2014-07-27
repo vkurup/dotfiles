@@ -1,4 +1,4 @@
-personal_ws-1.1 en 86 
+personal_ws-1.1 en 87
 SHA
 Compojure
 Mala
@@ -45,12 +45,11 @@ caffeinated
 rdoc
 clojure
 https
+django
 Django
 résumé
 Radagast
-Evrinid
 Heroku
-Evri
 JVM
 src
 Solr
