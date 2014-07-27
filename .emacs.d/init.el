@@ -43,6 +43,9 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; work with ubuntu clipboard
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
