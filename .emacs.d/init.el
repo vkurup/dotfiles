@@ -9,6 +9,7 @@
 (defvar my-packages '(starter-kit
                       starter-kit-lisp
                       starter-kit-bindings
+                      anzu
                       autopair
                       elpy
                       erc-hl-nicks
@@ -40,6 +41,7 @@
 (autopair-global-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
+(global-anzu-mode +1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
