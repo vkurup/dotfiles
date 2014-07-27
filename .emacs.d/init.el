@@ -192,7 +192,9 @@
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Ubuntu Mono-12")
+(set-frame-font "Inconsolata-12")
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 20 :name "Symbola"))
 
 ;; erc
 (require 'secrets)
