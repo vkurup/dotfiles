@@ -62,6 +62,12 @@
 (setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 (elpy-enable)
 
+;; ruby
+(add-to-list 'auto-mode-alist
+             '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist
+             '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\|Vagrantfile\\)\\'" . ruby-mode))
+
 ;; modeline
 ;;(sml/setup)
 
