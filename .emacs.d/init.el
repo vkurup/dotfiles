@@ -197,15 +197,15 @@
 (add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#ledger" "#vumi-libya" "#tripython")
+      '(("freenode.net" "#ledger" "#vumi-libya" "#tripython" "#rapidsms")
         ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
 
 (progn
-  (erc-tls
-   :server "chat.caktusgroup.com"
-   :port 6697
-   :nick "vkurup"
-   :password erc-password)
+  ;; (erc-tls
+  ;;  :server "chat.caktusgroup.com"
+  ;;  :port 6697
+  ;;  :nick "vkurup"
+  ;;  :password erc-password)
   (erc
    :server "irc.freenode.net"
    :port 6667
@@ -257,7 +257,7 @@
  '(js2-enter-indents-newline t)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
- '(org-agenda-files (quote ("~/org/gtd.org")))
+ '(org-agenda-files (quote ("~/Documents/caktus.org")))
  '(org-capture-templates (quote (("j" "Journal Entry" entry (file "~/org/notes.org") "* %T %?") ("t" "Create Task" entry (file+headline "~/Dropbox/org/gtd.org" "Inbox") "* TODO %^{Description} %^g
 %?
 Added: %U") ("d" "Diary" entry (file+headline "~/Dropbox/org/notes.org" "Diary") "* %T
@@ -273,13 +273,25 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(safe-local-variable-values (quote ((project-venv-name . "dr-tea") (project-venv-name . "oberlin") (project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
+ '(safe-local-variable-values (quote ((project-venv-name . "rescuesms")
+                                      (project-venv-name . "reporting-api")
+                                      (project-venv-name . "dr-tea")
+                                      (project-venv-name . "oberlin")
+                                      (project-venv-name . "libya-elections")
+                                      (project-venv-name . "rsvp")
+                                      (encoding . utf-8)
+                                      (whitespace-line-column . 80)
+                                      (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
  '(vc-annotate-very-old-color "#dc8cc3")
  '(web-mode-code-indent-offset 4)
- '(web-mode-css-indent-offset 4))
+ '(web-mode-css-indent-offset 4)
+ '(web-mode-enable-comment-keywords t)
+ '(web-mode-enable-part-face t)
+ '(web-mode-extra-python-keywords t)
+ '(web-mode-markup-indent-offset 4))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
