@@ -47,3 +47,11 @@ export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=`which python`
 export PROJECT_HOME=$HOME/dev
 #source /usr/bin/virtualenvwrapper.sh
+
+eval "$(rbenv init -)"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+# added by travis gem
+[ -f /home/vkurup/.travis/travis.sh ] && source /home/vkurup/.travis/travis.sh
