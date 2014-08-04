@@ -14,15 +14,10 @@
                       autopair
                       elpy
                       erc-hl-nicks
-                      flycheck
                       js2-mode
                       markdown-mode
                       org
-                      projectile
                       rainbow-mode
-                      smart-mode-line
-                      virtualenv
-                      virtualenvwrapper
                       web-mode
                       yaml-mode
                       zenburn-theme
@@ -40,7 +35,6 @@
                (autopair-mode -1)))
 (require 'autopair)
 (autopair-global-mode)
-(projectile-global-mode)
 (yas-global-mode 1)
 (global-anzu-mode +1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -52,17 +46,6 @@
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-(add-hook 'python-mode-hook (lambda ()
-                              (hack-local-variables)
-                              (venv-workon project-venv-name)))
-(add-hook 'shell-mode-hook (lambda ()
-                              (hack-local-variables)
-                              (venv-workon project-venv-name)))
-(require 'virtualenvwrapper)
-(venv-initialize-interactive-shells)
-(venv-initialize-eshell)
-(setq venv-location "~/.virtualenvs/")
-(setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 (elpy-enable)
 
 ;; ruby
@@ -70,9 +53,6 @@
              '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist
              '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\|Vagrantfile\\)\\'" . ruby-mode))
-
-;; modeline
-;;(sml/setup)
 
 ;; scrolling
 (setq redisplay-dont-pause t
@@ -193,7 +173,7 @@
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Inconsolata-12")
+(set-frame-font "Inconsolata-14")
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
@@ -248,7 +228,8 @@
  '(browse-url-browser-function (quote browse-url-chromium))
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(elpy-default-minor-modes (quote (eldoc-mode flycheck-mode yas-minor-mode auto-complete-mode)))
+ '(elpy-modules (quote (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
+ '(elpy-test-runner (quote elpy-test-django-runner))
  '(erc-autojoin-mode t)
  '(erc-enable-logging (quote erc-log-all-but-server-buffers))
  '(erc-log-channels-directory "~/.erc/logs")
@@ -279,7 +260,8 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
  '(pony-server-host "0.0.0.0")
- '(safe-local-variable-values (quote ((project-venv-name . "rescuesms") (project-venv-name . "reporting-api") (project-venv-name . "dr-tea") (project-venv-name . "oberlin") (project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
+ '(python-check-command "flake8")
+ '(safe-local-variable-values (quote ((project-venv-name . "superlists") (project-venv-name . "pythontdd") (project-venv-name . "rescuesms") (project-venv-name . "reporting-api") (project-venv-name . "dr-tea") (project-venv-name . "oberlin") (project-venv-name . "libya-elections") (project-venv-name . "rsvp") (encoding . utf-8) (whitespace-line-column . 80) (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map (quote ((20 . "#bc8383") (40 . "#cc9393") (60 . "#dfaf8f") (80 . "#d0bf8f") (100 . "#e0cf9f") (120 . "#f0dfaf") (140 . "#5f7f5f") (160 . "#7f9f7f") (180 . "#8fb28f") (200 . "#9fc59f") (220 . "#afd8af") (240 . "#bfebbf") (260 . "#93e0e3") (280 . "#6ca0a3") (300 . "#7cb8bb") (320 . "#8cd0d3") (340 . "#94bff3") (360 . "#dc8cc3"))))
