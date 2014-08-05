@@ -14,6 +14,7 @@
                       autopair
                       elpy
                       erc-hl-nicks
+                      flymake-cursor
                       js2-mode
                       markdown-mode
                       org
@@ -215,6 +216,9 @@
 
 ;; http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation/
 (electric-indent-mode 0)
+
+;; flymake-cursor
+(eval-after-load 'flymake '(require 'flymake-cursor))
 
 ;; emacsclient
 (server-start)
