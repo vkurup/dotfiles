@@ -2,6 +2,8 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -18,6 +20,7 @@
                       js2-mode
                       markdown-mode
                       org
+                      projectile
                       rainbow-mode
                       web-mode
                       yaml-mode
@@ -34,12 +37,17 @@
 (add-hook 'calc-mode-hook
            #'(lambda ()
                (autopair-mode -1)))
-(require 'autopair)
 (autopair-global-mode)
+(ido-mode 1)
+(ido-everywhere 1)
+(projectile-global-mode)
 (yas-global-mode 1)
 (global-anzu-mode +1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; projectile settings
+(setq projectile-enable-caching t)
 
 ;; work with ubuntu clipboard
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
@@ -229,7 +237,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
- '(browse-url-browser-function (quote browse-url-chromium))
+ '(browse-url-browser-function (quote browse-url-default-browser))
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(elpy-modules (quote (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
