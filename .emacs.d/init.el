@@ -16,7 +16,7 @@
                       autopair
                       elpy
                       erc-hl-nicks
-                      flymake-cursor
+                      flycheck
                       js2-mode
                       markdown-mode
                       org
@@ -225,8 +225,11 @@
 ;; http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation/
 (electric-indent-mode 0)
 
-;; flymake-cursor
-(eval-after-load 'flymake '(require 'flymake-cursor))
+;; use flycheck instead of flymake
+;; https://github.com/jorgenschaefer/elpy/issues/304
+(when (require 'flycheck nil t)
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; emacsclient
 (server-start)
@@ -240,7 +243,7 @@
  '(browse-url-browser-function (quote browse-url-default-browser))
  '(browse-url-generic-program "chromium-browser")
  '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(elpy-modules (quote (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
+ '(elpy-modules (quote (elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
  '(elpy-test-runner (quote elpy-test-django-runner))
  '(erc-autojoin-mode t)
  '(erc-enable-logging (quote erc-log-all-but-server-buffers))
