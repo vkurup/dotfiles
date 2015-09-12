@@ -37,3 +37,8 @@ eval "$(rbenv init -)"
 export PATH="/usr/local/apache-jmeter-2.11/bin:$PATH"
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx
+
+# install ansible from source
+if [ -d "$HOME/dev/ansible" ] ; then
+    source $HOME/dev/ansible/hacking/env-setup
+fi
