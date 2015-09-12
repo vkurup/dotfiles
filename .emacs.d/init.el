@@ -194,17 +194,17 @@
       '(("freenode.net" "#ledger" "#vumi-libya" "#tripython" "#rapidsms")
         ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
 
-(progn
-  ;; (erc-tls
-  ;;  :server "chat.caktusgroup.com"
-  ;;  :port 6697
-  ;;  :nick "vkurup"
-  ;;  :password erc-password)
-  (erc
-   :server "irc.freenode.net"
-   :port 6667
-   :nick "vkurup"
-   :password erc-freenode-password))
+;; (progn
+;;   ;; (erc-tls
+;;   ;;  :server "chat.caktusgroup.com"
+;;   ;;  :port 6697
+;;   ;;  :nick "vkurup"
+;;   ;;  :password erc-password)
+;;   (erc
+;;    :server "irc.freenode.net"
+;;    :port 6667
+;;    :nick "vkurup"
+;;    :password erc-freenode-password))
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
