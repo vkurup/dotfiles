@@ -16,4 +16,5 @@
 /.emacs.d/semanticdb
 /.emacs.d/session*
 /.emacs.d/tramp
+/.emacs.d/tmp
 /.emacs.d/url
