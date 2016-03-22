@@ -2,8 +2,6 @@
 # ~/.bash_profile
 #
 
-eval `keychain --clear --eval id_rsa 66832BC1`
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -33,7 +31,7 @@ fi
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# jmeter
-export PATH="/usr/local/apache-jmeter-2.11/bin:$PATH"
-
-[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx
+# install ansible from source
+if [ -d "$HOME/dev/ansible" ] ; then
+    source $HOME/dev/ansible/hacking/env-setup
+fi

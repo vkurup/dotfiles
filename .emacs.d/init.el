@@ -191,7 +191,7 @@
                   (font-spec :size 20 :name "Symbola"))
 
 ;; erc
-(require 'secrets)
+;; (require 'secrets)
 (add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
 (setq erc-autojoin-channels-alist
