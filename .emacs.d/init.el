@@ -1,6 +1,5 @@
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
@@ -45,7 +44,7 @@
 
 (progn
   ;; Turn off mouse interface early in startup to avoid momentary display
-  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+  (dolist (mode '(tool-bar-mode scroll-bar-mode))
     (when (fboundp mode) (funcall mode -1)))
 
   ;; You can keep system- or user-specific customizations here
@@ -70,9 +69,6 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
-;; can't do it at launch or emacsclient won't always honor it
-(add-hook 'before-make-frame-hook 'esk-turn-off-tool-bar)
-
 (setq visible-bell t
       inhibit-startup-message t
       color-theme-is-global t
@@ -87,9 +83,6 @@
       save-place-file "~/.emacs.d/places"
       backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
       diff-switches "-u")
-
-(add-to-list 'safe-local-variable-values '(lexical-binding . t))
-(add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
 
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
@@ -131,6 +124,12 @@
   (esk-untabify-buffer)
   (delete-trailing-whitespace))
 
+(defun esk-sudo-edit (&optional arg)
+  (interactive "p")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 (defun esk-lorem ()
   "Insert a lorem ipsum."
   (interactive)
@@ -147,8 +146,6 @@
   (interactive)
   (insert (format-time-string "%c" (current-time))))
 
-
-
 ;;; Disable autopair-global-mode in calc-mode
 ;;; https://github.com/capitaomorte/autopair/issues/17
 (add-hook 'calc-mode-hook
@@ -159,7 +156,7 @@
 (ido-everywhere 1)
 (ido-ubiquitous-mode)
 (projectile-global-mode)
-; (yas-global-mode 1)
+(yas-global-mode 1)
 (global-anzu-mode +1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -173,7 +170,6 @@
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-(setq elpy-modules '(elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-sane-defaults))
 (elpy-enable)
 
 ;; ruby
@@ -208,7 +204,6 @@
 ;; js2
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-hook 'js2-mode-hook 'flycheck-mode)
-(setq flycheck-jshintrc "~/.emacs.d/.jshintrc")
 
 ;; make moving around windows easier
 (require 'windmove)
@@ -361,11 +356,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(android-mode-sdk-dir "~/src/android-sdk-linux_x86")
- '(ansi-color-names-vector
-   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(browse-url-browser-function (quote browse-url-default-browser))
- '(browse-url-generic-program "chromium-browser")
  '(compilation-always-kill t)
  '(compilation-scroll-output t)
  '(compilation-skip-threshold 2)
@@ -375,9 +365,6 @@
  '(elfeed-feeds
    (quote
     ("https://www.archlinux.org/feeds/news/" "http://www.caktusgroup.com/feeds/main/" "http://feeds.feedburner.com/CoderWeeklyArchiveFeed" "http://www.stephanboyer.com/rss" "http://feeds.feedburner.com/extracheese" "http://www.daemonology.net/hn-daily/index.rss" "http://opensource.com/health/feed" "http://blogs.hospitalmedicine.org/SHMClinicalBlog/?feed=rss2" "http://psung.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/jazzychadblog" "https://julien.danjou.info/blog/index.xml" "http://www.learningclojure.com/feeds/posts/default" "http://pipes.yahoo.com/pipes/pipe.run?_id=3PHwctj52xGg02vB6kjTQA&_render=rss" "http://mmcgrana.github.io/atom.xml" "http://minimallinux.com/feed/" "http://feeds.pheedo.com/OcwWeb/rss/new/mit-newocwscholarcourses" "http://allbleedingstops.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/MuddyCalves" "http://www.newsobserver.com/static/includes/most_popular-daily.rss" "http://www.tbray.org/ongoing/ongoing.atom" "http://blog.pinboard.in/feed/" "https://pragprog.com/magazines.opds" "http://primarilypictures.tumblr.com/rss" "http://yosefk.com/blog/feed" "http://feeds.feedburner.com/relevance-blog" "http://feeds.feedburner.com/ryanwaggoner" "http://kennedychina.blogspot.com/feeds/posts/default" "http://blog.fogus.me/feed/" "http://blogs.hospitalmedicine.org/hm10blog/feed/" "http://technomancy.us/feed/atom.xml" "http://blackstag.com/blog.rss" "http://changelog.complete.org/feed" "http://feeds2.feedburner.com/thecodemill/dawn-patrol" "https://github.com/blog.atom" "http://feeds.feedburner.com/blogspot/MKuf" "http://www.zefrank.com/theshow/replay/?feed=rss2" "http://blog.wikinvest.com/feed/atom/index.html" "http://blog.thinglabs.com/rss" "http://www.kurup.org/thinkup/crawler/rss.php?un=vinod@kurup.com&as=ca68922cda7604acbc7e71441f5e1f94" "http://feeds.feedburner.com/VirtuousCode" "http://womensbestkeptsecrets.com/" "http://blog.xkcd.com/feed/" "http://blog.yorba.org/feed" "http://feeds.raganwald.com/raganwald" "http://scribbling.net/feed/" "http://seriouspony.com/blog?format=rss" "http://www.fredtrotter.com/feed/" "http://s200161356.onlinehome.us/SHMClinicalBlog/?feed=rss2" "http://feeds.feedburner.com/WachtersWorld" "http://feeds.feedburner.com/43folders" "http://feeds.feedburner.com/jarkkolaine/sSkp" "http://subhasisarchana.blogspot.com/feeds/posts/default" "http://borkwarellc.wordpress.com/feed/" "http://feeds.feedburner.com/kurup/MGsB" "http://varkeyblog.com/cgi-sys/suspendedpage.cgi?feed=atom" "http://feeds.feedburner.com/vkurup" "http://stiglerdiet.com/feeds/all.atom.xml" "http://bc.tech.coop/blog/rss.xml" "http://briancarper.net/feed" "http://www.defmacro.org/" "http://blog.disqus.com/rss" "http://emacs-fu.blogspot.com/feeds/posts/default" "http://genehack.org/feed/rss/index.xml" "http://feeds.feedburner.com/newartisanscom" "http://feeds.feedburner.com/PindsBlog" "http://groups.google.com/group/ledger-cli/atom_v1_0_msgs.xml?num=50" "http://torvalds-family.blogspot.com/feeds/posts/default" "http://weeklyreddit.appspot.com/rss/linux" "http://feeds.feedburner.com/emacsblog" "http://firehose.diveintomark.org/atom.xml" "http://feeds.mekk.waw.pl/MekksBlog?format=xml" "http://emacs.wordpress.com/feed/" "https://blog.nearlyfreespeech.net/feed/atom/?_=5977" "http://feeds.feedburner.com/OfficialGmailBlog" "http://feeds.feedburner.com/PaulGrahamUnofficialRssFeed" "http://blogs.law.harvard.edu/philg/feed/atom/" "http://weeklyreddit.appspot.com/rss/programming" "http://feeds.postrank.com/4adcf2b26442f84ebcf631f42516c1ac?level=best" "http://www.aaronsw.com/weblog/index.xml" "http://feeds.feedburner.com/sachac" "http://user/04689935238818494850/state/com.google/broadcast" "http://spyced.blogspot.com/feeds/posts/default" "http://steve-yegge.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/tom-preston-werner" "http://withoutane.com/feed/" "http://www.pixelbeat.org/feed/rss2.xml" "http://www.garann.com/dev/feed/" "http://gigasquidsoftware.com/atom.xml" "http://aphyr.com/posts.atom" "http://user/14474885413983863081/state/com.google/broadcast" "http://rubick.com:8002/blogger/rss/rss/rss.xml" "http://feeds.feedburner.com/MarkAufflicksWeblog" "http://www.solutiongrove.com/blogger/rss/rss.xml" "http://feeds.dailylit.com/feeds/subs/fc826fec3370831ba4c1f2eee7a65535" "http://philipsung.blogspot.com/feeds/posts/default" "http://www.xkcd.com/rss.xml" "http://feeds.feedburner.com/zefrank" "http://feeds.kottke.org/main" "http://feeds.feedburner.com/AAIIComputerizedInvestingIssueUpdate" "http://feeds.feedburner.com/AAIIJournalIssueUpdate" "http://feeds.feedburner.com/AAIIModelPortfolioUpdate" "http://feeds.feedburner.com/AAIIStockScreensUpdate" "http://feeds.feedburner.com/GoogleFinanceBlog" "http://carpedurham.com/feed/atom/" "http://feeds2.feedburner.com/EclecticGlobOfTangentialVerbosity" "http://nullprogram.com/feed/" "http://www.terminally-incoherent.com/blog/feed/" "http://greengeckobay.blogspot.com/feeds/posts/default")))
- '(elpy-modules
-   (quote
-    (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-sane-defaults)))
  '(elpy-test-runner (quote elpy-test-django-runner))
  '(erc-autojoin-mode t)
  '(erc-enable-logging (quote erc-log-all-but-server-buffers))
@@ -419,10 +406,6 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-create-method (quote capture))
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
- '(package-selected-packages
-   (quote
-    (zencoding-mode zenburn-theme yaml-mode web-mode virtualenvwrapper virtualenv twittering-mode starter-kit-lisp starter-kit-bindings smart-mode-line rainbow-mode projectile popup nrepl nose markdown-mode js2-mode iedit haskell-mode fuzzy flymake-cursor flycheck flx-ido f expand-region erlang erc-hl-nicks elpy elfeed diminish autopair anzu)))
- '(pony-server-host "0.0.0.0")
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
@@ -469,59 +452,21 @@ Anika's favorite: %^{Anika's favorite}
                    (concat
                     (getenv "PATH")
                     ":/home/vkurup/dev/serviceinfo/node_modules/.bin")))
-     (test-case-name . hnec\.tests)
      (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "service_info.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "dr_tea.settings.local"))
      (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "rescuesms.settings.local"))
      (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "libya_elections.settings.local"))
-     (project-venv-name . "superlists")
-     (project-venv-name . "pythontdd")
      (project-venv-name . "rescuesms")
-     (project-venv-name . "reporting-api")
-     (project-venv-name . "dr-tea")
      (project-venv-name . "oberlin")
      (project-venv-name . "libya-elections")
-     (project-venv-name . "rsvp")
      (encoding . utf-8)
-     (whitespace-line-column . 80)
      (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
- '(vc-annotate-background "#2b2b2b")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#bc8383")
-     (40 . "#cc9393")
-     (60 . "#dfaf8f")
-     (80 . "#d0bf8f")
-     (100 . "#e0cf9f")
-     (120 . "#f0dfaf")
-     (140 . "#5f7f5f")
-     (160 . "#7f9f7f")
-     (180 . "#8fb28f")
-     (200 . "#9fc59f")
-     (220 . "#afd8af")
-     (240 . "#bfebbf")
-     (260 . "#93e0e3")
-     (280 . "#6ca0a3")
-     (300 . "#7cb8bb")
-     (320 . "#8cd0d3")
-     (340 . "#94bff3")
-     (360 . "#dc8cc3"))))
- '(vc-annotate-very-old-color "#dc8cc3")
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-enable-comment-keywords t)
  '(web-mode-enable-part-face t)
  '(web-mode-extra-python-keywords t)
  '(web-mode-markup-indent-offset 2))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ledger-font-xact-highlight-face ((t (:background "black")))))

@@ -9,7 +9,8 @@ case $- in
       *) return;;
 esac
 
-eval `keychain --eval id_rsa 66832BC1`
+export SSH_ASKPASS="/usr/bin/ssh-askpass"
+eval `keychain --agents gpg,ssh --eval id_rsa 66832BC1`
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoreboth
@@ -56,10 +57,15 @@ export VIRTUALENVWRAPPER_PYTHON=`which python`
 export PROJECT_HOME=$HOME/dev
 #source /usr/bin/virtualenvwrapper.sh
 
-#eval "$(rbenv init -)"
-
 ### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+if [ -d /usr/local/heroku ]; then
+    export PATH="/usr/local/heroku/bin:$PATH"
+fi
 
 # added by travis gem
 [ -f /home/vkurup/.travis/travis.sh ] && source /home/vkurup/.travis/travis.sh
+
+# install ansible from source
+if [ -d "$HOME/dev/ansible" ] ; then
+    source $HOME/dev/ansible/hacking/env-setup -q
+fi

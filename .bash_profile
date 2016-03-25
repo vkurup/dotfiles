@@ -2,10 +2,6 @@
 # ~/.bash_profile
 #
 
-#eval `keychain --clear --eval id_rsa 66832BC1`
-export SSH_ASKPASS="/usr/bin/ssh-askpass"
-eval `keychain --clear --agents gpg,ssh --eval id_rsa`
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -32,12 +28,9 @@ if [ -d "$HOME/node_modules/.bin" ] ; then
 fi
 
 # rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-# install ansible from source
-if [ -d "$HOME/dev/ansible" ] ; then
-    source $HOME/dev/ansible/hacking/env-setup
+if [ -d "$HOME/.rbenv" ]; then
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
 fi
 
 # jmeter
