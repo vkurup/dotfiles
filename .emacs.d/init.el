@@ -16,11 +16,15 @@
                       elpy
                       erc-hl-nicks
                       flycheck
+                      ido-ubiquitous
                       js2-mode
+                      ledger-mode
+                      magit
                       markdown-mode
                       org
                       projectile
                       rainbow-mode
+                      smex
                       web-mode
                       yaml-mode
                       zenburn-theme)
@@ -217,8 +221,6 @@
 (global-set-key [f6] 'recompile)
 
 ;; ledger
-(add-to-list 'load-path (expand-file-name (concat user-emacs-directory user-login-name "/ledger/")))
-;; (load "ldg-new")
 (add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
 (add-hook 'ledger-mode-hook
           #'(lambda ()
