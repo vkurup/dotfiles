@@ -12,14 +12,6 @@ alias grep="grep --color=auto"
 
 alias f="find"
 
-# package management
-alias pmi="sudo pacmatic -S"
-alias pmr="sudo pacmatic -Rs"
-alias pmu="sudo pacman -Sc && sudo pacmatic -Syu"
-alias pms="pacmatic -Ss"
-alias pmsh="pacmatic -Qi"
-alias pmclean='sudo pacmatic -Rsn $(pacman -Qdtq)'
-
 # git
 alias gst="git status"
 alias gbv="git branch -v"
