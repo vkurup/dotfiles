@@ -17,6 +17,7 @@
                       flycheck
                       ido-ubiquitous
                       js2-mode
+                      json-mode
                       ledger-mode
                       magit
                       markdown-mode
@@ -188,7 +189,7 @@
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js[px]$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
@@ -207,10 +208,11 @@
 
 ;; make moving around windows easier
 (require 'windmove)
-(windmove-default-keybindings 'super)
+(windmove-default-keybindings)
 (setq org-replace-disputed-keys t)
 
 (add-hook 'css-mode-hook 'rainbow-mode)
+(add-to-list 'auto-mode-alist '("\\.less\\'" . css-mode))
 
 ;; For running tests easily
 (global-set-key [f6] 'recompile)
@@ -348,6 +350,19 @@
 ;; elfeed
 (global-set-key (kbd "C-x w") 'elfeed)
 
+;; show image dimensions in modeline
+;; http://emacs.stackexchange.com/a/7693/289
+(defun show-image-dimensions-in-mode-line ()
+  (let* ((image-dimensions (image-size (image-get-display-property) :pixels))
+         (width (car image-dimensions))
+         (height (cdr image-dimensions)))
+    (setq mode-line-buffer-identification
+          (format "%s %dx%d" (propertized-buffer-identification "%12b") width height))))
+
+(add-hook 'image-mode-hook #'show-image-dimensions-in-mode-line)
+
+(define-coding-system-alias 'UTF-8 'utf-8)
+
 ;; emacsclient
 (server-start)
 
@@ -409,6 +424,9 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-create-method (quote capture))
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
+ '(package-selected-packages
+   (quote
+    (json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode ido-ubiquitous flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
@@ -467,12 +485,12 @@ Anika's favorite: %^{Anika's favorite}
      (encoding . utf-8)
      (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
- '(web-mode-code-indent-offset 2)
- '(web-mode-css-indent-offset 2)
+ '(web-mode-code-indent-offset 4)
+ '(web-mode-css-indent-offset 4)
  '(web-mode-enable-comment-keywords t)
  '(web-mode-enable-part-face t)
  '(web-mode-extra-python-keywords t)
- '(web-mode-markup-indent-offset 2))
+ '(web-mode-markup-indent-offset 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
