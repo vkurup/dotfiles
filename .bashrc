@@ -64,8 +64,3 @@ fi
 
 # added by travis gem
 [ -f /home/vkurup/.travis/travis.sh ] && source /home/vkurup/.travis/travis.sh
-
-# install ansible from source
-if [ -d "$HOME/dev/ansible" ] ; then
-    source $HOME/dev/ansible/hacking/env-setup -q
-fi
