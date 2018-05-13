@@ -437,53 +437,6 @@ Anika's favorite: %^{Anika's favorite}
      (xml "rst2xml.py" ".xml" nil)
      (pdf "rst2pdf" ".pdf" nil)
      (s5 "rst2s5.py" ".html" nil))))
- '(safe-local-variable-values
-   (quote
-    ((eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "duckling.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "cts.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "rescue_id.settings.local")
-           (setenv "PATH"
-                   (concat
-                    (getenv "PATH")
-                    ":/home/vkurup/dev/rescue_id/node_modules/.bin"))
-           (setq exec-path
-                 (append exec-path
-                         (quote
-                          ("/home/vkurup/dev/rescue_id/node_modules/.bin")))))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "rescue_id.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "ucare4life.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "service_info.settings.local")
-           (setenv "PATH"
-                   (concat
-                    (getenv "PATH")
-                    ":/home/vkurup/dev/serviceinfo/node_modules/.bin"))
-           (setq exec-path
-                 (append exec-path
-                         (quote
-                          ("/home/vkurup/dev/serviceinfo/node_modules/.bin")))))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "service_info.settings.local")
-           (setenv "PATH"
-                   (concat
-                    (getenv "PATH")
-                    ":/home/vkurup/dev/serviceinfo/node_modules/.bin")))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "service_info.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "rescuesms.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "libya_elections.settings.local"))
-     (project-venv-name . "rescuesms")
-     (project-venv-name . "oberlin")
-     (project-venv-name . "libya-elections")
-     (encoding . utf-8)
-     (lexical-binding . t))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(web-mode-code-indent-offset 4)
  '(web-mode-css-indent-offset 4)
