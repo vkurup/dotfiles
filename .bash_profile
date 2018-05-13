@@ -31,6 +31,13 @@ if [ -d "$HOME/.rbenv" ]; then
     eval "$(rbenv init -)"
 fi
 
+# pyenv
+if [ -d "$HOME/.pyenv" ]; then
+    export PATH="/home/vkurup/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 # jmeter
 if [ -d "$HOME/Downloads/apache-jmeter-2.13" ] ; then
 	export PATH="$HOME/Downloads/apache-jmeter-2.13/bin:$PATH"
