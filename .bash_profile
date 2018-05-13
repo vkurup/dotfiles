@@ -23,9 +23,7 @@ if [ -d "$HOME/opt/android-sdk-linux/tools" ] ; then
 fi
 
 # add node.js
-if [ -d "$HOME/node_modules/.bin" ] ; then
-    PATH="$HOME/node_modules/.bin:$PATH"
-fi
+PATH="$PATH:node_modules/.bin"
 
 # rbenv
 if [ -d "$HOME/.rbenv" ]; then
