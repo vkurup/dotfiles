@@ -19,9 +19,12 @@ else
 fi
 
 case $VIRTUAL_ENV in
-  */dr-tea) PORT=8001;;
+  */bringfido) PORT=8001;;
   */libya-elections) PORT=8002;;
   */rescuesms) PORT=8003;;
+  */rescue_id) PORT=8004;;
+  */caktus-website) PORT=8005;;
+  */inddex) PORT=8006;;
   # ...
   *) PORT=8000;;
 esac
@@ -29,8 +32,9 @@ esac
 TARGET=localhost:$PORT
 
 # Open page in browser after giving Django a few seconds to start
-if [ "$OPEN" != "false" ] ; then
-  (sleep 4;$OPEN http://$TARGET)&
-fi
+# if [ "$OPEN" != "false" ] ; then
+#   (sleep 4;$OPEN http://$TARGET)&
+# fi
 
-exec python manage.py runserver "$@" "$TARGET"
+#exec python manage.py runserver "$@" "$TARGET"
+exec npm run dev -- --port=$PORT --address=0.0.0.0
