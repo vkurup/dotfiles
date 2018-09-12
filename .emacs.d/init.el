@@ -13,7 +13,6 @@
                       elpy
                       erc-hl-nicks
                       flycheck
-                      ido-ubiquitous
                       js2-mode
                       json-mode
                       ledger-mode
@@ -153,7 +152,6 @@
 (autopair-global-mode)
 (ido-mode 1)
 (ido-everywhere 1)
-(ido-ubiquitous-mode)
 (projectile-global-mode)
 (yas-global-mode 1)
 (global-anzu-mode +1)
@@ -462,7 +460,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode ido-ubiquitous flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
