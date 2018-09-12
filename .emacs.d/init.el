@@ -1,7 +1,5 @@
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
 (package-initialize)
 
@@ -475,6 +473,18 @@ Anika's favorite: %^{Anika's favorite}
      (xml "rst2xml.py" ".xml" nil)
      (pdf "rst2pdf" ".pdf" nil)
      (s5 "rst2s5.py" ".html" nil))))
+ '(safe-local-variable-values
+   (quote
+    ((eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "cts.settings.local"))
+     (eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "mdumaker.settings.local"))
+     (eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "ncvoter.local_settings"))
+     (eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "inddex.settings.dev"))
+     (eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "libya_elections.settings.local")))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(web-mode-code-indent-offset 4)
  '(web-mode-css-indent-offset 4)
