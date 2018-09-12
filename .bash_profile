@@ -33,9 +33,14 @@ fi
 
 # pyenv
 if [ -d "$HOME/.pyenv" ]; then
-    export PATH="/home/vkurup/.pyenv/bin:$PATH"
+    export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+fi
+
+# pipsi/pipenv
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$HOME/.local/bin:$PATH
 fi
 
 # jmeter

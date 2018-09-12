@@ -55,7 +55,7 @@ export PAGER=most
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=`which python`
 export PROJECT_HOME=$HOME/dev
-#source /usr/bin/virtualenvwrapper.sh
+source $HOME/.pyenv/versions/3.6.5/bin/virtualenvwrapper.sh
 
 ### Added by the Heroku Toolbelt
 if [ -d /usr/local/heroku ]; then
