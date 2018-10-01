@@ -52,11 +52,6 @@ export ALTERNATE_EDITOR=emacs
 export CVS_RSH=ssh
 export PAGER=most
 
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=`which python`
-export PROJECT_HOME=$HOME/dev
-source $HOME/.pyenv/versions/3.6.5/bin/virtualenvwrapper.sh
-
 ### Added by the Heroku Toolbelt
 if [ -d /usr/local/heroku ]; then
     export PATH="/usr/local/heroku/bin:$PATH"
@@ -68,3 +63,13 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# pyenv
+# pyenv-virtualenv init needs to be in bashrc for each terminal, so check each time
+# https://github.com/pyenv/pyenv/issues/264#issuecomment-283768966
+if [ -n "$(type -t pyenv)" ] && [ "$(type -t pyenv)" = function ]; then
+    true
+else
+    if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+    if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+fi
