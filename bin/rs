@@ -20,7 +20,7 @@ fi
 
 GULP=""
 
-case $VIRTUAL_ENV in
+case $PWD in
   */bringfido) PORT=8001;;
   */libya-elections) PORT=8002;;
   */rescuesms) PORT=8003;;
@@ -28,6 +28,7 @@ case $VIRTUAL_ENV in
   */caktus-website) PORT=8005;;
   */inddex) PORT=8006 GULP="TRUE";;
   */mdumaker) PORT=8008;;
+  */tulip) PORT=8009 WEBPACK="TRUE";;
   # ...
   *) PORT=8000;;
 esac
@@ -36,11 +37,13 @@ TARGET=localhost:$PORT
 
 # Open page in browser after giving Django a few seconds to start
 if [ "$OPEN" != "false" ] ; then
-    (sleep 4;$OPEN http://$TARGET)&
+    (sleep 6;$OPEN http://$TARGET)&
 fi
 
-if [ "$GULP" != "TRUE" ] ; then
+if [ "$GULP" != "TRUE" ] && [ "$WEBPACK" != "TRUE" ] ; then
     exec python manage.py runserver "$@" "$TARGET"
-else
+elif [ "$GULP" = "TRUE" ] ; then
     exec npm run dev -- --port=$PORT --address=0.0.0.0
+else
+    exec npm run serve -- --port_num=$PORT --address=0.0.0.0
 fi
