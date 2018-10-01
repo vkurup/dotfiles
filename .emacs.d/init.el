@@ -8,20 +8,25 @@
 
 (defvar my-packages '(anzu
                       autopair
+                      avy
                       company
                       elfeed
                       elpy
-                      erc-hl-nicks
+                      exec-path-from-shell
                       flycheck
+                      ivy
                       js2-mode
                       json-mode
                       ledger-mode
                       magit
                       markdown-mode
                       org
+                      pyenv-mode
                       projectile
                       rainbow-mode
                       smex
+                      tide
+                      use-package
                       web-mode
                       yaml-mode
                       zenburn-theme)
@@ -34,11 +39,9 @@
 ;; ESK things: Keep?
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (progn
   ;; Turn off mouse interface early in startup to avoid momentary display
@@ -54,12 +57,50 @@
 
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
-  (global-set-key (kbd "M-x") 'smex)
 
   (when (file-exists-p esk-system-config) (load esk-system-config))
   (when (file-exists-p esk-user-config) (load esk-user-config))
   (when (file-exists-p esk-user-dir)
     (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))
+
+;; ivy
+(require 'use-package)
+(use-package ivy :ensure t
+  :diminish (ivy-mode . "")
+  :bind
+  (:map ivy-mode-map
+   ("C-'" . ivy-avy))
+  :config
+  (ivy-mode 1)
+  ;; config from https://github.com/abo-abo/swiper
+  (setq enable-recursive-minibuffers t)
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+  (setq ivy-use-virtual-buffers t)
+  ;; number of result lines to display
+  (setq ivy-height 10)
+  ;; does not count candidates
+  (setq ivy-count-format "")
+  ;; no regexp by default
+  (setq ivy-initial-inputs-alist nil)
+  ;; configure regexp engine.
+  (setq ivy-re-builders-alist
+	;; allow input not in order
+        '((t   . ivy--regex-ignore-order))))
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
@@ -84,16 +125,6 @@
 
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
-
-;; ido-mode is like magic pixie dust!
-(setq ido-enable-prefix nil
-      ido-enable-flex-matching t
-      ido-auto-merge-work-directories-length nil
-      ido-create-new-buffer 'always
-      ido-use-filename-at-point 'guess
-      ido-use-virtual-buffers t
-      ido-handle-duplicate-virtual-buffers 2
-      ido-max-prospects 10)
 
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
@@ -125,7 +156,7 @@
 (defun esk-sudo-edit (&optional arg)
   (interactive "p")
   (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+      (find-file (concat "/sudo:root@localhost:" (read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 (defun esk-lorem ()
@@ -150,8 +181,6 @@
            #'(lambda ()
                (autopair-mode -1)))
 (autopair-global-mode)
-(ido-mode 1)
-(ido-everywhere 1)
 (projectile-global-mode)
 (yas-global-mode 1)
 (global-anzu-mode +1)
@@ -167,7 +196,58 @@
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-(elpy-enable)
+;; elpy
+(use-package elpy
+    :init
+    (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+    :bind (:map elpy-mode-map
+	      ("<M-left>" . nil)
+	      ("<M-right>" . nil)
+	      ("<M-S-left>" . elpy-nav-indent-shift-left)
+	      ("<M-S-right>" . elpy-nav-indent-shift-right)
+	      ("M-." . elpy-goto-definition)
+	      ("M-," . pop-tag-mark))
+    :config
+    (setq elpy-rpc-backend "jedi"))
+
+(use-package python
+  :mode ("\\.py" . python-mode)
+  :config
+  (setq python-indent-offset 4)
+  (elpy-enable))
+
+(use-package pyenv-mode
+  :init
+  (add-to-list 'exec-path "~/.pyenv/shims")
+  (setenv "WORKON_HOME" "~/.pyenv/versions/")
+  (setenv "PATH" (concat "/home/vkurup/.pyenv/shims:" (getenv "PATH")))
+  :config
+  (pyenv-mode)
+  :bind
+  ("C-x p e" . pyenv-activate-current-project))
+
+(defun pyenv-activate-current-project ()
+  "Automatically activates pyenv version if .python-version file exists."
+  (interactive)
+  (let ((python-version-directory (locate-dominating-file default-directory ".python-version")))
+    (if python-version-directory
+        (let* ((pyenv-version-path (f-expand ".python-version" python-version-directory))
+               (pyenv-current-version (s-trim (f-read-text pyenv-version-path 'utf-8))))
+          (pyenv-mode-set pyenv-current-version)
+          (message (concat "Setting virtualenv to " pyenv-current-version))))))
+
+(defvar pyenv-current-version nil nil)
+
+(defun pyenv-init()
+  "Initialize pyenv's current version to the global one."
+  (let ((global-pyenv (replace-regexp-in-string "\n" "" (shell-command-to-string "pyenv global"))))
+    (message (concat "Setting pyenv version to " global-pyenv))
+    (pyenv-mode-set global-pyenv)
+    (setq pyenv-current-version global-pyenv)))
+
+(add-hook 'after-init-hook 'pyenv-init)
+(add-hook 'find-file-hook 'pyenv-activate-current-project)
+(add-hook 'dired-mode-hook 'pyenv-activate-current-project)
 
 ;; ruby
 (add-to-list 'auto-mode-alist
@@ -191,6 +271,7 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
 (setq web-mode-engines-alist
       '(("django" . "\\.html\\'")))
 (add-hook 'web-mode-hook
@@ -201,6 +282,10 @@
 ;; js2
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-hook 'js2-mode-hook 'flycheck-mode)
+(require 'tide)
+(add-hook 'js2-mode-hook #'setup-tide-mode)
+;; configure javascript-tide checker to run after your default javascript checker
+(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
 
 ;; http://www.flycheck.org/manual/latest/index.html
 (require 'flycheck)
@@ -425,11 +510,11 @@
  '(erc-track-position-in-mode-line t)
  '(fci-rule-color "#383838")
  '(fill-column 100)
+ '(js-indent-level 2)
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
  '(js2-strict-missing-semi-warning nil)
  '(js2-strict-trailing-comma-warning nil)
- '(magit-completing-read-function (quote magit-ido-completing-read))
  '(magit-pull-arguments nil)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
@@ -451,7 +536,6 @@ Kavi's favorite: %^{Kavi's favorite}
 Anika's favorite: %^{Anika's favorite}
 
 %?"))))
- '(org-completion-use-ido t)
  '(org-velocity-allow-regexps t)
  '(org-velocity-always-use-bucket t)
  '(org-velocity-bucket "~/Dropbox/org/bucket.org")
@@ -460,7 +544,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
@@ -473,7 +557,11 @@ Anika's favorite: %^{Anika's favorite}
      (s5 "rst2s5.py" ".html" nil))))
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((pyvenv-workon . tulip)
+     (pyvenv-workon . inddex)
+     (eval progn
+           (setenv "DJANGO_SETTINGS_MODULE" "tulip.settings.dev"))
+     (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "cts.settings.local"))
      (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "mdumaker.settings.local"))
@@ -484,12 +572,19 @@ Anika's favorite: %^{Anika's favorite}
      (eval progn
            (setenv "DJANGO_SETTINGS_MODULE" "libya_elections.settings.local")))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
- '(web-mode-code-indent-offset 4)
- '(web-mode-css-indent-offset 4)
+ '(web-mode-auto-close-style 2)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-enable-comment-interpolation t)
  '(web-mode-enable-comment-keywords t)
+ '(web-mode-enable-current-column-highlight t)
+ '(web-mode-enable-current-element-highlight t)
  '(web-mode-enable-part-face t)
  '(web-mode-extra-python-keywords t)
- '(web-mode-markup-indent-offset 4))
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-part-padding 0)
+ '(web-mode-script-padding 0)
+ '(web-mode-style-padding 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
