@@ -37,7 +37,7 @@ TARGET=localhost:$PORT
 
 # Open page in browser after giving Django a few seconds to start
 if [ "$OPEN" != "false" ] ; then
-    (sleep 6;$OPEN http://$TARGET)&
+    (sleep 8;$OPEN http://$TARGET)&
 fi
 
 if [ "$GULP" != "TRUE" ] && [ "$WEBPACK" != "TRUE" ] ; then
