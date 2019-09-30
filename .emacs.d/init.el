@@ -10,6 +10,8 @@
                       autopair
                       avy
                       company
+                      company-lsp
+                      counsel
                       elfeed
                       elpy
                       exec-path-from-shell
@@ -18,6 +20,7 @@
                       js2-mode
                       json-mode
                       ledger-mode
+                      lsp-mode
                       magit
                       markdown-mode
                       org
@@ -249,6 +252,27 @@
 (add-hook 'find-file-hook 'pyenv-activate-current-project)
 (add-hook 'dired-mode-hook 'pyenv-activate-current-project)
 
+;; elixir
+;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
+;; using lsp-mode
+(use-package lsp-mode
+  :bind ("C-c h" . lsp-describe-thing-at-point)
+  :commands lsp
+  :ensure t
+  :diminish lsp-mode
+  :hook
+  (elixir-mode . lsp)
+  :init
+  (add-to-list 'exec-path "~/dev/elixir-ls/release"))
+
+(use-package company-lsp
+  :bind
+  ("M-SPC" . company-complete)
+  :config
+  (push 'company-lsp company-backends)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
 ;; ruby
 (add-to-list 'auto-mode-alist
              '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
@@ -272,6 +296,7 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html.eex\\'" . web-mode))
 (setq web-mode-engines-alist
       '(("django" . "\\.html\\'")))
 (add-hook 'web-mode-hook
@@ -312,7 +337,7 @@
 ;; https://github.com/purcell/exec-path-from-shell
 ;; only need exec-path-from-shell on OSX
 ;; this hopefully sets up path and other vars better
-(when (memq window-system '(mac ns))
+(when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
 ;; for better jsx syntax-highlighting in web-mode
@@ -544,7 +569,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode swiper smex rainbow-mode projectile markdown-mode magit ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
