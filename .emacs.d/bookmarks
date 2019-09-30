@@ -8,18 +8,18 @@
  (rear-context-string)
  (position . 1))
 ("Passwords"
- (filename . "~/Dropbox/website-ids.gpg")
+ (filename . "~/Sync/Vinod/website-ids.gpg")
  (front-context-string . "-*- mode: org; e")
  (rear-context-string)
  (position . 1))
 ("Ledger"
- (filename . "~/Dropbox/data/finance/ledger.dat")
+ (filename . "~/Sync/Vinod/data/finance/ledger.dat")
  (front-context-string . "2012/04/08 Achie")
  (rear-context-string . "First Internet\n\n")
  (position . 3045810)
  (annotation . ""))
 ("org-refile-last-stored"
- (filename . "~/Dropbox/org/gtd.org")
+ (filename . "~/Sync/Vinod/org/gtd.org")
  (front-context-string . "** TODO ledger l")
  (rear-context-string . "2-03 Fri 06:37]\n")
  (position . 919))

@@ -367,7 +367,7 @@
               (auto-fill-mode -1)))
 
 ;; org mode
-(setq org-directory "~/Dropbox/org/")
+(setq org-directory "~/Sync/Vinod/org/")
 (setq org-default-notes-file (concat org-directory "todo.org"))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
@@ -550,12 +550,12 @@
       (file "~/org/notes.org")
       "* %T %?")
      ("t" "Create Task" entry
-      (file+headline "~/Dropbox/org/gtd.org" "Inbox")
+      (file+headline "~/Sync/Vinod/org/gtd.org" "Inbox")
       "* TODO %^{Description} %^g
 %?
 Added: %U")
      ("d" "Diary" entry
-      (file+headline "~/Dropbox/org/notes.org" "Diary")
+      (file+headline "~/Sync/Vinod/org/notes.org" "Diary")
       "* %T
 Kavi's favorite: %^{Kavi's favorite}
 Anika's favorite: %^{Anika's favorite}
@@ -563,7 +563,7 @@ Anika's favorite: %^{Anika's favorite}
 %?"))))
  '(org-velocity-allow-regexps t)
  '(org-velocity-always-use-bucket t)
- '(org-velocity-bucket "~/Dropbox/org/bucket.org")
+ '(org-velocity-bucket "~/Sync/Vinod/org/bucket.org")
  '(org-velocity-create-method (quote capture))
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))

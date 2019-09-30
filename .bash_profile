@@ -7,9 +7,9 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-# add Dropbox/bin to path
-if [ -d "$HOME/Dropbox/bin" ] ; then
-    PATH="$HOME/Dropbox/bin:$PATH"
+# add Sync/Vinod/bin to path
+if [ -d "$HOME/Sync/Vinod/bin" ] ; then
+    PATH="$HOME/Sync/Vinod/bin:$PATH"
 fi
 
 # add node.js

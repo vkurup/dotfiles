@@ -45,7 +45,7 @@ PS1="\u@\h:\w\$(parse_git_branch) $ "
 
 TIME_STYLE=long-iso
 
-export LEDGER_FILE=${HOME}/Dropbox/data/finance/ledger.dat
+export LEDGER_FILE=${HOME}/Sync/Vinod/data/finance/ledger.dat
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=emacs
