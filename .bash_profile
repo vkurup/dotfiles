@@ -26,3 +26,5 @@ if [ -d "$HOME/.pyenv" ]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
     # init commands are in bashrc
 fi
+
+export PATH="$HOME/.poetry/bin:$PATH"
