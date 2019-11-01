@@ -13,6 +13,7 @@
                       company-lsp
                       counsel
                       elfeed
+                      elixir-mode
                       elpy
                       exec-path-from-shell
                       flycheck
@@ -569,7 +570,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (elixir-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
