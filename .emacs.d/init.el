@@ -12,6 +12,7 @@
                       company
                       company-lsp
                       counsel
+                      dockerfile-mode
                       elfeed
                       elixir-mode
                       elpy
@@ -570,7 +571,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (elixir-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (elixir-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
