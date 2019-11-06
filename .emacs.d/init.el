@@ -41,6 +41,9 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Display the column number.
+(column-number-mode t)
+
 ;; ESK things: Keep?
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
@@ -307,12 +310,21 @@
                (auto-fill-mode -1)))
 
 ;; js2
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-hook 'js2-mode-hook 'flycheck-mode)
 (require 'tide)
 (add-hook 'js2-mode-hook #'setup-tide-mode)
 ;; configure javascript-tide checker to run after your default javascript checker
 (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+
+;; https://emacs.stackexchange.com/a/33544/289
+(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+(defadvice js-jsx-indent-line (after js-jsx-indent-line-after-hack activate)
+  "Workaround sgml-mode and follow airbnb component style."
+  (save-excursion
+    (beginning-of-line)
+    (if (looking-at-p "^ +\/?> *$")
+        (delete-char sgml-basic-offset))))
+
 
 ;; http://www.flycheck.org/manual/latest/index.html
 (require 'flycheck)
@@ -339,8 +351,11 @@
 ;; https://github.com/purcell/exec-path-from-shell
 ;; only need exec-path-from-shell on OSX
 ;; this hopefully sets up path and other vars better
+;; Inherit environment variables from Shell.
 (when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize)))
 
 ;; for better jsx syntax-highlighting in web-mode
 ;; - courtesy of Patrick @halbtuerke
@@ -370,6 +385,11 @@
 
 ;; org mode
 (setq org-directory "~/Sync/Vinod/org/")
+(defvar user-todo-org (concat user-org-directory "todo.org"))
+(defvar user-work-org (concat user-org-directory "work.org"))
+(setq org-agenda-files (list
+                        user-todo-org
+                        user-work-org))
 (setq org-default-notes-file (concat org-directory "todo.org"))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
@@ -377,18 +397,13 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 (define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
 ;;(define-key global-map [f9] 'remember-region)
-(setq org-log-done t)
+(setq org-log-done (quote time))
 (setq org-agenda-show-log t)
 (setq org-return-follows-link t)
 (setq org-startup-indented t)
 (setq org-agenda-start-on-weekday nil) ; show agenda starting today
 (setq org-use-speed-commands t)
 (setq org-archive-location (concat org-directory "archive/%s_archive::"))
-
-(defun gtd ()
-  "Open my todo list"
-  (interactive)
-  (find-file (concat org-directory "gtd.org")))
 
 (fset 'vk-process-movie-list
       [?\C-a down ?\C-s ?2 ?0 ?1 ?1 left left left left ?\C-  ?\C-s ?  ?\C-s left ?\M-w right ?\C-y ?- left left left backspace ?- left left left backspace ?- right right right right right right ?\C-  ?\C-e ?\C-w ?. ?a ?v ?i left left left left ?\C-x ?o ?m ?p ?l ?a ?y ?e ?r ?  ?\C-y return ?\C-x ?o])
@@ -451,20 +466,20 @@
 (add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#ledger" "#vumi-libya" "#tripython" "#rapidsms" "#elpy" "#emacs-elpy")
+      '(("freenode.net" "#ledger" "#tripython" "#rapidsms" "#emacs-elpy")
         ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
 
-;; (progn
-;;   ;; (erc-tls
-;;   ;;  :server "chat.caktusgroup.com"
-;;   ;;  :port 6697
-;;   ;;  :nick "vkurup"
-;;   ;;  :password erc-password)
-;;   (erc
-;;    :server "irc.freenode.net"
-;;    :port 6667
-;;    :nick "vkurup"
-;;    :password erc-freenode-password))
+(progn
+  ;; (erc-tls
+  ;;  :server "chat.caktusgroup.com"
+  ;;  :port 6697
+  ;;  :nick "vkurup"
+  ;;  :password erc-password)
+  (erc
+   :server "irc.freenode.net"
+   :port 6667
+   :nick "vkurup"
+   :password erc-freenode-password))
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
@@ -545,7 +560,6 @@
  '(magit-pull-arguments nil)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
- '(org-agenda-files (quote ("~/Documents/caktus.org")))
  '(org-capture-templates
    (quote
     (("j" "Journal Entry" entry
@@ -571,7 +585,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (elixir-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
