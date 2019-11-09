@@ -384,7 +384,7 @@
               (auto-fill-mode -1)))
 
 ;; org mode
-(setq org-directory "~/Sync/Vinod/org/")
+(setq user-org-directory "~/Sync/Vinod/org/")
 (defvar user-todo-org (concat user-org-directory "todo.org"))
 (defvar user-work-org (concat user-org-directory "work.org"))
 (setq org-agenda-files (list
@@ -469,17 +469,17 @@
       '(("freenode.net" "#ledger" "#tripython" "#rapidsms" "#emacs-elpy")
         ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
 
-(progn
-  ;; (erc-tls
-  ;;  :server "chat.caktusgroup.com"
-  ;;  :port 6697
-  ;;  :nick "vkurup"
-  ;;  :password erc-password)
-  (erc
-   :server "irc.freenode.net"
-   :port 6667
-   :nick "vkurup"
-   :password erc-freenode-password))
+;; (progn
+;;   ;; (erc-tls
+;;   ;;  :server "chat.caktusgroup.com"
+;;   ;;  :port 6697
+;;   ;;  :nick "vkurup"
+;;   ;;  :password erc-password)
+;;   (erc
+;;    :server "irc.freenode.net"
+;;    :port 6667
+;;    :nick "vkurup"
+;;    :password erc-freenode-password))
 
 ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
 (defun visit-term-buffer ()
