@@ -418,14 +418,12 @@
   "Create a new blog post."
   (interactive "sPost Title: ")
   (let ((slug (vk-slugify title)))
-    (find-file (concat "~/dev/kurup.org/source/_posts/"
+    (find-file (concat "~/dev/kurup.org/content/post/"
                        (format-time-string "%Y-%m-%d")
                        "-" slug ".markdown"))
     (insert "---\n")
-    (insert "layout: post\n")
     (insert "date: " (format-time-string "%Y/%m/%d %H:%M:%S") "\n")
     (insert "title: " title "\n")
-    (insert "comments: true\n")
     (insert "categories: \n")
     (insert "---\n\n")))
 
@@ -566,12 +564,12 @@
       (file "~/org/notes.org")
       "* %T %?")
      ("t" "Create Task" entry
-      (file+headline "~/Sync/Vinod/org/gtd.org" "Inbox")
-      "* TODO %^{Description} %^g
+      (file+headline "~/org/gtd.org" "Inbox")
+      "* %^{Description} %^g
 %?
 Added: %U")
      ("d" "Diary" entry
-      (file+headline "~/Sync/Vinod/org/notes.org" "Diary")
+      (file+headline "~/org/notes.org" "Diary")
       "* %T
 Kavi's favorite: %^{Kavi's favorite}
 Anika's favorite: %^{Anika's favorite}
@@ -579,7 +577,7 @@ Anika's favorite: %^{Anika's favorite}
 %?"))))
  '(org-velocity-allow-regexps t)
  '(org-velocity-always-use-bucket t)
- '(org-velocity-bucket "~/Sync/Vinod/org/bucket.org")
+ '(org-velocity-bucket "~/org/bucket.org")
  '(org-velocity-create-method (quote capture))
  '(org-velocity-max-depth 2)
  '(org-velocity-search-method (quote phrase))
