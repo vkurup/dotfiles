@@ -384,9 +384,9 @@
               (auto-fill-mode -1)))
 
 ;; org mode
-(setq user-org-directory "~/Sync/Vinod/org/")
-(defvar user-todo-org (concat user-org-directory "todo.org"))
-(defvar user-work-org (concat user-org-directory "work.org"))
+(setq org-directory "~/org/")
+(defvar user-todo-org (concat org-directory "todo.org"))
+(defvar user-work-org (concat org-directory "work.org"))
 (setq org-agenda-files (list
                         user-todo-org
                         user-work-org))
