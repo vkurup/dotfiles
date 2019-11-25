@@ -405,6 +405,11 @@
 (setq org-use-speed-commands t)
 (setq org-archive-location (concat org-directory "archive/%s_archive::"))
 
+(defun gtd ()
+  "Open my todo list"
+  (interactive)
+  (find-file (concat org-directory "gtd.org")))
+
 (fset 'vk-process-movie-list
       [?\C-a down ?\C-s ?2 ?0 ?1 ?1 left left left left ?\C-  ?\C-s ?  ?\C-s left ?\M-w right ?\C-y ?- left left left backspace ?- left left left backspace ?- right right right right right right ?\C-  ?\C-e ?\C-w ?. ?a ?v ?i left left left left ?\C-x ?o ?m ?p ?l ?a ?y ?e ?r ?  ?\C-y return ?\C-x ?o])
 
