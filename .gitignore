@@ -8,11 +8,12 @@
 /.emacs.d/backups
 /.emacs.d/bookmarks
 /.emacs.d/elpa
+/.emacs.d/elpy
 /.emacs.d/eshell
 /.emacs.d/ido.last
+/.emacs.d/.lsp-session*
 /.emacs.d/places
-/.emacs.d/projectile.cache
-/.emacs.d/projectile-bookmarks.eld
+/.emacs.d/projectile*
 /.emacs.d/recentf
 /.emacs.d/semanticdb
 /.emacs.d/session*
