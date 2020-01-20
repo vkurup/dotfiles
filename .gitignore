@@ -6,6 +6,7 @@
 /.emacs.d/ac-dict
 /.emacs.d/auto-save-list
 /.emacs.d/backups
+/.emacs.d/bookmarks
 /.emacs.d/elpa
 /.emacs.d/eshell
 /.emacs.d/ido.last
