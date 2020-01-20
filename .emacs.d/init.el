@@ -12,8 +12,8 @@
                       company
                       company-lsp
                       counsel
+                      direnv
                       dockerfile-mode
-                      elfeed
                       elixir-mode
                       elpy
                       exec-path-from-shell
@@ -40,6 +40,8 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+(require 'use-package)
 
 ;; Display the column number.
 (column-number-mode t)
@@ -71,19 +73,27 @@
   (when (file-exists-p esk-user-dir)
     (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))
 
-;; ivy
-(require 'use-package)
-(use-package ivy :ensure t
+;; direnv
+(use-package direnv
+  :config
+  (direnv-mode))
+
+;; ivy/swiper/counsel
+(use-package ivy
+  :ensure t
   :diminish (ivy-mode . "")
-  :bind
-  (:map ivy-mode-map
-   ("C-'" . ivy-avy))
   :config
   (ivy-mode 1)
-  ;; config from https://github.com/abo-abo/swiper
+  (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
-  (global-set-key "\C-s" 'swiper)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume))
+(use-package swiper
+  :ensure t
+  :config
+  (global-set-key "\C-s" 'swiper))
+(use-package counsel
+  :ensure t
+  :config
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -95,20 +105,9 @@
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (setq ivy-use-virtual-buffers t)
-  ;; number of result lines to display
-  (setq ivy-height 10)
-  ;; does not count candidates
-  (setq ivy-count-format "")
-  ;; no regexp by default
+  ;; tried putting this in ivy config, but it got overridden here, so...
   (setq ivy-initial-inputs-alist nil)
-  ;; configure regexp engine.
-  (setq ivy-re-builders-alist
-	;; allow input not in order
-        '((t   . ivy--regex-ignore-order))))
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
@@ -126,7 +125,6 @@
       whitespace-style '(face trailing lines-tail tabs)
       whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
-      oddmuse-directory "~/.emacs.d/oddmuse"
       save-place-file "~/.emacs.d/places"
       backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
       diff-switches "-u")
@@ -206,56 +204,19 @@
 
 ;; elpy
 (use-package elpy
-    :init
-    (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-    :bind (:map elpy-mode-map
+  :ensure t
+  :init
+  (elpy-enable)
+  :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)
 	      ("<M-S-left>" . elpy-nav-indent-shift-left)
 	      ("<M-S-right>" . elpy-nav-indent-shift-right)
 	      ("M-." . elpy-goto-definition)
 	      ("M-," . pop-tag-mark))
-    :config
-    (setq elpy-rpc-backend "jedi"))
-
-(use-package python
-  :mode ("\\.py" . python-mode)
   :config
-  (setq python-indent-offset 4)
-  (elpy-enable))
-
-(use-package pyenv-mode
-  :init
-  (add-to-list 'exec-path "~/.pyenv/shims")
-  (setenv "WORKON_HOME" "~/.pyenv/versions/")
-  (setenv "PATH" (concat "/home/vkurup/.pyenv/shims:" (getenv "PATH")))
-  :config
-  (pyenv-mode)
-  :bind
-  ("C-x p e" . pyenv-activate-current-project))
-
-(defun pyenv-activate-current-project ()
-  "Automatically activates pyenv version if .python-version file exists."
-  (interactive)
-  (let ((python-version-directory (locate-dominating-file default-directory ".python-version")))
-    (if python-version-directory
-        (let* ((pyenv-version-path (f-expand ".python-version" python-version-directory))
-               (pyenv-current-version (s-trim (f-read-text pyenv-version-path 'utf-8))))
-          (pyenv-mode-set pyenv-current-version)
-          (message (concat "Setting virtualenv to " pyenv-current-version))))))
-
-(defvar pyenv-current-version nil nil)
-
-(defun pyenv-init()
-  "Initialize pyenv's current version to the global one."
-  (let ((global-pyenv (replace-regexp-in-string "\n" "" (shell-command-to-string "pyenv global"))))
-    (message (concat "Setting pyenv version to " global-pyenv))
-    (pyenv-mode-set global-pyenv)
-    (setq pyenv-current-version global-pyenv)))
-
-(add-hook 'after-init-hook 'pyenv-init)
-(add-hook 'find-file-hook 'pyenv-activate-current-project)
-(add-hook 'dired-mode-hook 'pyenv-activate-current-project)
+  (setq elpy-rpc-backend "jedi")
+  (setq elpy-rpc-python-command "python3"))
 
 ;; elixir
 ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
@@ -333,20 +294,17 @@
 ;; (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; disable jshint since we prefer eslint checking
+;; disable json-jsonlist checking for json files
 (setq-default flycheck-disabled-checkers
   (append flycheck-disabled-checkers
-    '(javascript-jshint)))
+    '(javascript-jshint
+      json-jsonlist)))
 
 ;; use eslint with web-mode for jsx files
 (flycheck-add-mode 'javascript-eslint 'web-mode)
 
 ;; customize flycheck temp file prefix
 (setq-default flycheck-temp-prefix ".flycheck")
-
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(json-jsonlist)))
 
 ;; https://github.com/purcell/exec-path-from-shell
 ;; only need exec-path-from-shell on OSX
@@ -427,7 +385,7 @@
                        (format-time-string "%Y-%m-%d")
                        "-" slug ".markdown"))
     (insert "---\n")
-    (insert "date: " (format-time-string "%Y/%m/%d %H:%M:%S") "\n")
+    (insert "date: " (format-time-string "%Y-%m-%dT%H:%M:%S") "\n")
     (insert "title: " title "\n")
     (insert "categories: \n")
     (insert "---\n\n")))
@@ -509,9 +467,6 @@
   (remove-hook 'elpy-modules 'elpy-module-flymake)
   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-;; elfeed
-(global-set-key (kbd "C-x w") 'elfeed)
-
 ;; show image dimensions in modeline
 ;; http://emacs.stackexchange.com/a/7693/289
 (defun show-image-dimensions-in-mode-line ()
@@ -539,9 +494,6 @@
  '(custom-safe-themes
    (quote
     ("de538b2d1282b23ca41ac5d8b69c033b911521fe27b5e1f59783d2eb20384e1f" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(elfeed-feeds
-   (quote
-    ("https://www.archlinux.org/feeds/news/" "http://www.caktusgroup.com/feeds/main/" "http://feeds.feedburner.com/CoderWeeklyArchiveFeed" "http://www.stephanboyer.com/rss" "http://feeds.feedburner.com/extracheese" "http://www.daemonology.net/hn-daily/index.rss" "http://opensource.com/health/feed" "http://blogs.hospitalmedicine.org/SHMClinicalBlog/?feed=rss2" "http://psung.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/jazzychadblog" "https://julien.danjou.info/blog/index.xml" "http://www.learningclojure.com/feeds/posts/default" "http://pipes.yahoo.com/pipes/pipe.run?_id=3PHwctj52xGg02vB6kjTQA&_render=rss" "http://mmcgrana.github.io/atom.xml" "http://minimallinux.com/feed/" "http://feeds.pheedo.com/OcwWeb/rss/new/mit-newocwscholarcourses" "http://allbleedingstops.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/MuddyCalves" "http://www.newsobserver.com/static/includes/most_popular-daily.rss" "http://www.tbray.org/ongoing/ongoing.atom" "http://blog.pinboard.in/feed/" "https://pragprog.com/magazines.opds" "http://primarilypictures.tumblr.com/rss" "http://yosefk.com/blog/feed" "http://feeds.feedburner.com/relevance-blog" "http://feeds.feedburner.com/ryanwaggoner" "http://kennedychina.blogspot.com/feeds/posts/default" "http://blog.fogus.me/feed/" "http://blogs.hospitalmedicine.org/hm10blog/feed/" "http://technomancy.us/feed/atom.xml" "http://blackstag.com/blog.rss" "http://changelog.complete.org/feed" "http://feeds2.feedburner.com/thecodemill/dawn-patrol" "https://github.com/blog.atom" "http://feeds.feedburner.com/blogspot/MKuf" "http://www.zefrank.com/theshow/replay/?feed=rss2" "http://blog.wikinvest.com/feed/atom/index.html" "http://blog.thinglabs.com/rss" "http://www.kurup.org/thinkup/crawler/rss.php?un=vinod@kurup.com&as=ca68922cda7604acbc7e71441f5e1f94" "http://feeds.feedburner.com/VirtuousCode" "http://womensbestkeptsecrets.com/" "http://blog.xkcd.com/feed/" "http://blog.yorba.org/feed" "http://feeds.raganwald.com/raganwald" "http://scribbling.net/feed/" "http://seriouspony.com/blog?format=rss" "http://www.fredtrotter.com/feed/" "http://s200161356.onlinehome.us/SHMClinicalBlog/?feed=rss2" "http://feeds.feedburner.com/WachtersWorld" "http://feeds.feedburner.com/43folders" "http://feeds.feedburner.com/jarkkolaine/sSkp" "http://subhasisarchana.blogspot.com/feeds/posts/default" "http://borkwarellc.wordpress.com/feed/" "http://feeds.feedburner.com/kurup/MGsB" "http://varkeyblog.com/cgi-sys/suspendedpage.cgi?feed=atom" "http://feeds.feedburner.com/vkurup" "http://stiglerdiet.com/feeds/all.atom.xml" "http://bc.tech.coop/blog/rss.xml" "http://briancarper.net/feed" "http://www.defmacro.org/" "http://blog.disqus.com/rss" "http://emacs-fu.blogspot.com/feeds/posts/default" "http://genehack.org/feed/rss/index.xml" "http://feeds.feedburner.com/newartisanscom" "http://feeds.feedburner.com/PindsBlog" "http://groups.google.com/group/ledger-cli/atom_v1_0_msgs.xml?num=50" "http://torvalds-family.blogspot.com/feeds/posts/default" "http://weeklyreddit.appspot.com/rss/linux" "http://feeds.feedburner.com/emacsblog" "http://firehose.diveintomark.org/atom.xml" "http://feeds.mekk.waw.pl/MekksBlog?format=xml" "http://emacs.wordpress.com/feed/" "https://blog.nearlyfreespeech.net/feed/atom/?_=5977" "http://feeds.feedburner.com/OfficialGmailBlog" "http://feeds.feedburner.com/PaulGrahamUnofficialRssFeed" "http://blogs.law.harvard.edu/philg/feed/atom/" "http://weeklyreddit.appspot.com/rss/programming" "http://feeds.postrank.com/4adcf2b26442f84ebcf631f42516c1ac?level=best" "http://www.aaronsw.com/weblog/index.xml" "http://feeds.feedburner.com/sachac" "http://user/04689935238818494850/state/com.google/broadcast" "http://spyced.blogspot.com/feeds/posts/default" "http://steve-yegge.blogspot.com/feeds/posts/default" "http://feeds.feedburner.com/tom-preston-werner" "http://withoutane.com/feed/" "http://www.pixelbeat.org/feed/rss2.xml" "http://www.garann.com/dev/feed/" "http://gigasquidsoftware.com/atom.xml" "http://aphyr.com/posts.atom" "http://user/14474885413983863081/state/com.google/broadcast" "http://rubick.com:8002/blogger/rss/rss/rss.xml" "http://feeds.feedburner.com/MarkAufflicksWeblog" "http://www.solutiongrove.com/blogger/rss/rss.xml" "http://feeds.dailylit.com/feeds/subs/fc826fec3370831ba4c1f2eee7a65535" "http://philipsung.blogspot.com/feeds/posts/default" "http://www.xkcd.com/rss.xml" "http://feeds.feedburner.com/zefrank" "http://feeds.kottke.org/main" "http://feeds.feedburner.com/AAIIComputerizedInvestingIssueUpdate" "http://feeds.feedburner.com/AAIIJournalIssueUpdate" "http://feeds.feedburner.com/AAIIModelPortfolioUpdate" "http://feeds.feedburner.com/AAIIStockScreensUpdate" "http://feeds.feedburner.com/GoogleFinanceBlog" "http://carpedurham.com/feed/atom/" "http://feeds2.feedburner.com/EclecticGlobOfTangentialVerbosity" "http://nullprogram.com/feed/" "http://www.terminally-incoherent.com/blog/feed/" "http://greengeckobay.blogspot.com/feeds/posts/default")))
  '(elpy-modules
    (quote
     (elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
@@ -554,7 +506,7 @@
  '(erc-log-write-after-send t)
  '(erc-track-position-in-mode-line t)
  '(fci-rule-color "#383838")
- '(fill-column 100)
+ '(fill-column 88)
  '(js-indent-level 2)
  '(js2-auto-indent-p t)
  '(js2-enter-indents-newline t)
@@ -563,6 +515,7 @@
  '(magit-pull-arguments nil)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
+ '(org-agenda-files (quote ("~/org/gtd.org")))
  '(org-capture-templates
    (quote
     (("j" "Journal Entry" entry
@@ -599,22 +552,6 @@ Anika's favorite: %^{Anika's favorite}
      (xml "rst2xml.py" ".xml" nil)
      (pdf "rst2pdf" ".pdf" nil)
      (s5 "rst2s5.py" ".html" nil))))
- '(safe-local-variable-values
-   (quote
-    ((pyvenv-workon . tulip)
-     (pyvenv-workon . inddex)
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "tulip.settings.dev"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "cts.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "mdumaker.settings.local"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "ncvoter.local_settings"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "inddex.settings.dev"))
-     (eval progn
-           (setenv "DJANGO_SETTINGS_MODULE" "libya_elections.settings.local")))))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(web-mode-auto-close-style 2)
  '(web-mode-code-indent-offset 2)

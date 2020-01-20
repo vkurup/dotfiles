@@ -42,6 +42,13 @@ parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 PS1="\u@\h:\w\$(parse_git_branch) $ "
+show_virtual_env() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo "($(basename $VIRTUAL_ENV))"
+  fi
+}
+export -f show_virtual_env
+PS1='$(show_virtual_env)'$PS1
 
 TIME_STYLE=long-iso
 
@@ -64,18 +71,20 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# pyenv
-# pyenv-virtualenv init needs to be in bashrc for each terminal, so check each time
-# https://github.com/pyenv/pyenv/issues/264#issuecomment-283768966
-if [ -n "$(type -t pyenv)" ] && [ "$(type -t pyenv)" = function ]; then
-    true
-else
-    if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-    if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
-fi
-
 # elixir asdf
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/asdf.sh"
   source "$HOME/.asdf/completions/asdf.bash"
+fi
+
+# pyenv
+if [ -n "$(which pyenv)" ]; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# direnv
+if [ -n "$(which direnv)" ]; then
+    eval "$(direnv hook bash)"
 fi
