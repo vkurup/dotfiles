@@ -10,7 +10,7 @@ case $- in
 esac
 
 export SSH_ASKPASS="/usr/bin/ssh-askpass"
-eval `keychain --agents gpg,ssh --eval id_rsa id_rsa4096 66832BC1`
+eval `keychain --agents gpg,ssh --eval id_rsa id_rsa4096 id_ed25519 66832BC1`
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoreboth
