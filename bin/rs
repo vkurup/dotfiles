@@ -24,11 +24,12 @@ case $PWD in
   */bringfido) PORT=8001;;
   */libya-elections) PORT=8002;;
   */rescuesms) PORT=8003;;
-  */rescue_id) PORT=8004;;
-  */caktus-website) PORT=8005;;
+  */rescue_id) PORT=8004 GULP="TRUE";;
+  */caktus-website) PORT=8005 GULP="TRUE";;
   */inddex) PORT=8006 GULP="TRUE";;
   */mdumaker) PORT=8008;;
   */tulip) PORT=8009 WEBPACK="TRUE";;
+  */discohub) PORT=8007 GULP="TRUE";;
   # ...
   *) PORT=8000;;
 esac

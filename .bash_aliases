@@ -32,3 +32,6 @@ alias less='most'
 # emacs
 alias e="emacsclient -t"
 alias E="SUDO_EDITOR=\"emacsclient -t -a emacs\" sudoedit"
+
+# k8s
+alias k="kubectl"

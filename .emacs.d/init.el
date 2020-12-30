@@ -15,6 +15,7 @@
                       direnv
                       dockerfile-mode
                       elixir-mode
+                      elixir-yasnippets
                       elpy
                       exec-path-from-shell
                       flycheck
@@ -52,6 +53,7 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "") 'isearch-backward-regexp)
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "M-o") 'other-window)
 
 (progn
   ;; Turn off mouse interface early in startup to avoid momentary display
@@ -541,7 +543,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
