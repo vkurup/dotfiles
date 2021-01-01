@@ -42,7 +42,27 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-(require 'use-package)
+(use-package avy
+  :ensure t
+  :bind ("M-s" . avy-goto-char))
+
+(use-package try
+  :ensure t)
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package undo-tree
+  :ensure t
+  :init
+  (global-undo-tree-mode))
 
 ;; Display the column number.
 (column-number-mode t)
@@ -54,6 +74,8 @@
 (global-set-key (kbd "") 'isearch-backward-regexp)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "M-o") 'other-window)
+;; Kill current buffer (instead of asking first buffer name)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
 
 (progn
   ;; Turn off mouse interface early in startup to avoid momentary display
@@ -66,6 +88,9 @@
         esk-user-dir (concat user-emacs-directory user-login-name))
 
   (add-to-list 'load-path esk-user-dir)
+
+  (setq shared-lib-dir (concat user-emacs-directory "lib"))
+  (add-to-list 'load-path shared-lib-dir)
 
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
@@ -118,8 +143,14 @@
   (blink-cursor-mode -1))
 
 (setq visible-bell t
+      inhibit-startup-screen t
       inhibit-startup-message t
+      initial-scratch-message nil
+      indent-tabs-mode nil
+      indicate-empty-lines nil
+      cursor-in-non-selected-windows nil
       color-theme-is-global t
+      imenu-auto-rescan t
       sentence-end-double-space nil
       shift-select-mode nil
       mouse-yank-at-point t
@@ -133,10 +164,6 @@
 
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
-
-(set-default 'indent-tabs-mode nil)
-(set-default 'indicate-empty-lines t)
-(set-default 'imenu-auto-rescan t)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
@@ -208,7 +235,6 @@
 (use-package elpy
   :ensure t
   :init
-  (elpy-enable)
   :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)
@@ -218,7 +244,8 @@
 	      ("M-," . pop-tag-mark))
   :config
   (setq elpy-rpc-backend "jedi")
-  (setq elpy-rpc-python-command "python3"))
+  (setq elpy-rpc-python-command "python3")
+  (elpy-enable))
 
 ;; elixir
 ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
@@ -289,11 +316,13 @@
         (delete-char sgml-basic-offset))))
 
 
-;; http://www.flycheck.org/manual/latest/index.html
-(require 'flycheck)
+(add-hook 'after-init-hook 'global-company-mode)
 
-;; turn on flychecking globally
-;; (add-hook 'after-init-hook #'global-flycheck-mode)
+;; http://www.flycheck.org/manual/latest/index.html
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
 
 ;; disable jshint since we prefer eslint checking
 ;; disable json-jsonlist checking for json files
@@ -312,7 +341,7 @@
 ;; only need exec-path-from-shell on OSX
 ;; this hopefully sets up path and other vars better
 ;; Inherit environment variables from Shell.
-(when (memq window-system '(mac ns x))
+(when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
     :config
     (exec-path-from-shell-initialize)))
@@ -331,7 +360,7 @@
 (setq org-replace-disputed-keys t)
 
 (add-hook 'css-mode-hook 'rainbow-mode)
-(add-to-list 'auto-mode-alist '("\\.less\\'" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))
 
 ;; For running tests easily
 (global-set-key [f6] 'recompile)
@@ -406,8 +435,14 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-(load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
 ;; (load-theme 'wombat t)
+
+;; nano-emacs https://github.com/rougier/nano-emacs
+(require 'nano-layout)
+(require 'nano-faces)
+(nano-faces)
+(require 'nano-modeline)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
@@ -543,7 +578,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (undo-tree org-bullets which-key try elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
