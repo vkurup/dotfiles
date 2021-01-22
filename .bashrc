@@ -3,14 +3,13 @@
 # for examples
 
 # If not running interactively, don't do anything
-# vk old version -> [ -z "$PS1" ] && return
 case $- in
     *i*) ;;
       *) return;;
 esac
 
 export SSH_ASKPASS="/usr/bin/ssh-askpass"
-eval `keychain --agents gpg,ssh --eval id_rsa id_rsa4096 id_ed25519 66832BC1`
+eval `keychain --agents gpg,ssh --eval id_rsa id_ed25519 66832BC1`
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoreboth
@@ -21,6 +20,11 @@ export HISTSIZE=1000000
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize histappend
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
@@ -64,9 +68,6 @@ if [ -d /usr/local/heroku ]; then
     export PATH="/usr/local/heroku/bin:$PATH"
 fi
 
-# added by travis gem
-[ -f /home/vkurup/.travis/travis.sh ] && source /home/vkurup/.travis/travis.sh
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -78,7 +79,8 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
 fi
 
 # pyenv
-if [ -n "$(which pyenv)" ]; then
+if [ -d "$HOME/.pyenv" ]; then
+  export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
