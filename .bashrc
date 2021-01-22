@@ -88,3 +88,15 @@ fi
 if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
+
+# kubectl bash completion
+source <(kubectl completion bash)
+
+# invoke bash completion
+_complete_invoke() {
+    # taken from https://github.com/pyinvoke/invoke/blob/master/invoke/completion/bash.completion
+    local candidates
+    candidates=`invoke --complete -- ${COMP_WORDS[*]}`
+    COMPREPLY=( $(compgen -W "${candidates}" -- $2) )
+}
+complete -F _complete_invoke -o default invoke inv
