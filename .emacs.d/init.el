@@ -235,6 +235,7 @@
 (use-package elpy
   :ensure t
   :init
+  (elpy-enable)
   :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)
@@ -244,8 +245,7 @@
 	      ("M-," . pop-tag-mark))
   :config
   (setq elpy-rpc-backend "jedi")
-  (setq elpy-rpc-python-command "python3")
-  (elpy-enable))
+  (setq elpy-rpc-python-command "python3"))
 
 ;; elixir
 ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
@@ -435,7 +435,7 @@
 (setq delete-old-versions t)
 
 ;; (load-theme 'adwaita t)
-;; (load-theme 'zenburn t)
+(load-theme 'zenburn t)
 ;; (load-theme 'wombat t)
 
 ;; nano-emacs https://github.com/rougier/nano-emacs
@@ -455,7 +455,6 @@
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4)
-(set-frame-font "Inconsolata-12")
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
