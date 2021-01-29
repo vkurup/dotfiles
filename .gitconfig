@@ -1,9 +1,6 @@
 [user]
 	name = Vinod Kurup
 	email = vinod@kurup.com
-[github]
-	user = vkurup
-	token = fad3309ee010161fe29678616e7085ee
 [color]
     status = auto
     branch = auto
