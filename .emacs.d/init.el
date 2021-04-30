@@ -9,6 +9,7 @@
 (defvar my-packages '(anzu
                       autopair
                       avy
+                      cider
                       company
                       company-lsp
                       counsel
@@ -146,7 +147,6 @@
       inhibit-startup-screen t
       inhibit-startup-message t
       initial-scratch-message nil
-      indent-tabs-mode nil
       indicate-empty-lines nil
       cursor-in-non-selected-windows nil
       color-theme-is-global t
@@ -454,7 +454,8 @@
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
-(setq-default default-tab-width 4)
+(setq-default default-tab-width 4
+      indent-tabs-mode nil)
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
@@ -527,6 +528,7 @@
  '(compilation-always-kill t)
  '(compilation-scroll-output t)
  '(compilation-skip-threshold 2)
+ '(css-indent-offset 2)
  '(custom-safe-themes
    (quote
     ("de538b2d1282b23ca41ac5d8b69c033b911521fe27b5e1f59783d2eb20384e1f" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
@@ -577,7 +579,7 @@ Anika's favorite: %^{Anika's favorite}
  '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
    (quote
-    (undo-tree org-bullets which-key try elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+    (cider undo-tree org-bullets which-key try elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
    (quote
@@ -592,15 +594,7 @@ Anika's favorite: %^{Anika's favorite}
  '(web-mode-auto-close-style 2)
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
- '(web-mode-enable-comment-interpolation t)
- '(web-mode-enable-comment-keywords t)
- '(web-mode-enable-current-column-highlight t)
- '(web-mode-enable-current-element-highlight t)
- '(web-mode-enable-part-face t)
- '(web-mode-extra-python-keywords t)
  '(web-mode-markup-indent-offset 2)
- '(web-mode-part-padding 0)
- '(web-mode-script-padding 0)
  '(web-mode-style-padding 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
