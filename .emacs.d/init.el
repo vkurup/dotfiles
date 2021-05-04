@@ -9,8 +9,10 @@
 (defvar my-packages '(anzu
                       autopair
                       avy
-                      cider
-                      company
+		      cider
+		      clojure-mode
+		      clojure-mode-extra-font-locking
+		      company
                       company-lsp
                       counsel
                       direnv
@@ -28,10 +30,13 @@
                       magit
                       markdown-mode
                       org
+		      paredit
                       pyenv-mode
                       projectile
+		      rainbow-delimiters
                       rainbow-mode
                       smex
+		      tagedit
                       tide
                       use-package
                       web-mode
@@ -101,6 +106,43 @@
   (when (file-exists-p esk-user-dir)
     (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))
 
+;; clojure for the brave and true
+;; These settings relate to how emacs interacts with your operating system
+(setq ;; makes killing/yanking interact with the clipboard
+ x-select-enable-clipboard t
+ ;; I'm actually not sure what this does but it's recommended?
+ x-select-enable-primary t
+ ;; Save clipboard strings into kill ring before replacing them.
+ ;; When one selects something in another program to paste it into Emacs,
+ ;; but kills something in Emacs before actually pasting it,
+ ;; this selection is gone unless this variable is non-nil
+ save-interprogram-paste-before-kill t
+ ;; Shows all options when running apropos. For more info,
+ ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
+ apropos-do-all t
+ ;; Mouse yank commands yank at point instead of at click.
+ mouse-yank-at-point t)
+(setq-default sh-basic-offset 2)
+(setq-default sh-indentation 2)
+;; No need for ~ files when editing
+(setq create-lockfiles nil)
+;; Automatically load paredit when editing a lisp file
+;; More at http://www.emacswiki.org/emacs/ParEdit
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+;; eldoc-mode shows documentation in the minibuffer when writing code
+;; http://www.emacswiki.org/emacs/ElDoc
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(load "setup-clojure.el")
+(load "setup-js.el")
+
 ;; direnv
 (use-package direnv
   :config
@@ -164,6 +206,8 @@
 
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
+;; Highlight current line
+(global-hl-line-mode 1)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
@@ -344,7 +388,9 @@
 (when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
     :config
-    (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-envs
+   '("PATH"))))
 
 ;; for better jsx syntax-highlighting in web-mode
 ;; - courtesy of Patrick @halbtuerke
@@ -464,8 +510,7 @@
 (add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
 
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#ledger" "#tripython" "#rapidsms" "#emacs-elpy")
-        ("caktusgroup.com" "#caktus" "#libya" "#radiology" "#rsvp" "#oberlin")))
+      '(("freenode.net" "#ledger" "#tripython" "#rapidsms" "#emacs-elpy")))
 
 ;; (progn
 ;;   ;; (erc-tls
@@ -602,3 +647,8 @@ Anika's favorite: %^{Anika's favorite}
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(setq revert-without-query '(".*"))
+;; "Take text formatted like '0411 VTIAX 1.322 23.48' and turn it into a transaction"
+(fset 'vk-guideline-buy
+   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 50 48 50 48 45 right right 45 right right 32 116 120 110 right 67108896 134217830 134217847 134217826 34 66 85 89 32 25 right 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 25 32 32 4 4 4 4 4 4 134217848 115 101 97 13 32 left 32 25 32 123 125 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 67 97 115 104 32 32 45 5 32 85 83 68 13 6 5] 0 "%d")) arg)))
