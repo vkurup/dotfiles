@@ -418,32 +418,46 @@
               (autopair-mode -1)
               (auto-fill-mode -1)))
 
+;; beancount
+;; custom copied https://github.com/beancount/beancount-mode
+(require 'beancount)
+(add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
 ;; org mode
+;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
 (setq org-directory "~/org/")
-(defvar user-todo-org (concat org-directory "todo.org"))
-(defvar user-work-org (concat org-directory "work.org"))
-(setq org-agenda-files (list
-                        user-todo-org
-                        user-work-org))
-(setq org-default-notes-file (concat org-directory "todo.org"))
+(setq org-agenda-files '("~/org/inbox.org"
+                         "~/org/gtd.org"
+                         "~/org/tickler.org"))
+(setq org-capture-templates
+      '(("t" "Todo [inbox]" entry
+	 (file+headline "~/org/inbox.org" "Tasks")
+	 "* TODO %i%?\n  %a")
+	("T" "Tickler" entry
+	 (file+headline "~/org/tickler.org" "Tickler")
+	 "* %i%? \n %U")))
+(setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
+                           ("~/org/someday.org" :level . 1)
+                           ("~/org/tickler.org" :maxlevel . 2)))
+(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
-;;(define-key global-map [f9] 'remember-region)
-(setq org-log-done (quote time))
-(setq org-agenda-show-log t)
-(setq org-return-follows-link t)
-(setq org-startup-indented t)
-(setq org-agenda-start-on-weekday nil) ; show agenda starting today
-(setq org-use-speed-commands t)
-(setq org-archive-location (concat org-directory "archive/%s_archive::"))
+;; ;;(define-key global-map [f9] 'remember-region)
+;; (setq org-log-done (quote time))
+;; (setq org-agenda-show-log t)
+;; (setq org-return-follows-link t)
+;; (setq org-startup-indented t)
+;; (setq org-agenda-start-on-weekday nil) ; show agenda starting today
+;; (setq org-use-speed-commands t)
+;; (setq org-archive-location (concat org-directory "archive/%s_archive::"))
 
-(defun gtd ()
-  "Open my todo list"
-  (interactive)
-  (find-file (concat org-directory "gtd.org")))
+;; (defun gtd ()
+;;   "Open my todo list"
+;;   (interactive)
+;;   (find-file (concat org-directory "gtd.org")))
 
 (fset 'vk-process-movie-list
       [?\C-a down ?\C-s ?2 ?0 ?1 ?1 left left left left ?\C-  ?\C-s ?  ?\C-s left ?\M-w right ?\C-y ?- left left left backspace ?- left left left backspace ?- right right right right right right ?\C-  ?\C-e ?\C-w ?. ?a ?v ?i left left left left ?\C-x ?o ?m ?p ?l ?a ?y ?e ?r ?  ?\C-y return ?\C-x ?o])
@@ -598,24 +612,6 @@
  '(magit-pull-arguments nil)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
- '(org-agenda-files (quote ("~/org/gtd.org")))
- '(org-capture-templates
-   (quote
-    (("j" "Journal Entry" entry
-      (file "~/org/notes.org")
-      "* %T %?")
-     ("t" "Create Task" entry
-      (file+headline "~/org/gtd.org" "Inbox")
-      "* %^{Description} %^g
-%?
-Added: %U")
-     ("d" "Diary" entry
-      (file+headline "~/org/notes.org" "Diary")
-      "* %T
-Kavi's favorite: %^{Kavi's favorite}
-Anika's favorite: %^{Anika's favorite}
-
-%?"))))
  '(org-velocity-allow-regexps t)
  '(org-velocity-always-use-bucket t)
  '(org-velocity-bucket "~/org/bucket.org")
