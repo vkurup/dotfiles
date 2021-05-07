@@ -8,8 +8,11 @@ case $- in
       *) return;;
 esac
 
-export SSH_ASKPASS="/usr/bin/ssh-askpass"
-eval `keychain --agents gpg,ssh --eval id_rsa id_ed25519 66832BC1`
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Mac OSX
+  export SSH_ASKPASS="/usr/bin/ssh-askpass"
+  eval `keychain --agents gpg,ssh --eval id_rsa id_ed25519 66832BC1`
+fi
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoreboth

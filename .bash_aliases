@@ -1,5 +1,5 @@
 # -*- mode: sh -*-
-[ "$EMACS" == "t" ] || alias ls="ls --color"
+[ "$EMACS" == "t" ] || alias ls="ls -G"
 
 alias ll="ls -alF"
 alias la="ls -A"

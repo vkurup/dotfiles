@@ -12,13 +12,13 @@ if [ -d "$HOME/Sync/Vinod/bin" ] ; then
     PATH="$HOME/Sync/Vinod/bin:$PATH"
 fi
 
-# add node.js
-PATH="$PATH:node_modules/.bin"
-
 # rbenv
 if [ -d "$HOME/.rbenv" ]; then
     export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
 fi
 
-export PATH="$HOME/.poetry/bin:$PATH"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  source .bashrc
+fi
