@@ -1,17 +1,17 @@
 [user]
-	name = Vinod Kurup
-	email = vinod@kurup.com
+    name = Vinod Kurup
+    email = vinod@kurup.com
 [color]
     status = auto
     branch = auto
     ui = auto
 [push]
-	default = tracking
+    default = tracking
 [core]
-	autocrlf = input
-	excludesfile = ~/.gitignore-global
+    autocrlf = input
+    excludesfile = ~/.gitignore-global
 [core "safe"]
-	crlf = true
+    crlf = true
 [alias]
     st = status
     ci = commit
@@ -51,6 +51,4 @@
     l = "!source ~/.githelpers && pretty_git_log"
     la = !git l --all
 [gitlab]
-	user = vkurup
-[init]
-	templateDir = /home/vkurup/.git-template
+    user = vkurup

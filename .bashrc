@@ -77,7 +77,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# elixir asdf
+# asdf
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/asdf.sh"
   source "$HOME/.asdf/completions/asdf.bash"
@@ -96,14 +96,8 @@ if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
 
-# kubectl bash completion
-# source <(kubectl completion bash)
-
-# invoke bash completion
-# _complete_invoke() {
-#     # taken from https://github.com/pyinvoke/invoke/blob/master/invoke/completion/bash.completion
-#     local candidates
-#     candidates=`invoke --complete -- ${COMP_WORDS[*]}`
-#     COMPREPLY=( $(compgen -W "${candidates}" -- $2) )
-# }
-# complete -F _complete_invoke -o default invoke inv
+# Kevel
+export PATH=$PATH:~/src/adzerk/teammgmt/bin/:~/src/adzerk/teammgmt/infrastructure/bin/:~/src/adzerk/cli-tools/micha
+adzerk_env() {
+  eval "$(gpg -d ~/.adzerk/env.asc)"
+}

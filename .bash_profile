@@ -20,5 +20,5 @@ fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
-  source .bashrc
+  source "$HOME/.bashrc"
 fi

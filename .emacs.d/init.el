@@ -1,3 +1,6 @@
+;;; init.el --- vinod's .emacs.d
+;;; Commentary:
+;;; Code:
 (require 'package)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
@@ -7,13 +10,11 @@
   (package-refresh-contents))
 
 (defvar my-packages '(anzu
-                      autopair
                       avy
-		      cider
-		      clojure-mode
-		      clojure-mode-extra-font-locking
-		      company
-                      company-lsp
+                      cider
+                      clojure-mode
+                      clojure-mode-extra-font-locking
+                      company
                       counsel
                       direnv
                       dockerfile-mode
@@ -25,18 +26,17 @@
                       ivy
                       js2-mode
                       json-mode
-                      ledger-mode
                       lsp-mode
                       magit
                       markdown-mode
                       org
-		      paredit
+                      paredit
                       pyenv-mode
                       projectile
-		      rainbow-delimiters
+                      rainbow-delimiters
                       rainbow-mode
                       smex
-		      tagedit
+                      tagedit
                       tide
                       use-package
                       web-mode
@@ -48,32 +48,28 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-(use-package avy
-  :ensure t
-  :bind ("M-s" . avy-goto-char))
+; https://github.com/abo-abo/avy
+(global-set-key (kbd "C-:") 'avy-goto-char-2)
 
-(use-package try
-  :ensure t)
+; https://github.com/justbur/emacs-which-key
+(which-key-mode)
 
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
+; https://github.com/sabof/org-bullets
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+(global-undo-tree-mode)
 
-(use-package undo-tree
-  :ensure t
-  :init
-  (global-undo-tree-mode))
+;; macOS modifier keys
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
+
+;; reload file if it changed on disk
+(global-auto-revert-mode t)
 
 ;; Display the column number.
 (column-number-mode t)
 
-;; ESK things: Keep?
+;; ESK things
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
@@ -107,23 +103,6 @@
     (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))
 
 ;; clojure for the brave and true
-;; These settings relate to how emacs interacts with your operating system
-(setq ;; makes killing/yanking interact with the clipboard
- x-select-enable-clipboard t
- ;; I'm actually not sure what this does but it's recommended?
- x-select-enable-primary t
- ;; Save clipboard strings into kill ring before replacing them.
- ;; When one selects something in another program to paste it into Emacs,
- ;; but kills something in Emacs before actually pasting it,
- ;; this selection is gone unless this variable is non-nil
- save-interprogram-paste-before-kill t
- ;; Shows all options when running apropos. For more info,
- ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
- apropos-do-all t
- ;; Mouse yank commands yank at point instead of at click.
- mouse-yank-at-point t)
-(setq-default sh-basic-offset 2)
-(setq-default sh-indentation 2)
 ;; No need for ~ files when editing
 (setq create-lockfiles nil)
 ;; Automatically load paredit when editing a lisp file
@@ -144,9 +123,7 @@
 (load "setup-js.el")
 
 ;; direnv
-(use-package direnv
-  :config
-  (direnv-mode))
+(direnv-mode)
 
 ;; ivy/swiper/counsel
 (use-package ivy
@@ -191,17 +168,11 @@
       initial-scratch-message nil
       indicate-empty-lines nil
       cursor-in-non-selected-windows nil
-      color-theme-is-global t
-      imenu-auto-rescan t
       sentence-end-double-space nil
       shift-select-mode nil
       mouse-yank-at-point t
       uniquify-buffer-name-style 'forward
-      whitespace-style '(face trailing lines-tail tabs)
-      whitespace-line-column 80
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      save-place-file "~/.emacs.d/places"
-      backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
+      backup-inhibited t
       diff-switches "-u")
 
 ;; Highlight matching parentheses when the point is on them.
@@ -254,23 +225,19 @@
   (interactive)
   (insert (format-time-string "%c" (current-time))))
 
-;;; Disable autopair-global-mode in calc-mode
-;;; https://github.com/capitaomorte/autopair/issues/17
-(add-hook 'calc-mode-hook
-           #'(lambda ()
-               (autopair-mode -1)))
-(autopair-global-mode)
-(projectile-global-mode)
 (yas-global-mode 1)
 (global-anzu-mode +1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; projectile settings
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq projectile-enable-caching t)
 
 ;; work with ubuntu clipboard
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(setq interprogram-paste-function 'x-selection-value)
 
 ;; map RET to newline-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
@@ -281,12 +248,12 @@
   :init
   (elpy-enable)
   :bind (:map elpy-mode-map
-	      ("<M-left>" . nil)
-	      ("<M-right>" . nil)
-	      ("<M-S-left>" . elpy-nav-indent-shift-left)
-	      ("<M-S-right>" . elpy-nav-indent-shift-right)
-	      ("M-." . elpy-goto-definition)
-	      ("M-," . pop-tag-mark))
+              ("<M-left>" . nil)
+              ("<M-right>" . nil)
+              ("<M-S-left>" . elpy-nav-indent-shift-left)
+              ("<M-S-right>" . elpy-nav-indent-shift-right)
+              ("M-." . elpy-goto-definition)
+              ("M-," . pop-tag-mark))
   :config
   (setq elpy-rpc-backend "jedi")
   (setq elpy-rpc-python-command "python3"))
@@ -338,10 +305,7 @@
 (add-to-list 'auto-mode-alist '("\\.html.eex\\'" . web-mode))
 (setq web-mode-engines-alist
       '(("django" . "\\.html\\'")))
-(add-hook 'web-mode-hook
-           #'(lambda ()
-               (autopair-mode -1)
-               (auto-fill-mode -1)))
+
 
 ;; js2
 (add-hook 'js2-mode-hook 'flycheck-mode)
@@ -363,17 +327,14 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; http://www.flycheck.org/manual/latest/index.html
-(use-package flycheck
-  :ensure t
-  :init
-  (global-flycheck-mode t))
+(global-flycheck-mode t)
 
 ;; disable jshint since we prefer eslint checking
 ;; disable json-jsonlist checking for json files
 (setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint
-      json-jsonlist)))
+              (append flycheck-disabled-checkers
+                      '(javascript-jshint
+                        json-jsonlist)))
 
 ;; use eslint with web-mode for jsx files
 (flycheck-add-mode 'javascript-eslint 'web-mode)
@@ -390,14 +351,14 @@
     :config
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-envs
-   '("PATH"))))
+     '("PATH"))))
 
 ;; for better jsx syntax-highlighting in web-mode
 ;; - courtesy of Patrick @halbtuerke
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
-    (let ((web-mode-enable-part-face nil))
-      ad-do-it)
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
     ad-do-it))
 
 ;; make moving around windows easier
@@ -410,13 +371,6 @@
 
 ;; For running tests easily
 (global-set-key [f6] 'recompile)
-
-;; ledger
-(add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
-(add-hook 'ledger-mode-hook
-          #'(lambda ()
-              (autopair-mode -1)
-              (auto-fill-mode -1)))
 
 ;; beancount
 ;; custom copied https://github.com/beancount/beancount-mode
@@ -431,11 +385,11 @@
                          "~/org/tickler.org"))
 (setq org-capture-templates
       '(("t" "Todo [inbox]" entry
-	 (file+headline "~/org/inbox.org" "Tasks")
-	 "* TODO %i%?\n  %a")
-	("T" "Tickler" entry
-	 (file+headline "~/org/tickler.org" "Tickler")
-	 "* %i%? \n %U")))
+         (file+headline "~/org/inbox.org" "Tasks")
+         "* TODO %i%?\n  %a")
+        ("T" "Tickler" entry
+         (file+headline "~/org/tickler.org" "Tickler")
+         "* %i%? \n %U")))
 (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
                            ("~/org/someday.org" :level . 1)
                            ("~/org/tickler.org" :maxlevel . 2)))
@@ -446,30 +400,27 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 (define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
 ;; ;;(define-key global-map [f9] 'remember-region)
-;; (setq org-log-done (quote time))
-;; (setq org-agenda-show-log t)
-;; (setq org-return-follows-link t)
-;; (setq org-startup-indented t)
-;; (setq org-agenda-start-on-weekday nil) ; show agenda starting today
-;; (setq org-use-speed-commands t)
-;; (setq org-archive-location (concat org-directory "archive/%s_archive::"))
+(setq org-log-done (quote time))
+(setq org-agenda-show-log t)
+(setq org-return-follows-link t)
+(setq org-startup-indented t)
+(setq org-agenda-start-on-weekday nil) ; show agenda starting today
+(setq org-use-speed-commands t)
+(setq org-archive-location (concat org-directory "archive/%s_archive::"))
 
-;; (defun gtd ()
-;;   "Open my todo list"
-;;   (interactive)
-;;   (find-file (concat org-directory "gtd.org")))
-
-(fset 'vk-process-movie-list
-      [?\C-a down ?\C-s ?2 ?0 ?1 ?1 left left left left ?\C-  ?\C-s ?  ?\C-s left ?\M-w right ?\C-y ?- left left left backspace ?- left left left backspace ?- right right right right right right ?\C-  ?\C-e ?\C-w ?. ?a ?v ?i left left left left ?\C-x ?o ?m ?p ?l ?a ?y ?e ?r ?  ?\C-y return ?\C-x ?o])
+(defun gtd ()
+  "Open my todo list."
+  (interactive)
+  (find-file (concat org-directory "gtd.org")))
 
 (defun vk-slugify (title)
-  "Convert a normal Title string to something that can be used in a blog slug."
+  "Convert a normal TITLE string to something that can be used in a blog slug."
   (replace-regexp-in-string "[\\., ]+" "-"
                             (replace-regexp-in-string "['\?]" ""
                                                       (downcase title))))
 
 (defun vk-blogpost (title)
-  "Create a new blog post."
+  "Create a new blog post titled TITLE."
   (interactive "sPost Title: ")
   (let ((slug (vk-slugify title)))
     (find-file (concat "~/dev/kurup.org/content/post/"
@@ -489,7 +440,6 @@
 (setq calendar-location-name "Chapel Hill, NC")
 
 (setq-default kill-whole-line t)        ; ctrl-k kills whole line if at col 0
-(menu-bar-mode)
 
 ;; Delete old backup versions silently
 (setq delete-old-versions t)
@@ -515,23 +465,16 @@
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 
 (setq-default default-tab-width 4
-      indent-tabs-mode nil)
+              indent-tabs-mode nil)
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
 ;; erc
 (require 'secrets)
-(add-hook 'erc-mode-hook #'(lambda () (autopair-mode -1)))
-
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#ledger" "#tripython" "#rapidsms" "#emacs-elpy")))
+      '(("freenode.net" "#tripython" "#emacs")))
 
 ;; (progn
-;;   ;; (erc-tls
-;;   ;;  :server "chat.caktusgroup.com"
-;;   ;;  :port 6697
-;;   ;;  :nick "vkurup"
-;;   ;;  :password erc-password)
 ;;   (erc
 ;;    :server "irc.freenode.net"
 ;;    :port 6667
@@ -548,10 +491,6 @@
         (other-window 1)
         (ansi-term (getenv "SHELL")))
     (switch-to-buffer-other-window "*ansi-term*")))
-(add-hook 'term-mode-hook
-          (lambda ()
-            (autopair-mode -1)) ;; for emacsen >= 24
-          )
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 
 ;; http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation/
@@ -584,19 +523,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(coffee-tab-width 2)
  '(compilation-always-kill t)
  '(compilation-scroll-output t)
  '(compilation-skip-threshold 2)
  '(css-indent-offset 2)
  '(custom-safe-themes
-   (quote
-    ("de538b2d1282b23ca41ac5d8b69c033b911521fe27b5e1f59783d2eb20384e1f" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+   '("de538b2d1282b23ca41ac5d8b69c033b911521fe27b5e1f59783d2eb20384e1f" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "f61972772958e166cda8aaf0eba700aad4faa0b4101cee319e894e7a747645c9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default))
  '(elpy-modules
-   (quote
-    (elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
- '(elpy-test-runner (quote elpy-test-django-runner))
+   '(elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults))
+ '(elpy-test-runner 'elpy-test-django-runner)
  '(erc-autojoin-mode t)
- '(erc-enable-logging (quote erc-log-all-but-server-buffers))
+ '(erc-enable-logging 'erc-log-all-but-server-buffers)
  '(erc-log-channels-directory "~/.erc/logs")
  '(erc-log-insert-log-on-open t)
  '(erc-log-write-after-insert t)
@@ -612,25 +550,18 @@
  '(magit-pull-arguments nil)
  '(nxml-bind-meta-tab-to-complete-flag t)
  '(nxml-slash-auto-complete-flag t)
- '(org-velocity-allow-regexps t)
- '(org-velocity-always-use-bucket t)
- '(org-velocity-bucket "~/org/bucket.org")
- '(org-velocity-create-method (quote capture))
- '(org-velocity-max-depth 2)
- '(org-velocity-search-method (quote phrase))
  '(package-selected-packages
-   (quote
-    (cider undo-tree org-bullets which-key try elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode ledger-mode js2-mode flycheck erc-hl-nicks elpy elfeed autopair anzu)))
+   '(cider undo-tree org-bullets which-key try elixir-yasnippets elixir-mode rjsx-mode dockerfile-mode dash-functional lsp-mode counsel less-css-mode forge tide pyenv-mode avy use-package json-mode zenburn-theme yaml-mode web-mode smex rainbow-mode projectile markdown-mode js2-mode flycheck erc-hl-nicks elpy elfeed anzu))
  '(python-check-command "flake8")
  '(rst-compile-toolsets
-   (quote
-    ((html "rst2html.py" ".html" nil)
+   '((html "rst2html.py" ".html" nil)
      (latex "rst2latex.py" ".tex" nil)
      (newlatex "rst2newlatex" ".tex" nil)
      (pseudoxml "rst2pseudoxml.py" ".xml" nil)
      (xml "rst2xml.py" ".xml" nil)
      (pdf "rst2pdf" ".pdf" nil)
-     (s5 "rst2s5.py" ".html" nil))))
+     (s5 "rst2s5.py" ".html" nil)))
+ '(safe-local-variable-values '((use-inf-clojure . t) (inf-clojure-buffer . "geir-repl")))
  '(temporary-file-directory (concat user-emacs-directory "tmp"))
  '(web-mode-auto-close-style 2)
  '(web-mode-code-indent-offset 2)
@@ -647,4 +578,4 @@
 (setq revert-without-query '(".*"))
 ;; "Take text formatted like '0411 VTIAX 1.322 23.48' and turn it into a transaction"
 (fset 'vk-guideline-buy
-   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 50 48 50 48 45 right right 45 right right 32 116 120 110 right 67108896 134217830 134217847 134217826 34 66 85 89 32 25 right 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 25 32 32 4 4 4 4 4 4 134217848 115 101 97 13 32 left 32 25 32 123 125 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 67 97 115 104 32 32 45 5 32 85 83 68 13 6 5] 0 "%d")) arg)))
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 50 48 50 48 45 right right 45 right right 32 116 120 110 right 67108896 134217830 134217847 134217826 34 66 85 89 32 25 right 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 25 32 32 4 4 4 4 4 4 134217848 115 101 97 13 32 left 32 25 32 123 125 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 67 97 115 104 32 32 45 5 32 85 83 68 13 6 5] 0 "%d")) arg)))
