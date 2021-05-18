@@ -14,15 +14,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   eval `keychain --agents gpg,ssh --eval id_rsa id_ed25519 66832BC1`
 fi
 
-# don't put duplicate lines in the history. See bash(1) for more options
-export HISTCONTROL=ignoreboth
-
-export HISTFILESIZE=1000000000
-export HISTSIZE=1000000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# https://metaredux.com/posts/2020/07/07/supercharge-your-bash-history.html
 shopt -s checkwinsize histappend
+export HISTCONTROL=ignoreboth
+export HISTFILESIZE=10000000
+export HISTSIZE=100000
+export HISTIGNORE='ls:ll:cd:pwd:bg:fg:history'
+# Not enabling this since i think direnv uses PROMPT_COMMAND
+# PROMPT_COMMAND="history -a; history -n"
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
