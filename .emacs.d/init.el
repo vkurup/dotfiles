@@ -1,6 +1,4 @@
-;;; init.el --- vinod's .emacs.d
-;;; Commentary:
-;;; Code:
+;; -*- lexical-binding: t -*-
 (require 'package)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 

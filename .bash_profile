@@ -18,6 +18,19 @@ if [ -d "$HOME/.rbenv" ]; then
     eval "$(rbenv init -)"
 fi
 
+# pyenv
+if [ -d "$HOME/.pyenv" ]; then
+  export PATH="$HOME/.pyenv/bin:$PATH"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# Kevel
+export PATH=$PATH:~/src/adzerk/teammgmt/bin/:~/src/adzerk/teammgmt/infrastructure/bin/:~/src/adzerk/cli-tools/micha
+adzerk_env() {
+  eval "$(gpg -d ~/.adzerk/env.asc)"
+}
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   source "$HOME/.bashrc"

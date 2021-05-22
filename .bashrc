@@ -67,11 +67,6 @@ export ALTERNATE_EDITOR=emacs
 export CVS_RSH=ssh
 export PAGER=most
 
-### Added by the Heroku Toolbelt
-if [ -d /usr/local/heroku ]; then
-    export PATH="/usr/local/heroku/bin:$PATH"
-fi
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -82,21 +77,7 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/completions/asdf.bash"
 fi
 
-# pyenv
-if [ -d "$HOME/.pyenv" ]; then
-  export PATH="$HOME/.pyenv/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-fi
-
 # direnv
 if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
-
-# Kevel
-export PATH=$PATH:~/src/adzerk/teammgmt/bin/:~/src/adzerk/teammgmt/infrastructure/bin/:~/src/adzerk/cli-tools/micha
-adzerk_env() {
-  eval "$(gpg -d ~/.adzerk/env.asc)"
-}
