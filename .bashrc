@@ -81,3 +81,7 @@ fi
 if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
+
+adzerk_env() {
+  eval "$(gpg -d ~/.adzerk/env.asc)"
+}

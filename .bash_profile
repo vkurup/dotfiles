@@ -27,10 +27,7 @@ if [ -d "$HOME/.pyenv" ]; then
 fi
 
 # Kevel
-export PATH=$PATH:~/src/adzerk/teammgmt/bin/:~/src/adzerk/teammgmt/infrastructure/bin/:~/src/adzerk/cli-tools/micha
-adzerk_env() {
-  eval "$(gpg -d ~/.adzerk/env.asc)"
-}
+export PATH=$PATH:~/dev/teammgmt/bin/:~/dev/teammgmt/infrastructure/bin/:~/dev/cli-tools/micha
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   source "$HOME/.bashrc"
