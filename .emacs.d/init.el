@@ -82,7 +82,7 @@
 ;; nano emacs style
 (setq default-frame-alist
       (append (list
-               '(font . "Fira Code:style=Retina:size=14")
+               '(font . "Roboto Mono:style=Regular:size=14")
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24)
                '(left-fringe    . 0)
@@ -245,6 +245,9 @@
   ;; enable some really cool extensions like C-x C-j(dired-jump)
   (require 'dired-x))
 
+(use-package rainbow-delimiters
+  :ensure t)
+
 (use-package lisp-mode
   :config
   (defun visit-ielm ()
@@ -350,9 +353,6 @@ Start `ielm' if it's not already running."
   :bind
   (([(meta shift up)] . move-text-up)
    ([(meta shift down)] . move-text-down)))
-
-(use-package rainbow-delimiters
-  :ensure t)
 
 (use-package rainbow-mode
   :ensure t
@@ -640,40 +640,6 @@ Start `ielm' if it's not already running."
   (volatile-highlights-mode +1)
   (diminish 'volatile-highlights-mode))
 
-(defvar my-packages '(clj-refactor
-                      clojure-mode-extra-font-locking
-                      company
-                      company-prescient
-                      counsel
-                      direnv
-                      dockerfile-mode
-                      elixir-mode
-                      elixir-yasnippets
-                      elpy
-                      exec-path-from-shell
-                      flycheck
-                      ivy
-                      js2-mode
-                      json-mode
-                      lsp-mode
-                      magit
-                      marginalia
-                      markdown-mode
-                      org
-                      paredit
-                      pyenv-mode
-                      projectile
-                      rainbow-delimiters
-                      rainbow-mode
-                      tagedit
-                      tide
-                      use-package
-                      web-mode
-                      which-key
-                      yaml-mode
-                      zenburn-theme)
-  "A list of packages to ensure are installed at launch.")
-
 (use-package yasnippet
   :ensure t
   :config
@@ -702,18 +668,6 @@ Start `ielm' if it's not already running."
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
-
-;; cider
-;; (use-package flycheck-clj-kondo)
-;; (use-package clojure-mode
-;;   :config
-;;   (require 'flycheck-clj-kondo)
-;;   (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
-;;   (add-hook 'clojure-mode-hook #'paredit-mode)
-;;   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-;;   (add-hook 'clojure-mode-hook #'subword-mode))
-
-;; FIXME clj-refactor
 
 (use-package smex
   :ensure t
@@ -883,41 +837,35 @@ Start `ielm' if it's not already running."
 ;; (require 'beancount)
 ;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
 
-;; ;; org mode
-;; ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
-;; (setq org-directory "~/org/")
-;; (setq org-agenda-files '("~/org/inbox.org"
-;;                          "~/org/gtd.org"
-;;                          "~/org/tickler.org"))
-;; (setq org-capture-templates
-;;       '(("t" "Todo [inbox]" entry
-;;          (file+headline "~/org/inbox.org" "Tasks")
-;;          "* TODO %i%?\n  %a")
-;;         ("T" "Tickler" entry
-;;          (file+headline "~/org/tickler.org" "Tickler")
-;;          "* %i%? \n %U")))
-;; (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
-;;                            ("~/org/someday.org" :level . 1)
-;;                            ("~/org/tickler.org" :maxlevel . 2)))
-;; (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-;; (global-set-key "\C-cl" 'org-store-link)
-;; (global-set-key "\C-cc" 'org-capture)
-;; (global-set-key "\C-ca" 'org-agenda)
-;; (global-set-key "\C-cb" 'org-iswitchb)
-;; (define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
-;; ;; ;;(define-key global-map [f9] 'remember-region)
-;; (setq org-log-done (quote time))
-;; (setq org-agenda-show-log t)
-;; (setq org-return-follows-link t)
-;; (setq org-startup-indented t)
-;; (setq org-agenda-start-on-weekday nil) ; show agenda starting today
-;; (setq org-use-speed-commands t)
-;; (setq org-archive-location (concat org-directory "archive/%s_archive::"))
+;; org mode
+;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
+(setq org-directory "~/org/")
+(setq org-agenda-files '("~/org/inbox.org"
+                         "~/org/gtd.org"))
+(setq org-capture-templates
+      '(("t" "Todo [inbox]" entry
+         (file+headline "~/org/gtd.org" "Autofocus")
+         "* TODO %i%?\n%a\n%T")))
+(setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
+                           ("~/org/someday.org" :level . 1)
+                           ("~/org/tickler.org" :maxlevel . 2)))
+(setq org-todo-keywords '((sequence "TODO(t)" "PRESELECTED(p)" "|" "DONE(d)" "CANCELLED(c)")))
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(define-key global-map [f8] (lambda () (interactive) (org-capture nil "t")))
+(setq org-log-done (quote time))
+(setq org-agenda-show-log t)
+(setq org-return-follows-link t)
+(setq org-startup-indented t)
+(setq org-agenda-start-on-weekday nil) ; show agenda starting today
+(setq org-use-speed-commands t)
+(setq org-archive-location (concat org-directory "archive/%s_archive::"))
 
-;; (defun gtd ()
-;;   "Open my todo list."
-;;   (interactive)
-;;   (find-file (concat org-directory "gtd.org")))
+(defun gtd ()
+  "Open my todo list."
+  (interactive)
+  (find-file (concat org-directory "gtd.org")))
 
 ;; (defun vk-slugify (title)
 ;;   "Convert a normal TITLE string to something that can be used in a blog slug."
@@ -992,7 +940,8 @@ Start `ielm' if it's not already running."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window)))
+   (quote
+    (ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
