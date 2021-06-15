@@ -85,3 +85,8 @@ fi
 adzerk_env() {
   eval "$(gpg -d ~/.adzerk/env.asc)"
 }
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Linux
+  source "$HOME/.bash_profile"
+fi
