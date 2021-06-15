@@ -834,8 +834,29 @@ Start `ielm' if it's not already running."
 
 ;; ;; beancount
 ;; ;; custom copied https://github.com/beancount/beancount-mode
-;; (require 'beancount)
-;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+(require 'beancount)
+(add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+;; (add-hook 'beancount-mode-hook
+;;           (lambda () (local-set-key (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)))
+(define-key beancount-mode-map (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)
+(use-package ledger-mode
+  :ensure t)
+
+(defun vk-beancount-copy-transaction-at-point ()
+  "Copy the transaction at point and paste it to end of file."
+  (interactive)
+  (beancount-goto-transaction-begin)
+  (setq pt (point))
+  ;; (beancount-goto-transaction-end)
+  (forward-line)
+  (while (not (looking-at-p "[[:blank:]]*$"))
+    (forward-line))
+  (copy-region-as-kill pt (point))
+  (goto-char (point-max))
+  (insert "\n")
+  (yank)
+  (backward-char)
+  (beancount-goto-transaction-begin))
 
 ;; org mode
 ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
@@ -941,7 +962,7 @@ Start `ielm' if it's not already running."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window))))
+    (ledger-mode ledger ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
