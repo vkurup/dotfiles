@@ -396,6 +396,7 @@ Start `ielm' if it's not already running."
 (use-package clojure-mode
   :ensure t
   :config
+  (setq clojure-toplevel-inside-comment-form t)
   (add-hook 'clojure-mode-hook #'paredit-mode)
   (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
