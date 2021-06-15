@@ -84,6 +84,7 @@ fi
 
 adzerk_env() {
   eval "$(gpg -d ~/.adzerk/env.asc)"
+  export ADZERK_SLACK_TOKEN=$(zecret ADZERK_SLACK_TOKEN)
 }
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
