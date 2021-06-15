@@ -76,6 +76,10 @@
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; auto-fill in org and text
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
 ;; maximize the initial frame automatically
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
