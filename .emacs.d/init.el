@@ -99,8 +99,6 @@
 (setq window-divider-default-places 'right-only)
 (window-divider-mode 1)
 
-
-
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
@@ -270,10 +268,21 @@ Start `ielm' if it's not already running."
   (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode))
 
 ;;; third-party packages
-(use-package zenburn-theme
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'zenburn t))
+;; (load-theme 'adwaita t)
+;; (load-theme 'zenburn t)
+(load-theme 'wombat t)
+
+(use-package vterm
+  :ensure t)
+
+(use-package direnv
   :ensure t
   :config
-  (load-theme 'zenburn t))
+  (direnv-mode))
 
 (use-package diminish
   :ensure t
@@ -912,10 +921,6 @@ Start `ielm' if it's not already running."
 ;;     (insert "categories: \n")
 ;;     (insert "---\n\n")))
 
-
-;; (load-theme 'adwaita t)
-;; (load-theme 'zenburn t)
-;; (load-theme 'wombat t)
 
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
