@@ -109,6 +109,9 @@
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
 
+;; display line numbers https://www.emacswiki.org/emacs/LineNumbers#h5o-1
+(global-display-line-numbers-mode)
+
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
