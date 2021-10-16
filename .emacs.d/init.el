@@ -861,7 +861,15 @@ Start `ielm' if it's not already running."
   (insert "\n")
   (yank)
   (backward-char)
-  (beancount-goto-transaction-begin))
+  (beancount-goto-transaction-begin)
+  ;; replace date with current date
+  (delete-char 10)
+  (insert (format-time-string "%Y-%m-%d"))
+  ;; replace * with txn
+  (forward-char)
+  (when (looking-at-p "*")
+    (delete-char 1)
+    (insert "txn")))
 
 ;; org mode
 ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
@@ -956,10 +964,49 @@ Start `ielm' if it's not already running."
 ;; emacsclient
 (server-start)
 
-;; (setq revert-without-query '(".*"))
-;; ;; "Take text formatted like '0411 VTIAX 1.322 23.48' and turn it into a transaction"
-;; (fset 'vk-guideline-buy
-;;       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 50 48 50 48 45 right right 45 right right 32 116 120 110 right 67108896 134217830 134217847 134217826 34 66 85 89 32 25 right 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 25 32 32 4 4 4 4 4 4 134217848 115 101 97 13 32 left 32 25 32 123 125 13 65 115 115 101 116 115 58 73 110 118 101 115 116 109 101 110 116 115 58 71 117 105 100 101 108 105 110 101 58 67 97 115 104 32 32 45 5 32 85 83 68 13 6 5] 0 "%d")) arg)))
+(defun vk-guideline-pdf-to-csv ()
+  "Convert line from Guideline PDF statement to beancount transaction."
+  (interactive)
+  (let ((company "Kevel")
+        (year "2021"))
+    (beginning-of-line)
+    (insert year "-")
+    (forward-char 2)
+    (insert "-")
+    (forward-char 3)
+    (insert "txn \"")
+    (let ((beg (point)))
+      (forward-word)
+      (let* ((end (point))
+             (trans-type (buffer-substring beg end)))
+        (forward-char)
+        (let ((beg (point)))
+          (forward-word)
+          (let* ((end (point))
+                 (symbol (buffer-substring beg end)))
+            (insert "\"\n  Assets:Investments:Guideline:" company ":" symbol)
+            (insert "  ")
+            (forward-char)
+            (if (string-equal (upcase trans-type) "SELL")
+                (insert " -"))
+            (forward-word 2)
+            (insert " " symbol " {}\n  ")
+            (insert "Assets:Investments:Guideline:" company ":Cash    ")))
+        (let* ((beg (point)))
+          (end-of-line)
+          (search-backward " ")
+          (delete-region beg (point)))
+        (delete-char 2)
+        (if (string-equal (upcase trans-type) "SELL")
+            (delete-char 1)
+          (insert "-"))
+        (end-of-line)
+        (insert " USD\n")
+        (if (string-equal (upcase trans-type) "SELL")
+            (insert "  Income:CapitalGains:NT\n"))
+        (forward-char)))))
+
+(setq revert-without-query '(".*"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

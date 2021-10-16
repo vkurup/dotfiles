@@ -1,7 +1,6 @@
 # -*- mode: sh -*-
-[ "$EMACS" == "t" ] || alias ls="ls -G"
 
-alias ll="ls -alF"
+alias ll="ls -al"
 alias la="ls -A"
 alias l="ls -CF"
 alias lh="ls -l -h"
