@@ -86,7 +86,7 @@
 ;; nano emacs style
 (setq default-frame-alist
       (append (list
-               '(font . "Roboto Mono:style=Regular:size=14")
+               '(font . "Ubuntu Mono:style=Regular:size=14")
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24)
                '(left-fringe    . 0)
