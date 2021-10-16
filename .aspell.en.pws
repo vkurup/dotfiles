@@ -1,4 +1,4 @@
-personal_ws-1.1 en 86 
+personal_ws-1.1 en 91 
 Anika
 Applebee's
 Asheville
@@ -14,8 +14,10 @@ Emerick
 Erlang
 Freenode
 Github
+HMAC
 Hagelberg
 Heroku
+HmacSHA
 IRB
 IRC
 JRuby
@@ -24,6 +26,7 @@ Kavi
 Leiningen's
 Mala
 Mala's
+Mux
 Noir
 PeepCode
 Postgres
@@ -52,6 +55,7 @@ destructuring
 django
 dotfiles
 eval
+firefox
 http
 https
 init
@@ -84,4 +88,5 @@ technomancy
 tox
 triaged
 ubuntu
+webhook
 wikipedia

@@ -99,8 +99,6 @@
 (setq window-divider-default-places 'right-only)
 (window-divider-mode 1)
 
-
-
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
@@ -110,6 +108,9 @@
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
+
+;; display line numbers https://www.emacswiki.org/emacs/LineNumbers#h5o-1
+(global-display-line-numbers-mode)
 
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -219,10 +220,7 @@
   :config
   (setq recentf-save-file (expand-file-name "recentf" vkurup-savefile-dir)
         recentf-max-saved-items 500
-        recentf-max-menu-items 15
-        ;; disable recentf-cleanup on Emacs start, because it can cause
-        ;; problems with remote files
-        recentf-auto-cleanup 'never)
+        recentf-max-menu-items 15)
   (recentf-mode +1))
 
 (use-package windmove
@@ -270,10 +268,28 @@ Start `ielm' if it's not already running."
   (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode))
 
 ;;; third-party packages
-(use-package zenburn-theme
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'zenburn t))
+(use-package poet-theme
   :ensure t
   :config
-  (load-theme 'zenburn t))
+  (load-theme 'poet t)
+  (add-hook 'text-mode-hook
+            (lambda () (variable-pitch-mode 1))))
+;; (load-theme 'adwaita t)
+;; (load-theme 'zenburn t)
+;; (load-theme 'wombat t)
+;; (load-theme 'misterioso t)
+
+(use-package vterm
+  :ensure t)
+
+(use-package direnv
+  :ensure t
+  :config
+  (direnv-mode))
 
 (use-package diminish
   :ensure t
@@ -281,6 +297,10 @@ Start `ielm' if it's not already running."
   (diminish 'flyspell-mode)
   (diminish 'flyspell-prog-mode)
   (diminish 'eldoc-mode))
+
+(use-package restclient
+  :ensure t
+  :mode (("\\.http\\'" . restclient-mode)))
 
 (use-package avy
   :ensure t
@@ -397,6 +417,7 @@ Start `ielm' if it's not already running."
   :ensure t
   :config
   (setq clojure-toplevel-inside-comment-form t)
+  (setq clojure-indent-style 'align-arguments)
   (add-hook 'clojure-mode-hook #'paredit-mode)
   (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
@@ -921,10 +942,6 @@ Start `ielm' if it's not already running."
 ;;     (insert "---\n\n")))
 
 
-;; (load-theme 'adwaita t)
-;; (load-theme 'zenburn t)
-;; (load-theme 'wombat t)
-
 (global-set-key [(control x) (control r)] 'esk-sudo-edit)
 
 ;; erc
@@ -1012,9 +1029,10 @@ Start `ielm' if it's not already running."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
  '(package-selected-packages
-   (quote
-    (ledger-mode ledger ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window))))
+   '(poet-theme direnv restclient ledger-mode ledger ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
