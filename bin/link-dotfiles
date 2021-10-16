@@ -12,3 +12,14 @@ for f in $(ls -a ~/.dotfiles) ; do
     echo "Skipping $f"
   fi
 done
+
+# special case for the .config directory
+for f in $(ls -a ~/.dotfiles/.config) ; do
+    echo $f
+  if [ ! -r "$HOME/.config/$f" ]; then
+      echo "Linking $f"
+      ln -s "$HOME/.dotfiles/.config/$f" "$HOME/.config/$f"
+  else
+      echo "Skipping $f"
+  fi
+done
