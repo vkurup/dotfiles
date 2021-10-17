@@ -23,3 +23,8 @@ for f in $(ls -a ~/.dotfiles/.config) ; do
       echo "Skipping $f"
   fi
 done
+
+if [ -d "$HOME/Sync/Vinod/org" ]; then
+    echo "Linking org directory"
+    ln -s "$HOME/Sync/Vinod/org" "$HOME/org"
+fi
