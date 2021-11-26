@@ -28,9 +28,5 @@ fi
 
 # Kevel
 export PATH=$PATH:~/dev/teammgmt/bin/:~/dev/teammgmt/infrastructure/bin/:~/dev/cli-tools/micha:~/dev/cli-tools/scripts
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  # Mac OSX
-  source "$HOME/.bashrc"
-fi
 
-. ~/.asdf/plugins/java/set-java-home.bash
+source "$HOME/.bashrc"

@@ -60,21 +60,17 @@ PS1='$(show_virtual_env)'$PS1
 
 TIME_STYLE=long-iso
 
-export LEDGER_FILE=${HOME}/Sync/Vinod/data/finance/ledger.dat
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=emacs
 export CVS_RSH=ssh
 export PAGER=most
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # asdf
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/asdf.sh"
   source "$HOME/.asdf/completions/asdf.bash"
+  source "$HOME/.asdf/plugins/java/set-java-home.bash"
 fi
 
 # direnv
@@ -86,11 +82,6 @@ adzerk_env() {
   eval "$(gpg -d ~/.adzerk/env.asc)"
   export ADZERK_SLACK_TOKEN=$(zecret ADZERK_SLACK_TOKEN)
 }
-
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  # Linux
-  source "$HOME/.bash_profile"
-fi
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){
