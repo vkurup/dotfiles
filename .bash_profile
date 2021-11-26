@@ -32,3 +32,5 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   source "$HOME/.bashrc"
 fi
+
+. ~/.asdf/plugins/java/set-java-home.bash
