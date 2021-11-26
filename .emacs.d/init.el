@@ -316,17 +316,16 @@ Start `ielm' if it's not already running."
   :ensure t
   :bind (("s-g" . git-timemachine)))
 
-(use-package ripgrep
-  :ensure t)
+(use-package rg
+  :ensure t
+  :init
+  (rg-enable-default-bindings))
 
 (use-package projectile
   :ensure t
   :init
   (setq projectile-project-search-path '("~/src/" "~/dev/"))
   :config
-  ;; I typically use this keymap prefix on macOS
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  ;; On Linux, however, I usually go with another one
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
   (global-set-key (kbd "C-c p") 'projectile-command-map)
   (setq projectile-enable-caching t)
@@ -1033,7 +1032,7 @@ Start `ielm' if it's not already running."
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
  '(org-agenda-files '("~/org/gtd.org"))
  '(package-selected-packages
-   '(poet-theme direnv restclient ledger-mode ledger ripgrep elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window)))
+   '(rg poet-theme direnv restclient ledger-mode ledger elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
