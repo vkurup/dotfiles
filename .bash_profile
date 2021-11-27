@@ -27,6 +27,6 @@ if [ -d "$HOME/.pyenv" ]; then
 fi
 
 # Kevel
-export PATH=$PATH:~/dev/teammgmt/bin/:~/dev/teammgmt/infrastructure/bin/:~/dev/cli-tools/micha:~/dev/cli-tools/scripts
+export PATH=$PATH:~/dev/teammgmt/bin:~/dev/teammgmt/infrastructure/bin:~/dev/cli-tools/micha:~/dev/cli-tools/scripts
 
 source "$HOME/.bashrc"

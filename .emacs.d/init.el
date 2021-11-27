@@ -376,7 +376,7 @@ Start `ielm' if it's not already running."
     (add-hook hook #'whitespace-mode))
   (add-hook 'before-save-hook #'whitespace-cleanup)
   :config
-  (setq whitespace-line-column 88) ;; limit line length
+  (setq whitespace-line-column 120) ;; limit line length
   (setq whitespace-style '(face tabs empty trailing lines-tail)))
 
 (use-package inf-ruby
@@ -410,11 +410,25 @@ Start `ielm' if it's not already running."
   (clj-refactor-mode 1)
   (yas-minor-mode 1))
 
-(use-package inf-clojure
+(use-package lsp-mode
   :ensure t
   :config
-  (add-hook 'inf-clojure-mode-hook #'paredit-mode)
-  (add-hook 'inf-clojure-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'clojure-mode-hook 'lsp)
+  (add-hook 'clojurec-mode-hook 'lsp)
+  (add-hook 'clojurescript-mode-hook 'lsp)
+  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq read-process-output-max (* 1024 1024))
+  (setq treemacs-space-between-root-nodes nil)
+  (setq company-minimum-prefix-length 1)
+  (setq lsp-lens-enable t)
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-enable-indentation nil)
+  (setq lsp-enable-completion-at-point nil)
+  (setq lsp-clojure-custom-server-command '("bash" "-c" "/usr/local/bin/clojure-lsp")))
+
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode)
 
 (use-package cider
   :ensure t
@@ -879,8 +893,7 @@ Start `ielm' if it's not already running."
 ;; org mode
 ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
 (setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/inbox.org"
-                         "~/org/gtd.org"))
+(setq org-agenda-files '("~/org/gtd.org"))
 (setq org-capture-templates
       '(("t" "Todo [inbox]" entry
          (file+headline "~/org/gtd.org" "Autofocus")
@@ -888,7 +901,7 @@ Start `ielm' if it's not already running."
 (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
                            ("~/org/someday.org" :level . 1)
                            ("~/org/tickler.org" :maxlevel . 2)))
-(setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)")))
+(setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" "WAITING(w)")))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
@@ -1015,9 +1028,9 @@ Start `ielm' if it's not already running."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
- '(org-agenda-files '("~/org/gtd.org"))
- '(package-selected-packages
-   '(rg poet-theme direnv restclient ledger-mode ledger elpy zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights use-package undo-tree super-save smex selectrum-prescient rainbow-mode rainbow-delimiters projectile paredit move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev expand-region exec-path-from-shell erlang elixir-mode elisp-slime-nav easy-kill diminish diff-hl crux company cider cask-mode anzu adoc-mode ace-window)))
+ '(lsp-file-watch-ignored-directories
+   '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
+ '(sh-basic-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

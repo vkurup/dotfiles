@@ -1,9 +1,8 @@
-.ropeproject
-requirements/local.txt
 .dir-locals.el
-.noseids
 .projectile
 .rgignore
 # direnv
 .direnv
 .envrc
+# lsp
+.lsp/sqlite.db

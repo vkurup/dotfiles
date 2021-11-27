@@ -9,9 +9,19 @@ case $- in
 esac
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  # Mac OSX
+  # Linux
   export SSH_ASKPASS="/usr/bin/ssh-askpass"
-  eval `keychain --agents gpg,ssh --eval id_rsa id_ed25519 66832BC1`
+  eval `keychain --agents gpg,ssh --eval id_ed25519 66832BC1`
+else
+  # OS X
+    if ! ssh-add -l | grep '\.ssh/kevel\.pem' > /dev/null
+    then
+        ssh-add ~/.ssh/kevel.pem
+    fi
+    if ! ssh-add -l | grep 'ED25519' > /dev/null
+    then
+        ssh-add ~/.ssh/id_ed25519
+    fi
 fi
 
 # https://metaredux.com/posts/2020/07/07/supercharge-your-bash-history.html
@@ -78,10 +88,10 @@ if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
 
-adzerk_env() {
-  eval "$(gpg -d ~/.adzerk/env.asc)"
-  export ADZERK_SLACK_TOKEN=$(zecret ADZERK_SLACK_TOKEN)
-}
+export AWS_PROFILE=Admin-Kevel
+# export AWS_PROFILE=Power-Kevel
+eval "$(gpg -d ~/.adzerk/env.gpg)"
+export ADZERK_SLACK_TOKEN=$(zecret ADZERK_SLACK_TOKEN)
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){
