@@ -48,20 +48,9 @@
 ;; quit Emacs directly even if there are running processes
 (setq confirm-kill-processes nil)
 
-;; the toolbar is just a waste of valuable screen estate
-;; in a tty tool-bar-mode does not properly auto-load, and is
-;; already disabled anyway
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-
-;; the blinking cursor is nothing, but an annoyance
+(tool-bar-mode -1)
 (blink-cursor-mode -1)
-
-;; disable the annoying bell ring
 (setq ring-bell-function 'ignore)
-
-;; disable startup screen
-(setq inhibit-startup-screen t)
 
 ;; nice scrolling
 (setq scroll-margin 0
@@ -142,9 +131,6 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-
-;; revert buffers automatically when underlying files are changed externally
-(global-auto-revert-mode t)
 
 ;; hippie expand is dabbrev expand on steroids
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -677,12 +663,12 @@ Start `ielm' if it's not already running."
 ;;   :config (yasnippet-snippets-initialize))
 
 ;; https://github.com/sabof/org-bullets
-; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; Enable richer annotations using the Marginalia package
 (use-package marginalia
   :ensure t
-    ;; Either bind `marginalia-cycle` globally or only in the minibuffer
+  ;; Either bind `marginalia-cycle` globally or only in the minibuffer
   :bind (("M-A" . marginalia-cycle)
          :map minibuffer-local-map
          ("M-A" . marginalia-cycle))
@@ -709,7 +695,6 @@ Start `ielm' if it's not already running."
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "M-o") 'other-window)
 ;; Kill current buffer (instead of asking first buffer name)
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
@@ -728,7 +713,7 @@ Start `ielm' if it's not already running."
 
 (setq create-lockfiles nil
       visible-bell t
-      inhibit-startup-message t
+      inhibit-startup-screen t
       initial-scratch-message nil
       indicate-empty-lines nil
       cursor-in-non-selected-windows nil
@@ -796,7 +781,7 @@ Start `ielm' if it's not already running."
   (when (require 'flycheck nil t)
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (add-hook 'elpy-mode-hook 'flycheck-mode))
-    (elpy-enable))
+  (elpy-enable))
 
 ;; ;; elixir
 ;; ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
