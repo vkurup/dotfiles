@@ -68,8 +68,6 @@ show_virtual_env() {
 export -f show_virtual_env
 PS1='$(show_virtual_env)'$PS1
 
-TIME_STYLE=long-iso
-
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=emacs
@@ -91,7 +89,6 @@ fi
 export AWS_PROFILE=Admin-Kevel
 # export AWS_PROFILE=Power-Kevel
 eval "$(gpg -d ~/.adzerk/env.gpg)"
-export ADZERK_SLACK_TOKEN=$(zecret ADZERK_SLACK_TOKEN)
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){
