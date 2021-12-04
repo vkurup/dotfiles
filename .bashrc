@@ -86,9 +86,11 @@ if [ -n "$(which direnv)" ]; then
     eval "$(direnv hook bash)"
 fi
 
-export AWS_PROFILE=Admin-Kevel
-# export AWS_PROFILE=Power-Kevel
-eval "$(gpg -d ~/.adzerk/env.gpg)"
+if [ -f "$HOME/.adzerk/env.gpg" ]; then
+  export AWS_PROFILE=Admin-Kevel
+  # export AWS_PROFILE=Power-Kevel
+  eval "$(gpg -d ~/.adzerk/env.gpg)"
+fi
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){
