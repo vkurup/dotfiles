@@ -286,7 +286,9 @@ Start `ielm' if it's not already running."
 
 (use-package restclient
   :ensure t
-  :mode (("\\.http\\'" . restclient-mode)))
+  :mode (("\\.http\\'" . restclient-mode)
+         ;; syntax highlighting works for .hurl
+         ("\\.hurl\\'" . restclient-mode)))
 
 (use-package avy
   :ensure t
