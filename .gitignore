@@ -16,4 +16,6 @@
 /.emacs.d/tramp
 /.emacs.d/transient
 /.emacs.d/tmp
+/.emacs.d/url/cookies
 /.emacs.d/var
+.cache
