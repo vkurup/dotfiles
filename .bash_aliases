@@ -7,7 +7,7 @@ alias lh="ls -l -h"
 
 alias mv='mv -i'
 
-alias grep="grep --color=auto"
+alias grep="rg"
 
 alias f="find"
 
@@ -41,6 +41,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # aws
 alias awsvk="aws --cli-auto-prompt"
+alias sso="aws sso login"
 
 # clojure
 alias clj="clojure -M:rebel"

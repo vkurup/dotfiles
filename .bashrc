@@ -8,6 +8,15 @@ case $- in
       *) return;;
 esac
 
+black="\[\033[0;30m\]"
+red="\[\033[0;31m\]"
+green="\[\033[0;32m\]"
+yellow="\[\033[0;33m\]"
+blue="\[\033[0;34m\]"
+purple="\[\033[0;35m\]"
+cyan="\[\033[0;36m\]"
+white="\[\033[0;37m\]"
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Linux
   export SSH_ASKPASS="/usr/bin/ssh-askpass"
@@ -59,7 +68,7 @@ fi
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
-PS1="\u@\h:\w\$(parse_git_branch) $ "
+PS1="${yellow}\$AWS_PROFILE${white}:\w\$(parse_git_branch)[L\$SHLVL] $ "
 show_virtual_env() {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     echo "($(basename $VIRTUAL_ENV))"
@@ -79,6 +88,8 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/asdf.sh"
   source "$HOME/.asdf/completions/asdf.bash"
   source "$HOME/.asdf/plugins/java/set-java-home.bash"
+  # clojure installer requires this: https://github.com/clojure/brew-install/commit/f238dcebaa0b7bce51305c322dfb89fd3e152304
+  export HOMEBREW_RUBY_PATH=ruby
 fi
 
 # direnv
@@ -87,10 +98,74 @@ if [ -n "$(which direnv)" ]; then
 fi
 
 if [ -f "$HOME/.adzerk/env.gpg" ]; then
-  export AWS_PROFILE=Admin-Kevel
-  # export AWS_PROFILE=Power-Kevel
+  if [[ -z "$AWS_PROFILE" ]]; then
+    export AWS_PROFILE=default
+  fi
+  export KEVEL_JHA_READONLY_PROFILE=jha
   eval "$(gpg -d ~/.adzerk/env.gpg)"
 fi
+
+### START PACS STUFF ####
+### https://github.com/adzerk/pacs/blob/main/scripts/pacs.md
+
+# inspect the aws sso cache to see if our token is expired. macos users will
+# probably need to use `gdate` instead of `date`
+am-i-logged-in-to-aws () {
+  local sso_home=~/.aws/sso/cache
+  local logged_in=false
+  if [[ ! -d $sso_home ]]; then
+    echo $logged_in
+    return
+  fi
+  for f in $(ls $sso_home | grep -v boto); do
+    expires="$(gdate -d "$(cat $sso_home/$f | jt expiresAt %)" +%s)"
+    now="$(gdate +%s)"
+    # if the expiration of our sso cache has passed, delete it
+    if [[ $now -ge $expires ]]; then
+      rm $sso_home/$f
+    else
+      logged_in=true
+    fi
+  done
+  echo $logged_in
+}
+
+# aws profile switcher
+#
+# sets AWS_PROFILE, and optionally TICKET
+# if escalated privs are being used, then requires TICKET
+#
+# Finally, calls `aws sso login` if needed
+awp () {
+  local profile=$1
+  local ticket=$2
+  export AWS_PROFILE=$profile
+  export TICKET=$ticket
+  if [[ ! $profile ]]; then
+    echo "provide a profile 'awp default'"
+    return
+  fi
+  if [[ $profile == ESCALATED-* ]]; then
+    if [[ -z "$TICKET" ]]; then
+      echo "set TICKET env or provide it for escalated privs: 'awp ESCALATED-jha 12345'"
+      return
+    fi
+  fi
+  if [[ $(am-i-logged-in-to-aws) == "false" ]]; then
+    aws sso login --profile $profile
+  fi
+}
+
+# autocomplete for awp, inspects your .aws/config file for suggestions, macos
+# users might need `gsed` here instead of `sed`
+_awp() {
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  local ses=$(cat ~/.aws/config | grep '^\[' | cut -f2 -d' ' | gsed 's/\]//g')
+  COMPREPLY=( $(compgen -W "$ses" -- $cur) )
+}
+complete -F _awp awp
+
+### END PACS STUFF ####
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){

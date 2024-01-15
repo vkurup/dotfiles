@@ -26,7 +26,14 @@ if [ -d "$HOME/.pyenv" ]; then
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 
+# Can't do this because our scripts expect a Mac sed if OS is Darwin
+# gnu-sed instead of sed (from `brew info gnu-sed`)
+#export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+
 # Kevel
 export PATH=$PATH:~/dev/teammgmt/bin:~/dev/teammgmt/infrastructure/bin:~/dev/cli-tools/micha:~/dev/cli-tools/scripts
 
 source "$HOME/.bashrc"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+

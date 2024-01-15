@@ -52,3 +52,5 @@
     la = !git l --all
 [gitlab]
     user = vkurup
+[init]
+	defaultBranch = main
