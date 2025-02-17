@@ -9,7 +9,6 @@
 ;; https://github.com/bbatsov/emacs.d/blob/master/init.el
 
 ;;; Code:
-
 (require 'package)
 
 (add-to-list 'package-archives
@@ -75,7 +74,7 @@
 ;; nano emacs style
 (setq default-frame-alist
       (append (list
-               '(font . "Roboto Mono:style=Regular:size=14")
+               '(font . "Roboto Mono:style=Regular:size=20")
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24)
                '(left-fringe    . 0)
@@ -211,8 +210,8 @@
 
 (use-package windmove
   :config
-  ;; use shift + arrow keys to switch between visible buffers
-  (windmove-default-keybindings))
+  ;; use super + arrow keys to switch between visible buffers
+  (windmove-default-keybindings 'super))
 
 (use-package dired
   :config
@@ -236,7 +235,6 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(use-package csharp-mode)
 (use-package coffee-mode)
 
 (use-package lisp-mode
@@ -444,8 +442,8 @@ Start `ielm' if it's not already running."
   (setq lsp-lens-enable t)
   (setq lsp-signature-auto-activate nil)
   (setq lsp-enable-indentation nil)
-  (setq lsp-enable-completion-at-point nil)
-  (setq lsp-clojure-custom-server-command '("bash" "-c" "/usr/local/bin/clojure-lsp")))
+  (setq lsp-completion-enable nil)
+  (setq lsp-clojure-custom-server-command '("bash" "-c" "/opt/homebrew/bin/clojure-lsp")))
 
 ;; (use-package lsp-ui
 ;;   :ensure t
@@ -1100,11 +1098,11 @@ Start `ielm' if it's not already running."
  '(clojure-indent-style 'align-arguments)
  '(custom-safe-themes
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
- '(js-indent-level 2)
+ '(js-indent-level 4)
  '(lsp-file-watch-ignored-directories
    '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
  '(package-selected-packages
-   '(restclient-jq jq-mode tide coffee-mode csharp-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
+   '(restclient-jq jq-mode tide coffee-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
  '(safe-local-variable-values '((use-inf-clojure . t) (inf-clojure-buffer . "geir-repl")))
  '(sh-basic-offset 2)
  '(typescript-indent-level 2))

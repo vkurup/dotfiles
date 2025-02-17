@@ -83,6 +83,10 @@ export ALTERNATE_EDITOR=emacs
 export CVS_RSH=ssh
 export PAGER=most
 
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+# export PATH="/opt/homebrew/opt/gnupg@2.2/bin:$PATH"
+
 # asdf
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   source "$HOME/.asdf/asdf.sh"
