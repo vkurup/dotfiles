@@ -54,10 +54,6 @@
 ;; vinod customizations
 (setq user-full-name "Vinod Kurup"
       user-mail-address "vinod@kurup.com")
-;; set calendar's location (for sunrise sunset)
-(setq calendar-latitude 35.9162
-      calendar-longitude -79.0999
-      calendar-location-name "Chapel Hill, NC")
 
 ;;; General settings
 
