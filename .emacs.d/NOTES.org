@@ -1,0 +1,94 @@
+#+TITLE: Emacs config notes
+#+STARTUP: overview
+
+Roadmap, ideas and a changelog for =init.el=. The config is shared between
+the Linux home machine and the work Mac, so changes should work on both:
+gate machine-specific bits on =system-type= (or =executable-find=) rather
+than hard-coding paths.
+
+* Roadmap
+** TODO Emacs as an LLM harness [1/4]                                :llm:
+Current priority. Three different things this can mean:
+- *LLM in Emacs*: chat with / rewrite text in any buffer.
+- *Agent in Emacs*: run a coding agent (Claude Code etc.) with Emacs as its
+  UI: diffs, file context, approvals.
+- *Agent driving Emacs*: the agent calls back into the running Emacs
+  (emacsclient / MCP) to read buffers, run commands, use xref/LSP.
+Plan:
+- [ ] *gptel*: general-purpose LLM client (Anthropic, OpenAI, Ollama...).
+  Chat in any buffer, region rewrite, presets, tool use, MCP via =mcp.el=.
+  Needs an API key; keep it in =~/.authinfo.gpg= (not the repo).
+- [X] *agent-shell*: native Emacs buffer for ACP agents (Claude Code,
+  Gemini CLI, ...). Installed 2026-10-31; uses the Claude Code login.
+  - Start: =C-c A= (=agent-shell=); =C-u C-c A= forces a new session.
+  - In the buffer: =RET= send (queues if busy), =M-RET= steer the running
+    turn, =M-J= newline, =C-c C-c= interrupt, =C-c C-v= model,
+    =C-c C-m= session mode, =C-c C-o= toggle shell/viewport.
+  - Needs the adapter on each machine:
+    =npm install -g @agentclientprotocol/claude-agent-acp=
+    (then =asdf reshim nodejs=, or nothing with mise), plus one =claude=
+    login outside Emacs.
+  - Debug: =M-x agent-shell-toggle-logging=, then =agent-shell-view-traffic=.
+  - Image paste on Linux needs =wl-clipboard= (Wayland) or =xclip= (X11).
+- [ ] Alternative to compare: *claude-code-ide.el*: runs the Claude Code CLI
+  in vterm/eat and exposes Emacs (xref, diagnostics, ediff diffs) to it over
+  MCP.
+- [ ] Decide what to keep; write up keybindings and workflow here.
+Notes:
+- Claude Code CLI is installed (=~/.local/bin/claude=) and can already
+  reach this Emacs via =emacsclient --eval=.
+- Must work on the work Mac too (auth, model/provider may differ there).
+** TODO Move Custom settings out of init.el
+=custom-set-variables= lives at the bottom of =init.el=, and
+=package-selected-packages= changes every time a package is installed on
+either machine, which caused a merge conflict on 2026-10-31. Set
+=custom-file= to a separate, git-ignored file and move the deliberate
+settings (indent levels, =org-agenda-files=, etc.) into real =setq= /
+=use-package :custom= forms.
+** TODO Replace selectrum (deprecated) with vertico
+Selectrum's author recommends vertico. vertico + orderless (or keep
+prescient via =vertico-prescient=) + the existing marginalia. smex can
+probably go too, since =M-x= history comes from savehist.
+** TODO Decide: lsp-mode vs eglot
+eglot is built into Emacs 29. Try it for clojure (clojure-lsp) and python
+before deciding; would also let elpy go.
+** TODO Replace elpy
+elpy is largely unmaintained. Candidates: eglot + pyright/basedpyright or
+ruff, with direnv handling the venv.
+** TODO Look at tree-sitter major modes
+Emacs 29 ships =*-ts-mode= variants (python, yaml, typescript, ...).
+=treesit-auto= can install grammars and remap modes.
+** TODO Revisit undo-tree
+Built-in =undo-redo= plus =vundo= is lighter; undo-tree history files
+have been a source of slowness/corruption for some people.
+** TODO company vs corfu
+Optional. corfu + cape is the lighter-weight modern pairing with vertico.
+** TODO Resolve the =;; FIXME= above git-timemachine
+No note on what's wrong; figure out or delete.
+** TODO Package archive hygiene
+The MELPA index had gone stale (404s on install). Consider refreshing on a
+schedule or using =package-vc= / pinning for the few that matter.
+** TODO Consider splitting init.el
+~1100 lines in one file. Options: split into =lisp/*.el= modules, or a
+literate =config.org=. Only worth it if it makes changes easier.
+
+* Ideas / someday
+
+* Changelog
+** 2026-10-31 (agent-shell)
+- Added =agent-shell= (MELPA) on =C-c A=, configured for Claude Code with
+  subscription login and inherited environment.
+- Installed =@agentclientprotocol/claude-agent-acp= 0.99.1 on Linux.
+** 2026-10-31
+- Merged work-Mac and Linux configs into one =master=.
+- Font is chosen by =system-type=: Roboto Mono on Mac, DejaVu Sans Mono
+  on Linux.
+- windmove: super+arrows on Mac, shift+arrows on Linux (GNOME grabs
+  super+arrows).
+- clojure-lsp located via =executable-find= instead of a hard-coded
+  Homebrew path.
+- =coffee-mode= now =:ensure t=; refreshed MELPA and installed jq-mode,
+  restclient-jq, tide, forge; upgraded restclient (needed by
+  restclient-jq).
+- paredit in clojure-mode; erlang commented out; beancount/Guideline
+  import tweaks.

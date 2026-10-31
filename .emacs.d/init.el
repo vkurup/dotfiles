@@ -276,6 +276,21 @@ Start `ielm' if it's not already running."
 
 (use-package vterm
   :ensure t)
+;; LLM agents in an Emacs buffer via the Agent Client Protocol (ACP).
+;; Needs the adapter on PATH (npm i -g @agentclientprotocol/claude-agent-acp)
+;; and a one-time `claude' login outside Emacs. See NOTES.org.
+(use-package agent-shell
+  :ensure t
+  :bind (("C-c A" . agent-shell))
+  :config
+  ;; use the Claude Code subscription login, not an API key
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication :login t))
+  ;; inherit Emacs's environment so asdf/mise shims, direnv etc. are on PATH
+  (setq agent-shell-anthropic-claude-environment
+        (agent-shell-make-environment-variables :inherit-env t))
+  (setq agent-shell-preferred-agent-config
+        (agent-shell-anthropic-make-claude-code-config)))
 
 (use-package direnv
   :ensure t
