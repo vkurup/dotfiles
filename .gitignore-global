@@ -6,3 +6,5 @@
 .envrc
 # lsp
 .lsp/sqlite.db
+
+**/.claude/settings.local.json

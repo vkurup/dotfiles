@@ -75,7 +75,7 @@
 ;; nano emacs style
 (setq default-frame-alist
       (append (list
-               '(font . "Ubuntu Mono:style=Regular:size=20")
+               '(font . "DejaVu Sans Mono:style=Regular:size=20")
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24)
                '(left-fringe    . 0)
@@ -332,6 +332,8 @@ Start `ielm' if it's not already running."
 
 (use-package paredit
   :ensure t
+  :hook
+  ((clojure-mode . paredit-mode))
   :config
   (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
   ;; enable in the *scratch* buffer
@@ -444,12 +446,12 @@ Start `ielm' if it's not already running."
   :config
   (add-hook 'elixir-mode #'subword-mode))
 
-(use-package erlang
-  :ensure t
-  :config
-  (when (eq system-type 'windows-nt)
-    (setq erlang-root-dir "C:/Program Files/erl7.2")
-    (add-to-list 'exec-path "C:/Program Files/erl7.2/bin")))
+;; (use-package erlang
+;;   :ensure t
+;;   :config
+;;   (when (eq system-type 'windows-nt)
+;;     (setq erlang-root-dir "C:/Program Files/erl7.2")
+;;     (add-to-list 'exec-path "C:/Program Files/erl7.2/bin")))
 
 (use-package haskell-mode
   :ensure t
@@ -880,6 +882,10 @@ Start `ielm' if it's not already running."
 ;; (add-hook 'beancount-mode-hook
 ;;           (lambda () (local-set-key (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)))
 (define-key beancount-mode-map (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)
+(add-hook 'beancount-mode
+          (lambda ()
+            (variable-pitch-mode 0)))
+
 (use-package ledger-mode
   :ensure t)
 
@@ -996,14 +1002,24 @@ Start `ielm' if it's not already running."
 (server-start)
 
 (defun vk-guideline-pdf-to-csv ()
-  "Convert line from Guideline PDF statement to beancount transaction."
+  "Convert line from Guideline PDF statement to beancount transaction.
+
+Copy PDF into transactions.beancount buffer. Make lines look like:
+12/27 Sell VTABX 0.010 $22.12 -$0.09 - -$0.13 -$0.22
+Adjust company and year in this function, if needed.
+
+Action can be Buy, Sell, or Reinvest"
   (interactive)
   (let ((company "Kevel")
-        (year "2021"))
+        (year "2025"))
     (beginning-of-line)
     (insert year "-")
     (forward-char 2)
+
+    ;; replace "/" with "-"
     (insert "-")
+    (delete-forward-char 1)
+
     (forward-char 3)
     (insert "txn \"")
     (let ((beg (point)))
@@ -1047,8 +1063,9 @@ Start `ielm' if it's not already running."
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
  '(lsp-file-watch-ignored-directories
    '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
+ '(org-agenda-files '("~/org/gtd.org" "~/org/trips.org"))
  '(package-selected-packages
-   '(popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
+   '(cider racket-mode writeroom-mode rust-mode popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
  '(sh-basic-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

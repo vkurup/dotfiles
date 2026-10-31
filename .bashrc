@@ -1,3 +1,12 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+if [ -d "/home/vinod/.local/share/bash-completion/completions" ]; then
+  for f in "/home/vinod/.local/share/bash-completion/completions"/*; do
+    [ -f "$f" ] && . "$f"
+  done
+fi
+# OPENSPEC:END
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -75,10 +84,10 @@ export CVS_RSH=ssh
 export PAGER=most
 
 # asdf
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
-  source "$HOME/.asdf/asdf.sh"
-  source "$HOME/.asdf/completions/asdf.bash"
-  source "$HOME/.asdf/plugins/java/set-java-home.bash"
+if [ -d "$HOME/.asdf" ]; then
+  export ASDF_DATA_DIR="$HOME/.asdf"
+  export PATH="$ASDF_DATA_DIR/shims:$PATH"
+  source <(asdf completion bash)
 fi
 
 # direnv
@@ -114,3 +123,5 @@ vterm_prompt_end(){
     vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
 }
 PS1=$PS1'\[$(vterm_prompt_end)\]'
+
+export PATH="$HOME/.local/bin:$PATH"
