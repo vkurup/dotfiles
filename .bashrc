@@ -96,8 +96,10 @@ export PAGER=most
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 # export PATH="/opt/homebrew/opt/gnupg@2.2/bin:$PATH"
 
-# asdf
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
+# version manager: mise if installed, otherwise asdf
+if command -v mise > /dev/null; then
+  eval "$(mise activate bash)"
+elif [ -f "$HOME/.asdf/asdf.sh" ]; then
   # asdf < 0.16 (shell-script version)
   source "$HOME/.asdf/asdf.sh"
   source "$HOME/.asdf/completions/asdf.bash"
