@@ -9,7 +9,6 @@
 ;; https://github.com/bbatsov/emacs.d/blob/master/init.el
 
 ;;; Code:
-
 (require 'package)
 
 (add-to-list 'package-archives
@@ -75,7 +74,9 @@
 ;; nano emacs style
 (setq default-frame-alist
       (append (list
-               '(font . "DejaVu Sans Mono:style=Regular:size=20")
+               (cons 'font (if (eq system-type 'darwin)
+                               "Roboto Mono:style=Regular:size=20"
+                             "DejaVu Sans Mono:style=Regular:size=20"))
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24)
                '(left-fringe    . 0)
@@ -211,8 +212,9 @@
 
 (use-package windmove
   :config
-  ;; use shift + arrow keys to switch between visible buffers
-  (windmove-default-keybindings))
+  ;; switch between visible buffers: super+arrows on Mac, shift+arrows
+  ;; elsewhere (GNOME grabs super+arrows)
+  (windmove-default-keybindings (if (eq system-type 'darwin) 'super 'shift)))
 
 (use-package dired
   :config
@@ -234,6 +236,9 @@
   (require 'dired-x))
 
 (use-package rainbow-delimiters
+  :ensure t)
+
+(use-package coffee-mode
   :ensure t)
 
 (use-package lisp-mode
@@ -284,11 +289,20 @@ Start `ielm' if it's not already running."
   (diminish 'flyspell-prog-mode)
   (diminish 'eldoc-mode))
 
+(use-package jq-mode
+  :ensure t)
+
 (use-package restclient
   :ensure t
   :mode (("\\.http\\'" . restclient-mode)
          ;; syntax highlighting works for .hurl
-         ("\\.hurl\\'" . restclient-mode)))
+         ("\\.hurl\\'" . restclient-mode))
+  :config
+  (setq restclient-same-buffer-response t))
+
+(use-package restclient-jq
+  :ensure t)
+
 
 (use-package avy
   :ensure t
@@ -298,8 +312,13 @@ Start `ielm' if it's not already running."
 
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)))
+  :bind (("C-x g" . magit-status))
+  :config
+  (setq magit-ediff-dwim-show-on-hunks t)
+  (setq ediff-split-window-function (quote split-window-horizontally))
+  (setq ediff-diff-options "-w"))
 
+;; FIXME
 (use-package git-timemachine
   :ensure t
   :bind (("s-g" . git-timemachine)))
@@ -317,7 +336,9 @@ Start `ielm' if it's not already running."
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
   (global-set-key (kbd "C-c p") 'projectile-command-map)
   (setq projectile-enable-caching t)
-  (projectile-mode +1))
+  (projectile-mode +1)
+  (add-to-list 'projectile-globally-ignored-directories "node_modules" )
+  (add-to-list 'projectile-globally-ignored-directories "submodules"))
 
 (use-package expand-region
   :ensure t
@@ -427,8 +448,9 @@ Start `ielm' if it's not already running."
   (setq lsp-lens-enable t)
   (setq lsp-signature-auto-activate nil)
   (setq lsp-enable-indentation nil)
-  (setq lsp-enable-completion-at-point nil)
-  (setq lsp-clojure-custom-server-command '("bash" "-c" "/usr/local/bin/clojure-lsp")))
+  (setq lsp-completion-enable nil)
+  (setq lsp-clojure-custom-server-command
+        (list "bash" "-c" (or (executable-find "clojure-lsp") "clojure-lsp"))))
 
 ;; (use-package lsp-ui
 ;;   :ensure t
@@ -469,7 +491,8 @@ Start `ielm' if it's not already running."
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)))
 
 (use-package markdown-mode
   :ensure t
@@ -838,6 +861,30 @@ Start `ielm' if it's not already running."
 ;;   (setq company-idle-delay 0)
 ;;   (setq company-minimum-prefix-length 1))
 
+(use-package tide :ensure t)
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+;; enable typescript - tslint checker
+(flycheck-add-mode 'typescript-tslint 'web-mode)
+
 ;; ;; js2
 ;; (add-hook 'js2-mode-hook 'flycheck-mode)
 ;; (require 'tide)
@@ -998,6 +1045,16 @@ Start `ielm' if it's not already running."
           (format "%s %dx%d" (propertized-buffer-identification "%12b") width height))))
 (add-hook 'image-mode-hook #'show-image-dimensions-in-mode-line)
 
+;;; workaround until Emacs 29
+;;; https://www.blogbyben.com/2022/05/gotcha-emacs-on-mac-os-too-many-files.html
+(defun file-notify-rm-all-watches ()
+  "Remove all existing file notification watches from Emacs."
+  (interactive)
+  (maphash
+   (lambda (key _value)
+     (file-notify-rm-watch key))
+   file-notify-descriptors))
+
 ;; emacsclient
 (server-start)
 
@@ -1059,17 +1116,22 @@ Action can be Buy, Sell, or Reinvest"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(clojure-indent-style 'align-arguments)
  '(custom-safe-themes
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
+ '(js-indent-level 4)
  '(lsp-file-watch-ignored-directories
    '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
  '(org-agenda-files '("~/org/gtd.org" "~/org/trips.org"))
  '(package-selected-packages
-   '(cider racket-mode writeroom-mode rust-mode popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
- '(sh-basic-offset 2))
+   '(cider racket-mode writeroom-mode rust-mode restclient-jq jq-mode tide coffee-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
+ '(safe-local-variable-values '((use-inf-clojure . t) (inf-clojure-buffer . "geir-repl")))
+ '(sh-basic-offset 2)
+ '(typescript-indent-level 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)

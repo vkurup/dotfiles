@@ -1,1 +1,3 @@
+\set PROMPT1 '%M/%/%R%x%# '
+\pset pager 0
 \timing
