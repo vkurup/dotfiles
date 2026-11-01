@@ -288,6 +288,10 @@ Start `ielm' if it's not already running."
   ;; inherit Emacs's environment so asdf/mise shims, direnv etc. are on PATH
   (setq agent-shell-anthropic-claude-environment
         (agent-shell-make-environment-variables :inherit-env t))
+  ;; start in Auto mode, like the claude CLI: Claude decides which actions
+  ;; are safe and only asks about risky ones (the default, "Manual", asks
+  ;; before every change). Switch per session with C-c C-m.
+  (setq agent-shell-anthropic-default-session-mode-id "auto")
   (setq agent-shell-preferred-agent-config
         (agent-shell-anthropic-make-claude-code-config)))
 
