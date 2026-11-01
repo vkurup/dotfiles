@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-java -jar "$HOME"/bin/clsql.jar       -H $ADZERK_MSQL_HOSTNAME       -U $ADZERK_MSQL_USER       -P $ADZERK_MSQL_PASSWORD       -d $ADZERK_MSQL_DATABASE       "$@"
