@@ -38,8 +38,9 @@
 (setq load-prefer-newer t)
 
 ;; reduce the frequency of garbage collection by making it happen on
-;; each 50MB of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold 50000000)
+;; each 100MB of allocated data (the default is on every 0.76MB).
+;; lsp-mode recommends this much.
+(setq gc-cons-threshold (* 100 1024 1024))
 
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
@@ -127,9 +128,7 @@
 ;; delete the selection with a keypress
 (delete-selection-mode t)
 
-;; store all backup and autosave files in the tmp dir
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+;; store autosave files in the tmp dir (backups are off, see backup-inhibited)
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
@@ -348,7 +347,6 @@ Start `ielm' if it's not already running."
   :init
   (setq projectile-project-search-path '("~/src/" "~/dev/"))
   :config
-  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
   (global-set-key (kbd "C-c p") 'projectile-command-map)
   (setq projectile-enable-caching t)
   (projectile-mode +1)
@@ -446,9 +444,9 @@ Start `ielm' if it's not already running."
   (add-hook 'clojure-mode-hook #'paredit-mode)
   (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-  (require 'flycheck-clj-kondo)
-  (clj-refactor-mode 1)
-  (yas-minor-mode 1))
+  (add-hook 'clojure-mode-hook #'clj-refactor-mode)
+  (add-hook 'clojure-mode-hook #'yas-minor-mode)
+  (require 'flycheck-clj-kondo))
 
 (use-package lsp-mode
   :ensure t
@@ -456,10 +454,8 @@ Start `ielm' if it's not already running."
   (add-hook 'clojure-mode-hook 'lsp)
   (add-hook 'clojurec-mode-hook 'lsp)
   (add-hook 'clojurescript-mode-hook 'lsp)
-  (setq gc-cons-threshold (* 100 1024 1024))
   (setq read-process-output-max (* 1024 1024))
   (setq treemacs-space-between-root-nodes nil)
-  (setq company-minimum-prefix-length 1)
   (setq lsp-lens-enable t)
   (setq lsp-signature-auto-activate nil)
   (setq lsp-enable-indentation nil)
@@ -481,7 +477,7 @@ Start `ielm' if it's not already running."
 (use-package elixir-mode
   :ensure t
   :config
-  (add-hook 'elixir-mode #'subword-mode))
+  (add-hook 'elixir-mode-hook #'subword-mode))
 
 ;; (use-package erlang
 ;;   :ensure t
@@ -616,7 +612,6 @@ Start `ielm' if it's not already running."
 (use-package crux
   :ensure t
   :bind (("C-c o" . crux-open-with)
-         ("M-o" . crux-smart-open-line)
          ("C-c n" . crux-cleanup-buffer-or-region)
          ("C-c f" . crux-recentf-find-file)
          ("C-M-z" . crux-indent-defun)
@@ -783,7 +778,6 @@ Start `ielm' if it's not already running."
   (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$")))
 
 (setq create-lockfiles nil
-      visible-bell t
       inhibit-startup-screen t
       initial-scratch-message nil
       indicate-empty-lines nil
@@ -825,8 +819,6 @@ Start `ielm' if it's not already running."
 
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'before-save-hook 'cider-format-buffer t t)
-;; (remove-hook 'before-save-hook 'cider-format-buffer)
 
 ;; ;; work with ubuntu clipboard
 ;; (setq interprogram-paste-function 'x-selection-value)
@@ -888,8 +880,6 @@ Start `ielm' if it's not already running."
   ;; install it separately via package-install
   ;; `M-x package-install [ret] company`
   (company-mode +1))
-;; aligns annotation to the right hand side
-(setq company-tooltip-align-annotations t)
 ;; formats the buffer before saving
 (add-hook 'before-save-hook 'tide-format-before-save)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
@@ -944,7 +934,7 @@ Start `ielm' if it's not already running."
 ;; (add-hook 'beancount-mode-hook
 ;;           (lambda () (local-set-key (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)))
 (define-key beancount-mode-map (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)
-(add-hook 'beancount-mode
+(add-hook 'beancount-mode-hook
           (lambda ()
             (variable-pitch-mode 0)))
 
@@ -955,12 +945,12 @@ Start `ielm' if it's not already running."
   "Copy the transaction at point and paste it to end of file."
   (interactive)
   (beancount-goto-transaction-begin)
-  (setq pt (point))
-  ;; (beancount-goto-transaction-end)
-  (forward-line)
-  (while (not (looking-at-p "[[:blank:]]*$"))
-    (forward-line))
-  (copy-region-as-kill pt (point))
+  (let ((pt (point)))
+    ;; (beancount-goto-transaction-end)
+    (forward-line)
+    (while (not (looking-at-p "[[:blank:]]*$"))
+      (forward-line))
+    (copy-region-as-kill pt (point)))
   (goto-char (point-max))
   (insert "\n")
   (yank)
