@@ -45,3 +45,7 @@ alias sso="aws sso login"
 
 # clojure
 alias clj="clojure -M:rebel"
+
+# AI
+alias ai="start-agent"
+alias aib="start-agent -b"

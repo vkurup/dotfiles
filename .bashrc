@@ -86,6 +86,9 @@ show_virtual_env() {
 export -f show_virtual_env
 PS1='$(show_virtual_env)'$PS1
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export EMACS_SOCKET_NAME="$HOME/.emacs.d/server/server"
+fi
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=emacs
@@ -214,3 +217,14 @@ vterm_prompt_end(){
 PS1=$PS1'\[$(vterm_prompt_end)\]'
 
 export PATH="$HOME/.local/bin:$PATH"
+
+export NO_SPEAK=1
+# opencode
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # openjml
+  export PATH=$HOME/src/openjml-macos-14-21-0.23:$PATH
+  # docker
+  export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+fi

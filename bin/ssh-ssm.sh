@@ -1,0 +1,1 @@
+/Users/vkurup/dev/ssh-over-ssm/ssh-ssm.sh

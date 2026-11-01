@@ -843,7 +843,7 @@ Start `ielm' if it's not already running."
 (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
                            ("~/org/someday.org" :level . 1)
                            ("~/org/tickler.org" :maxlevel . 2)))
-(setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" "WAITING(w)")))
+(setq org-todo-keywords '((sequence "TODO(t)" "DOING(p)" "|" "DONE(d)" "CANCELLED(c)" "WAITING(w)")))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
