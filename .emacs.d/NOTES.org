@@ -97,6 +97,16 @@ of writing elisp:
 - which-key is already on and covers the "what can I press next?" half.
 
 * Changelog
+** 2026-11-01 (cleanup step 4: outline sections)
+- =init.el= is grouped into =;;;= sections (=;;;;= for each language), in
+  load order: packages, environment, general, appearance, keys, projects,
+  editing, checking, completion, files/windows, VC, terminals/agents,
+  languages, writing, local files, org, finance, demos, server/custom.
+- Order matters in two places: =diminish= and =exec-path-from-shell= must
+  load first, and rg must load before crux so =C-c s= stays
+  =crux-ispell-word-then-abbrev= (rg's default bindings also want it).
+- Checked by loading old and new =init.el= in batch and diffing every
+  global key binding, hook and variable: only ordering differed.
 ** 2026-11-01 (cleanup step 3: custom-file)
 - M-x customize and package installs now save to =custom.el= (git-ignored,
   per machine) instead of the bottom of =init.el=, so
