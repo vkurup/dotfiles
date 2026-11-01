@@ -55,10 +55,15 @@ either machine, which caused a merge conflict on 2026-10-31. Set
 =custom-file= to a separate, git-ignored file and move the deliberate
 settings (indent levels, =org-agenda-files=, etc.) into real =setq= /
 =use-package :custom= forms.
-** TODO Replace selectrum (deprecated) with vertico
-Selectrum's author recommends vertico. vertico + orderless (or keep
-prescient via =vertico-prescient=) + the existing marginalia. smex can
-probably go too, since =M-x= history comes from savehist.
+** TODO Investigate modern completion setups
+Selectrum is deprecated (its author recommends vertico), so the minibuffer
+completion stack needs replacing. Look at what's current before picking:
+- *vertico* (minibuffer UI) + *orderless* (matching) + the existing
+  *marginalia*; or keep prescient's sorting via =vertico-prescient=.
+- *consult* (better =C-x b=, search, imenu, ...) and *embark* (actions).
+- Built-in options in Emacs 29/30 (=fido-vertical-mode=, =icomplete=).
+- In-buffer completion is a separate choice: see "company vs corfu".
+smex was removed 2026-11-01; =M-x= history comes from savehist.
 ** TODO Decide: lsp-mode vs eglot
 eglot is built into Emacs 29. Try it for clojure (clojure-lsp) and python
 before deciding; would also let elpy go.
@@ -99,6 +104,14 @@ of writing elisp:
 - which-key is already on and covers the "what can I press next?" half.
 
 * Changelog
+** 2026-11-01 (cleanup step 2: dead code)
+- Removed ledger-mode (I use beancount), smex, racket-mode, rust-mode,
+  writeroom-mode, inf-clojure, ERC/freenode, the file-notify workaround,
+  =lib/nano-*.el= and old commented-out code (git history has it).
+- =esk-cleanup-buffer= is gone: use =C-c n= (crux), which now cleans the
+  whole buffer when no region is active. =C-x C-r= is =crux-sudo-edit=
+  (edits the current file as root; =C-u C-x C-r= asks for a file).
+- =.ts= files open in web-mode with tide, like =.tsx=.
 ** 2026-10-31 (agent-shell)
 - Added =agent-shell= (MELPA) on =C-c A=, configured for Claude Code with
   subscription login and inherited environment.

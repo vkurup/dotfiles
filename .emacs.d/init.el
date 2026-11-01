@@ -72,7 +72,7 @@
 ;; maximize the initial frame automatically
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-;; nano emacs style
+;; frame: font, no scroll/tool/menu bars, padding around the edges
 (setq default-frame-alist
       (append (list
                (cons 'font (if (eq system-type 'darwin)
@@ -84,7 +84,6 @@
                '(right-fringe   . 0)
                '(tool-bar-lines . 0)
                '(menu-bar-lines . 0))))
-;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; Vertical window divider
 (setq window-divider-default-right-width 24)
 (setq window-divider-default-places 'right-only)
@@ -258,16 +257,12 @@ Start `ielm' if it's not already running."
   (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode))
 
 ;;; third-party packages
-;; (use-package zenburn-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'zenburn t))
 (use-package poet-theme
   :ensure t
   :config
   (load-theme 'poet t)
   ;; Proportional font for prose only. Lots of non-prose modes (yaml,
-  ;; ledger, ...) derive from text-mode, so list the prose ones explicitly.
+  ;; ...) derive from text-mode, so list the prose ones explicitly.
   ;; Plain text-mode covers magit commit messages too.
   (defun vk-variable-pitch-for-prose ()
     "Turn on `variable-pitch-mode' in prose buffers."
@@ -275,10 +270,6 @@ Start `ielm' if it's not already running."
               (derived-mode-p 'org-mode 'markdown-mode 'adoc-mode))
       (variable-pitch-mode 1)))
   (add-hook 'text-mode-hook #'vk-variable-pitch-for-prose))
-;; (load-theme 'adwaita t)
-;; (load-theme 'zenburn t)
-;; (load-theme 'wombat t)
-;; (load-theme 'misterioso t)
 
 (use-package vterm
   :ensure t)
@@ -474,10 +465,6 @@ Start `ielm' if it's not already running."
   (setq lsp-clojure-custom-server-command
         (list "bash" "-c" (or (executable-find "clojure-lsp") "clojure-lsp"))))
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
-
 (use-package cider
   :ensure t
   :config
@@ -489,13 +476,6 @@ Start `ielm' if it's not already running."
   :ensure t
   :config
   (add-hook 'elixir-mode-hook #'subword-mode))
-
-;; (use-package erlang
-;;   :ensure t
-;;   :config
-;;   (when (eq system-type 'windows-nt)
-;;     (setq erlang-root-dir "C:/Program Files/erl7.2")
-;;     (add-to-list 'exec-path "C:/Program Files/erl7.2/bin")))
 
 (use-package haskell-mode
   :ensure t
@@ -623,7 +603,7 @@ Start `ielm' if it's not already running."
 (use-package crux
   :ensure t
   :bind (("C-c o" . crux-open-with)
-         ("C-c n" . crux-cleanup-buffer-or-region)
+         ("C-c n" . crux-cleanup-buffer-or-region) ; indent, untabify, trim whitespace
          ("C-c f" . crux-recentf-find-file)
          ("C-M-z" . crux-indent-defun)
          ("C-c u" . crux-view-url)
@@ -646,7 +626,11 @@ Start `ielm' if it's not already running."
          ([(shift return)] . crux-smart-open-line)
          ([(control shift return)] . crux-smart-open-line-above)
          ([remap kill-whole-line] . crux-kill-whole-line)
-         ("C-c s" . crux-ispell-word-then-abbrev)))
+         ("C-c s" . crux-ispell-word-then-abbrev))
+  :config
+  ;; C-c n with no region cleans up the whole buffer
+  (crux-with-region-or-buffer indent-region)
+  (crux-with-region-or-buffer untabify))
 
 (use-package diff-hl
   :ensure t
@@ -670,36 +654,6 @@ Start `ielm' if it's not already running."
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode +1)
   (diminish 'undo-tree-mode))
-
-;; (use-package ivy
-;;   :ensure t
-;;   :config
-;;   (ivy-mode 1)
-;;   (setq ivy-use-virtual-buffers t)
-;;   (setq enable-recursive-minibuffers t)
-;;   (global-set-key (kbd "C-c C-r") 'ivy-resume)
-;;   (global-set-key (kbd "<f6>") 'ivy-resume))
-;;
-;; (use-package swiper
-;;   :ensure t
-;;   :config
-;;   (global-set-key "\C-s" 'swiper))
-;;
-;; (use-package counsel
-;;   :ensure t
-;;   :config
-;;   (global-set-key (kbd "M-x") 'counsel-M-x)
-;;   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-;;   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-;;   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-;;   (global-set-key (kbd "<f1> l") 'counsel-find-library)
-;;   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;;   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;;   (global-set-key (kbd "C-c g") 'counsel-git)
-;;   (global-set-key (kbd "C-c j") 'counsel-git-grep)
-;;   (global-set-key (kbd "C-c a") 'counsel-ag)
-;;   (global-set-key (kbd "C-x l") 'counsel-locate)
-;;   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (use-package ace-window
   :ensure t
@@ -729,18 +683,7 @@ Start `ielm' if it's not already running."
   (diminish 'volatile-highlights-mode))
 
 (use-package yasnippet
-  :ensure t
-  :config
-  ;; (yas-global-mode)
-  )
-
-;; (use-package yasnippet-snippets
-;;   :ensure t
-;;   :after yasnippet
-;;   :config (yasnippet-snippets-initialize))
-
-;; https://github.com/sabof/org-bullets
-;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :ensure t)
 
 ;; Enable richer annotations using the Marginalia package
 (use-package marginalia
@@ -756,12 +699,6 @@ Start `ielm' if it's not already running."
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
-
-(use-package smex
-  :ensure t
-  :config
-  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
-  (smex-initialize))
 
 ;; macOS modifier keys
 (setq mac-command-modifier 'meta)
@@ -799,43 +736,10 @@ Start `ielm' if it's not already running."
       kill-whole-line t        ; ctrl-k kills whole line if at col 0
       diff-switches "-u")
 
-(defun esk-untabify-buffer ()
-  "Untabify the current buffer."
-  (interactive)
-  (untabify (point-min) (point-max)))
-
-(defun esk-indent-buffer ()
-  "Indent the current buffer."
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-(defun esk-cleanup-buffer ()
-  "Perform a bunch of operations on the whitespace content of a buffer."
-  (interactive)
-  (esk-indent-buffer)
-  (esk-untabify-buffer)
-  (delete-trailing-whitespace))
-
-(defun esk-sudo-edit (&optional arg)
-  "Open a file ARG using sudo."
-  (interactive "p")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:" (read-file-name "File: ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
 (defun esk-insert-date ()
   "Insert a 'time-stamp' according to locale's date and time format."
   (interactive)
   (insert (format-time-string "%c" (current-time))))
-
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-;; (remove-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; ;; work with ubuntu clipboard
-;; (setq interprogram-paste-function 'x-selection-value)
-
-;; ;; map RET to newline-and-indent
-;; (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; elpy
 (use-package elpy
@@ -856,28 +760,6 @@ Start `ielm' if it's not already running."
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (add-hook 'elpy-mode-hook 'flycheck-mode))
   (elpy-enable))
-
-;; ;; elixir
-;; ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196
-;; ;; using lsp-mode
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :bind ("C-c h" . lsp-describe-thing-at-point)
-;;   :commands lsp
-;;   :diminish lsp-mode
-;;   :hook
-;;   (elixir-mode . lsp)
-;;   :init
-;;   (add-to-list 'exec-path "~/dev/elixir-ls/release"))
-
-;; (use-package company-lsp
-;;   :ensure t
-;;   :bind
-;;   ("M-SPC" . company-complete)
-;;   :config
-;;   (push 'company-lsp company-backends)
-;;   (setq company-idle-delay 0)
-;;   (setq company-minimum-prefix-length 1))
 
 (use-package tide :ensure t)
 (defun setup-tide-mode ()
@@ -901,60 +783,17 @@ Start `ielm' if it's not already running."
 ;; enable typescript - tslint checker
 (flycheck-add-mode 'typescript-tslint 'web-mode)
 
-;; ;; js2
-;; (add-hook 'js2-mode-hook 'flycheck-mode)
-;; (require 'tide)
-;; (add-hook 'js2-mode-hook #'setup-tide-mode)
-;; ;; configure javascript-tide checker to run after your default javascript checker
-;; (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-
-;; ;; https://emacs.stackexchange.com/a/33544/289
-;; (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-;; (defadvice js-jsx-indent-line (after js-jsx-indent-line-after-hack activate)
-;;   "Workaround sgml-mode and follow airbnb component style."
-;;   (save-excursion
-;;     (beginning-of-line)
-;;     (if (looking-at-p "^ +\/?> *$")
-;;         (delete-char sgml-basic-offset))))
-
-;; ;; disable jshint since we prefer eslint checking
-;; ;; disable json-jsonlist checking for json files
-;; (setq-default flycheck-disabled-checkers
-;;               (append flycheck-disabled-checkers
-;;                       '(javascript-jshint
-;;                         json-jsonlist)))
-
-;; ;; use eslint with web-mode for jsx files
-;; (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-;; ;; customize flycheck temp file prefix
-;; (setq-default flycheck-temp-prefix ".flycheck")
-
-;; ;; for better jsx syntax-highlighting in web-mode
-;; ;; - courtesy of Patrick @halbtuerke
-;; (defadvice web-mode-highlight-part (around tweak-jsx activate)
-;;   (if (equal web-mode-content-type "jsx")
-;;       (let ((web-mode-enable-part-face nil))
-;;         ad-do-it)
-;;     ad-do-it))
-
-;; ;; beancount
-;; ;; custom copied https://github.com/beancount/beancount-mode
+;; beancount
+;; custom copied https://github.com/beancount/beancount-mode
 (require 'beancount)
 (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-;; (add-hook 'beancount-mode-hook
-;;           (lambda () (local-set-key (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)))
 (define-key beancount-mode-map (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)
-
-(use-package ledger-mode
-  :ensure t)
 
 (defun vk-beancount-copy-transaction-at-point ()
   "Copy the transaction at point and paste it to end of file."
   (interactive)
   (beancount-goto-transaction-begin)
   (let ((pt (point)))
-    ;; (beancount-goto-transaction-end)
     (forward-line)
     (while (not (looking-at-p "[[:blank:]]*$"))
       (forward-line))
@@ -1002,51 +841,7 @@ Start `ielm' if it's not already running."
   (interactive)
   (find-file (concat org-directory "gtd.org")))
 
-;; (defun vk-slugify (title)
-;;   "Convert a normal TITLE string to something that can be used in a blog slug."
-;;   (replace-regexp-in-string "[\\., ]+" "-"
-;;                             (replace-regexp-in-string "['\?]" ""
-;;                                                       (downcase title))))
-
-;; (defun vk-blogpost (title)
-;;   "Create a new blog post titled TITLE."
-;;   (interactive "sPost Title: ")
-;;   (let ((slug (vk-slugify title)))
-;;     (find-file (concat "~/dev/kurup.org/content/post/"
-;;                        (format-time-string "%Y-%m-%d")
-;;                        "-" slug ".markdown"))
-;;     (insert "---\n")
-;;     (insert "date: " (format-time-string "%Y-%m-%dT%H:%M:%S") "\n")
-;;     (insert "title: " title "\n")
-;;     (insert "categories: \n")
-;;     (insert "---\n\n")))
-
-
-(global-set-key [(control x) (control r)] 'esk-sudo-edit)
-
-;; erc
-(require 'secrets)
-(setq erc-autojoin-channels-alist
-      '(("freenode.net" "#tripython" "#emacs")))
-
-;; ;; (progn
-;; ;;   (erc
-;; ;;    :server "irc.freenode.net"
-;; ;;    :port 6667
-;; ;;    :nick "vkurup"
-;; ;;    :password erc-freenode-password))
-
-;; ;; http://emacsredux.com/blog/2013/03/29/terminal-at-your-fingertips/
-;; (defun visit-term-buffer ()
-;;   "Create or visit a terminal buffer."
-;;   (interactive)
-;;   (if (not (get-buffer "*ansi-term*"))
-;;       (progn
-;;         (split-window-sensibly (selected-window))
-;;         (other-window 1)
-;;         (ansi-term (getenv "SHELL")))
-;;     (switch-to-buffer-other-window "*ansi-term*")))
-;; (global-set-key (kbd "C-c t") 'visit-term-buffer)
+(global-set-key [(control x) (control r)] 'crux-sudo-edit)
 
 ;; show image dimensions in modeline
 ;; http://emacs.stackexchange.com/a/7693/289
@@ -1057,16 +852,6 @@ Start `ielm' if it's not already running."
     (setq mode-line-buffer-identification
           (format "%s %dx%d" (propertized-buffer-identification "%12b") width height))))
 (add-hook 'image-mode-hook #'show-image-dimensions-in-mode-line)
-
-;;; workaround until Emacs 29
-;;; https://www.blogbyben.com/2022/05/gotcha-emacs-on-mac-os-too-many-files.html
-(defun file-notify-rm-all-watches ()
-  "Remove all existing file notification watches from Emacs."
-  (interactive)
-  (maphash
-   (lambda (key _value)
-     (file-notify-rm-watch key))
-   file-notify-descriptors))
 
 ;; emacsclient
 (server-start)
@@ -1137,7 +922,7 @@ Action can be Buy, Sell, or Reinvest"
    '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
  '(org-agenda-files '("~/org/gtd.org" "~/org/trips.org"))
  '(package-selected-packages
-   '(cider racket-mode writeroom-mode rust-mode restclient-jq jq-mode tide coffee-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save smex selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit ledger-mode keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
+   '(cider restclient-jq jq-mode tide coffee-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
  '(safe-local-variable-values '((use-inf-clojure . t) (inf-clojure-buffer . "geir-repl")))
  '(sh-basic-offset 2)
  '(typescript-indent-level 2))
