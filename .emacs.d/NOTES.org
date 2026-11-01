@@ -6,6 +6,16 @@ the Linux home machine and the work Mac, so changes should work on both:
 gate machine-specific bits on =system-type= (or =executable-find=) rather
 than hard-coding paths.
 
+* Regression tests
+=test/run-tests.sh= loads the real =init.el= in a batch Emacs (no server,
+no secrets, nothing saved on exit) and runs every =test/*-test.el=.
+Takes a few seconds; run it after changing =init.el= on either machine.
+- =test/run-tests.sh beancount/= runs only tests whose names match.
+- When something I rely on breaks, add a test for it before fixing it.
+  Copy a test in =test/beancount-test.el=: =vk-with-temp-file= opens a
+  temp file as if I'd visited it, =vk-press= presses a key binding.
+- New area of use (org, magit, ...) → new =test/<area>-test.el=.
+
 * Roadmap
 ** TODO Emacs as an LLM harness [1/4]                                :llm:
 Current priority. Three different things this can mean:
@@ -73,6 +83,20 @@ schedule or using =package-vc= / pinning for the few that matter.
 literate =config.org=. Only worth it if it makes changes easier.
 
 * Ideas / someday
+** Magit-style UX elsewhere                                          :ux:
+Magit's popup menus come from =transient=, a separate library that other
+packages use too. Add ready-made transient menus wherever possible instead
+of writing elisp:
+- *casual-suite*: transient menus for dired, ibuffer, isearch, calc, info,
+  bookmarks, agenda, re-builder. Bind each to =C-o= in its mode.
+- *gptel*: =gptel-menu= is already a transient (fits the LLM roadmap item).
+- *disproject*: a transient menu for project.el/projectile commands.
+- *embark*: =C-.= on any thing (file, symbol, URL, buffer) brings up its
+  actions, like magit's "act on the thing at point". Pairs with vertico.
+- A personal launcher transient (one key → my most-used commands:
+  rg, agent-shell, vterm, timemachine, ...). Takes about 15 lines of
+  =transient-define-prefix=.
+- which-key is already on and covers the "what can I press next?" half.
 
 * Changelog
 ** 2026-10-31 (agent-shell)
