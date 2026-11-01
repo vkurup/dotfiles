@@ -514,7 +514,7 @@ Start `ielm' if it's not already running."
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . web-mode)))
 
 (use-package markdown-mode
   :ensure t
@@ -893,10 +893,10 @@ Start `ielm' if it's not already running."
   (company-mode +1))
 ;; formats the buffer before saving
 (add-hook 'before-save-hook 'tide-format-before-save)
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
 (add-hook 'web-mode-hook
           (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+            (when (member (file-name-extension (or buffer-file-name ""))
+                          '("ts" "tsx"))
               (setup-tide-mode))))
 ;; enable typescript - tslint checker
 (flycheck-add-mode 'typescript-tslint 'web-mode)
