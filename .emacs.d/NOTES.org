@@ -48,13 +48,6 @@ Notes:
 - Claude Code CLI is installed (=~/.local/bin/claude=) and can already
   reach this Emacs via =emacsclient --eval=.
 - Must work on the work Mac too (auth, model/provider may differ there).
-** TODO Move Custom settings out of init.el
-=custom-set-variables= lives at the bottom of =init.el=, and
-=package-selected-packages= changes every time a package is installed on
-either machine, which caused a merge conflict on 2026-10-31. Set
-=custom-file= to a separate, git-ignored file and move the deliberate
-settings (indent levels, =org-agenda-files=, etc.) into real =setq= /
-=use-package :custom= forms.
 ** TODO Investigate modern completion setups
 Selectrum is deprecated (its author recommends vertico), so the minibuffer
 completion stack needs replacing. Look at what's current before picking:
@@ -104,6 +97,18 @@ of writing elisp:
 - which-key is already on and covers the "what can I press next?" half.
 
 * Changelog
+** 2026-11-01 (cleanup step 3: custom-file)
+- M-x customize and package installs now save to =custom.el= (git-ignored,
+  per machine) instead of the bottom of =init.el=, so
+  =package-selected-packages= no longer causes merge conflicts.
+- Settings I want everywhere moved to plain =setq='s in =init.el=:
+  =js-indent-level=, =sh-basic-offset=, =org-agenda-files= (now includes
+  trips.org), extra lsp ignored dirs (=screenshots=, =logs=) on top of
+  lsp-mode's current defaults.
+- Dropped =custom-safe-themes= (=load-theme= already skips the prompt) and
+  =typescript-indent-level= (typescript-mode isn't installed).
+- On a new machine, Emacs asks once before trusting =.dir-locals.el=
+  values (e.g. the work inf-clojure ones); answer =!= to save to custom.el.
 ** 2026-11-01 (cleanup step 2: dead code)
 - Removed ledger-mode (I use beancount), smex, racket-mode, rust-mode,
   writeroom-mode, inf-clojure, ERC/freenode, the file-notify workaround,

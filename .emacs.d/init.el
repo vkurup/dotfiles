@@ -117,6 +117,8 @@
 ;; meaning) of any files you load.
 (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent
 (setq-default tab-width 4)            ;; but maintain correct appearance
+(setq js-indent-level 4)
+(setq sh-basic-offset 2)
 
 ;; Newline at end of file
 (setq require-final-newline t)
@@ -463,7 +465,10 @@ Start `ielm' if it's not already running."
   (setq lsp-enable-indentation nil)
   (setq lsp-completion-enable nil)
   (setq lsp-clojure-custom-server-command
-        (list "bash" "-c" (or (executable-find "clojure-lsp") "clojure-lsp"))))
+        (list "bash" "-c" (or (executable-find "clojure-lsp") "clojure-lsp")))
+  ;; don't watch these (on top of lsp-mode's defaults)
+  (dolist (dir '("[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
+    (add-to-list 'lsp-file-watch-ignored-directories dir)))
 
 (use-package cider
   :ensure t
@@ -815,7 +820,7 @@ Start `ielm' if it's not already running."
 ;; org mode
 ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
 (setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/gtd.org"))
+(setq org-agenda-files '("~/org/gtd.org" "~/org/trips.org"))
 (setq org-capture-templates
       '(("t" "Todo [inbox]" entry
          (file+headline "~/org/gtd.org" "Autofocus")
@@ -909,27 +914,10 @@ Action can be Buy, Sell, or Reinvest"
         (forward-char)))))
 
 (setq revert-without-query '(".*"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(clojure-indent-style 'align-arguments)
- '(custom-safe-themes
-   '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
- '(js-indent-level 4)
- '(lsp-file-watch-ignored-directories
-   '("[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.circleci\\'" "[/\\\\]\\.hg\\'" "[/\\\\]\\.bzr\\'" "[/\\\\]_darcs\\'" "[/\\\\]\\.svn\\'" "[/\\\\]_FOSSIL_\\'" "[/\\\\]\\.idea\\'" "[/\\\\]\\.ensime_cache\\'" "[/\\\\]\\.eunit\\'" "[/\\\\]node_modules" "[/\\\\]\\.yarn\\'" "[/\\\\]\\.fslckout\\'" "[/\\\\]\\.tox\\'" "[/\\\\]dist\\'" "[/\\\\]dist-newstyle\\'" "[/\\\\]\\.stack-work\\'" "[/\\\\]\\.bloop\\'" "[/\\\\]\\.metals\\'" "[/\\\\]target\\'" "[/\\\\]\\.ccls-cache\\'" "[/\\\\]\\.vscode\\'" "[/\\\\]\\.deps\\'" "[/\\\\]build-aux\\'" "[/\\\\]autom4te.cache\\'" "[/\\\\]\\.reference\\'" "[/\\\\]\\.lsp\\'" "[/\\\\]\\.clj-kondo\\'" "[/\\\\]\\.shadow-cljs\\'" "[/\\\\]\\.babel_cache\\'" "[/\\\\]\\.cpcache\\'" "[/\\\\]bin/Debug\\'" "[/\\\\]obj\\'" "[/\\\\]_opam\\'" "[/\\\\]_build\\'" "[/\\\\]\\.direnv\\'" "[/\\\\]screenshots\\'" "[/\\\\]logs\\'"))
- '(org-agenda-files '("~/org/gtd.org" "~/org/trips.org"))
- '(package-selected-packages
-   '(cider restclient-jq jq-mode tide coffee-mode forge popper lsp-mode zop-to-char yaml-mode which-key web-mode vterm volatile-highlights use-package undo-tree super-save selectrum-prescient rg restclient rainbow-mode rainbow-delimiters projectile poet-theme move-text markdown-mode marginalia magit keycast inf-ruby inf-clojure imenu-anywhere hl-todo haskell-mode git-timemachine gif-screencast flycheck-joker flycheck-eldev flycheck-clj-kondo expand-region exec-path-from-shell erlang elpy elixir-mode elisp-slime-nav easy-kill direnv diminish diff-hl crux clj-refactor cask-mode anzu adoc-mode ace-window))
- '(safe-local-variable-values '((use-inf-clojure . t) (inf-clojure-buffer . "geir-repl")))
- '(sh-basic-offset 2)
- '(typescript-indent-level 2))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Settings saved from M-x customize (and package-selected-packages, which
+;; changes on every install) go in custom.el. It's git-ignored because it's
+;; different on each machine; put settings I want everywhere in this file.
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror 'nomessage)
+
 (put 'narrow-to-region 'disabled nil)
