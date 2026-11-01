@@ -266,8 +266,15 @@ Start `ielm' if it's not already running."
   :ensure t
   :config
   (load-theme 'poet t)
-  (add-hook 'text-mode-hook
-            (lambda () (variable-pitch-mode 1))))
+  ;; Proportional font for prose only. Lots of non-prose modes (yaml,
+  ;; ledger, ...) derive from text-mode, so list the prose ones explicitly.
+  ;; Plain text-mode covers magit commit messages too.
+  (defun vk-variable-pitch-for-prose ()
+    "Turn on `variable-pitch-mode' in prose buffers."
+    (when (or (eq major-mode 'text-mode)
+              (derived-mode-p 'org-mode 'markdown-mode 'adoc-mode))
+      (variable-pitch-mode 1)))
+  (add-hook 'text-mode-hook #'vk-variable-pitch-for-prose))
 ;; (load-theme 'adwaita t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'wombat t)
@@ -938,9 +945,6 @@ Start `ielm' if it's not already running."
 ;; (add-hook 'beancount-mode-hook
 ;;           (lambda () (local-set-key (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)))
 (define-key beancount-mode-map (kbd "C-c C-k") 'vk-beancount-copy-transaction-at-point)
-(add-hook 'beancount-mode-hook
-          (lambda ()
-            (variable-pitch-mode 0)))
 
 (use-package ledger-mode
   :ensure t)

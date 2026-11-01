@@ -37,8 +37,7 @@ blank line after the last transaction).")
 (ert-deftest beancount/opens-in-beancount-mode ()
   (vk-with-temp-file ".beancount" vk-test-transactions
     (should (eq major-mode 'beancount-mode))
-    ;; columns of amounts need a monospace font: no variable-pitch here
-    ;; (it's turned on for text-mode, which beancount-mode doesn't derive from)
+    ;; columns of amounts need a monospace font (see also fonts-test.el)
     (should-not (bound-and-true-p buffer-face-mode))))
 
 (ert-deftest beancount/copy-txn-to-bottom-with-todays-date ()
