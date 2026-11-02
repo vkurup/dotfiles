@@ -217,12 +217,9 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules" )
   (add-to-list 'projectile-globally-ignored-directories "submodules"))
 
-;; rg's default bindings put rg-menu on C-c s, but crux (in Editing,
-;; below) takes that key, so this section has to come first.
 (use-package rg
   :ensure t
-  :init
-  (rg-enable-default-bindings))
+  :defer t)
 
 ;;; Editing
 
@@ -460,7 +457,8 @@
   (diminish 'company-mode))
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :defer t)
 
 ;;; Files, buffers and windows
 
@@ -582,7 +580,8 @@
 ;;; Terminals and LLM agents
 
 (use-package vterm
-  :ensure t)
+  :ensure t
+  :defer t)
 
 ;; LLM agents in an Emacs buffer via the Agent Client Protocol (ACP).
 ;; Needs the adapter on PATH (npm i -g @agentclientprotocol/claude-agent-acp)
@@ -640,31 +639,33 @@ Start `ielm' if it's not already running."
 
 (use-package paredit
   :ensure t
-  :hook
-  ((clojure-mode . paredit-mode))
+  ;; lisp-interaction-mode is the *scratch* buffer
+  :hook ((clojure-mode emacs-lisp-mode lisp-interaction-mode ielm-mode lisp-mode)
+         . paredit-mode)
   :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-  ;; enable in the *scratch* buffer
-  (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
-  (add-hook 'ielm-mode-hook #'paredit-mode)
-  (add-hook 'lisp-mode-hook #'paredit-mode)
   (diminish 'paredit-mode "()"))
 
 (use-package cask-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 ;;;; Clojure
 
 (use-package flycheck-clj-kondo
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package flycheck-joker
-  :ensure t)
+  :ensure t
+  :after clojure-mode)
 
 (use-package clj-refactor
-  :ensure t)
+  :ensure t
+  :defer t)
+
 (use-package clojure-mode
   :ensure t
+  :defer t
   :config
   (setq clojure-toplevel-inside-comment-form t)
   (setq clojure-indent-style 'align-arguments)
@@ -677,11 +678,10 @@ Start `ielm' if it's not already running."
 
 (use-package lsp-mode
   :ensure t
-  :config
-  (add-hook 'clojure-mode-hook 'lsp)
-  (add-hook 'clojurec-mode-hook 'lsp)
-  (add-hook 'clojurescript-mode-hook 'lsp)
+  :hook ((clojure-mode clojurec-mode clojurescript-mode) . lsp)
+  :init
   (setq read-process-output-max (* 1024 1024))
+  :config
   (setq treemacs-space-between-root-nodes nil)
   (setq lsp-lens-enable t)
   (setq lsp-signature-auto-activate nil)
@@ -695,6 +695,7 @@ Start `ielm' if it's not already running."
 
 (use-package cider
   :ensure t
+  :defer t
   :config
   (setq nrepl-log-messages t)
   (add-hook 'cider-repl-mode-hook #'paredit-mode)
@@ -725,11 +726,11 @@ Start `ielm' if it's not already running."
 
 (use-package inf-ruby
   :ensure t
-  :config
-  (add-hook 'ruby-mode-hook #'inf-ruby-minor-mode))
+  :hook (ruby-mode . inf-ruby-minor-mode))
 
 (use-package ruby-mode
   :ensure t
+  :defer t
   :config
   (setq ruby-insert-encoding-magic-comment nil)
   (add-hook 'ruby-mode-hook #'subword-mode))
@@ -738,11 +739,13 @@ Start `ielm' if it's not already running."
 
 (use-package elixir-mode
   :ensure t
+  :defer t
   :config
   (add-hook 'elixir-mode-hook #'subword-mode))
 
 (use-package haskell-mode
   :ensure t
+  :defer t
   :config
   (add-hook 'haskell-mode-hook #'subword-mode)
   (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
@@ -756,16 +759,15 @@ Start `ielm' if it's not already running."
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . web-mode)))
+  :mode ("\\.html?\\'" "\\.erb\\'" "\\.hbs\\'" "\\.tsx?\\'"))
 
 (use-package coffee-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
-(use-package tide :ensure t)
+(use-package tide
+  :ensure t
+  :defer t)
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
@@ -790,10 +792,12 @@ Start `ielm' if it's not already running."
 ;;;; Data formats and HTTP
 
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package jq-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package restclient
   :ensure t
@@ -804,7 +808,8 @@ Start `ielm' if it's not already running."
   (setq restclient-same-buffer-response t))
 
 (use-package restclient-jq
-  :ensure t)
+  :ensure t
+  :after restclient)
 
 ;;; Writing (Markdown, AsciiDoc)
 
@@ -950,10 +955,12 @@ Action can be Buy, Sell, or Reinvest"
 
 ;; super useful for demos
 (use-package keycast
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package gif-screencast
   :ensure t
+  :defer t
   :config
   ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
   (setq gif-screencast-args '("-x"))

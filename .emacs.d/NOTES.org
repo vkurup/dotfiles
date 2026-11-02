@@ -61,7 +61,9 @@ smex was removed 2026-11-01; =M-x= history comes from savehist.
 eglot is built into Emacs 29. Try it for clojure (clojure-lsp) and python
 before deciding; would also let elpy go.
 ** TODO Replace elpy
-elpy is largely unmaintained. Candidates: eglot + pyright/basedpyright or
+Found 2026-11-01: elpy has never actually been turned on. Its =:bind=
+makes use-package defer it and nothing loads it, so =elpy-enable= never
+runs; Python files get plain python-mode. elpy is largely unmaintained. Candidates: eglot + pyright/basedpyright or
 ruff, with direnv handling the venv.
 ** TODO Look at tree-sitter major modes
 Emacs 29 ships =*-ts-mode= variants (python, yaml, typescript, ...).
@@ -97,6 +99,17 @@ of writing elisp:
 - which-key is already on and covers the "what can I press next?" half.
 
 * Changelog
+** 2026-11-01 (cleanup step 5: deferred loading)
+- Language and occasional-use packages load when first needed (=:defer=,
+  =:hook=, =:mode=, =:after=) instead of at startup. Batch startup went
+  from ~1.56s to ~1.05s. Remaining big ones: recentf, projectile.
+- paredit in elisp only worked because clj-refactor loaded it at startup;
+  it now has its own =:hook=. =test/languages-test.el= guards this.
+- rg's default bindings did nothing (their one key, =C-c s=, is crux's),
+  so rg is just deferred and no longer has to load before crux. rg has a
+  magit-style transient menu, =rg-menu=, if I want a key for it.
+- Checked by opening ~25 file types under the old and new config and
+  comparing major mode, minor modes and key bindings: identical.
 ** 2026-11-01 (cleanup step 4: outline sections)
 - =init.el= is grouped into =;;;= sections (=;;;;= for each language), in
   load order: packages, environment, general, appearance, keys, projects,
