@@ -119,6 +119,15 @@
 ;; maximize the initial frame automatically
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+;; Prefer the first non-primary monitor when one is connected.
+(let* ((secondary-monitor (cadr (display-monitor-attributes-list)))
+       (workarea (cdr (assq 'workarea secondary-monitor))))
+  (when workarea
+    ;; Wrapping coordinates in (+ ...) preserves negative monitor positions.
+    (push (cons 'left (list '+ (nth 0 workarea))) initial-frame-alist)
+    (push (cons 'top (list '+ (nth 1 workarea))) initial-frame-alist)
+    (push '(user-position . t) initial-frame-alist)))
+
 ;; frame: font, no scroll/tool/menu bars, padding around the edges
 (setq default-frame-alist
       (append (list
