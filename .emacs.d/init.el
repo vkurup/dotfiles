@@ -593,8 +593,9 @@
   :defer t)
 
 ;; LLM agents in an Emacs buffer via the Agent Client Protocol (ACP).
-;; Needs the adapter on PATH (npm i -g @agentclientprotocol/claude-agent-acp)
-;; and a one-time `claude' login outside Emacs. See NOTES.org.
+;; Claude needs `claude-agent-acp' plus a Claude login or AWS credentials for
+;; Bedrock. Copilot needs `@github/copilot' plus a one-time `copilot login'.
+;; See NOTES.org.
 (use-package agent-shell
   :ensure t
   :bind (("C-c A" . agent-shell))
@@ -604,13 +605,31 @@
         (agent-shell-anthropic-make-authentication :login t))
   ;; inherit Emacs's environment so asdf/mise shims, direnv etc. are on PATH
   (setq agent-shell-anthropic-claude-environment
-        (agent-shell-make-environment-variables :inherit-env t))
+        (if (string= user-login-name "vkurup")
+            (agent-shell-make-environment-variables
+             "CLAUDE_CODE_USE_BEDROCK" "1"
+             :inherit-env t)
+          (agent-shell-make-environment-variables :inherit-env t)))
   ;; start in Auto mode, like the claude CLI: Claude decides which actions
   ;; are safe and only asks about risky ones (the default, "Manual", asks
   ;; before every change). Switch per session with C-c C-m.
   (setq agent-shell-anthropic-default-session-mode-id "auto")
+  ;; Use the Copilot CLI's stored OAuth login instead of any classic GitHub
+  ;; token inherited by Emacs (authenticate once with `copilot login').
+  (setq agent-shell-github-environment
+        (seq-remove
+         (lambda (entry)
+           (string-match-p
+            "\\`\\(?:COPILOT_GITHUB_TOKEN\\|GH_TOKEN\\|GITHUB_TOKEN\\)="
+            entry))
+         process-environment))
+  ;; The work account defaults to Copilot; Claude uses Bedrock there. To make
+  ;; Bedrock the default, change `copilot' to `claude-code'. To choose each
+  ;; time, use `(preselect . copilot)' or `(preselect . claude-code)'.
   (setq agent-shell-preferred-agent-config
-        (agent-shell-anthropic-make-claude-code-config)))
+        (if (string= user-login-name "vkurup")
+            'copilot
+          'claude-code)))
 
 ;;; Programming languages
 
