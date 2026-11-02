@@ -4,7 +4,9 @@
 .DS_Store
 .cache
 /.emacs.d/.lsp-session*
+/.emacs.d/.mc-lists.el
 /.emacs.d/.smex-items
+/.emacs.d/agent
 /.emacs.d/auto-save-list
 /.emacs.d/bookmarks
 /.emacs.d/cider-history
@@ -12,6 +14,7 @@
 /.emacs.d/eln-cache
 /.emacs.d/elpa
 /.emacs.d/elpy
+/.emacs.d/games
 /.emacs.d/places
 /.emacs.d/projectile*
 /.emacs.d/recentf
