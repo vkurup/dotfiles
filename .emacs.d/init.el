@@ -290,8 +290,9 @@
     (add-hook hook #'whitespace-mode))
   (add-hook 'before-save-hook #'whitespace-cleanup)
   :config
-  (setq whitespace-line-column 120) ;; limit line length
-  (setq whitespace-style '(face tabs empty trailing lines-tail)))
+  ;; No `face', so nothing is highlighted. `whitespace-cleanup' still reads this list
+  ;; to decide what to fix on save: tabs, blank lines at either end, trailing spaces.
+  (setq whitespace-style '(tabs empty trailing)))
 
 (use-package undo-tree
   :ensure t
@@ -644,7 +645,6 @@ Start `ielm' if it's not already running."
   (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
   (add-hook 'ielm-mode-hook #'paredit-mode)
   (add-hook 'lisp-mode-hook #'paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
   (diminish 'paredit-mode "()"))
 
 (use-package cask-mode
