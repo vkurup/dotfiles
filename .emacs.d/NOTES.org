@@ -48,6 +48,18 @@ Notes:
 - Claude Code CLI is installed (=~/.local/bin/claude=) and can already
   reach this Emacs via =emacsclient --eval=.
 - Must work on the work Mac too (auth, model/provider may differ there).
+** TODO Migrate Linux from asdf to mise
+The Mac uses mise; Linux still runs asdf 0.16+ (the Go binary, untracked
+at =bin/asdf=, on PATH via =~/bin -> ~/.dotfiles/bin=). Node (and so
+agent-shell's =claude-agent-acp=), npm and Java come from asdf shims,
+which need that binary, so don't delete it until this is done:
+- Install mise; =mise use -g= the versions in =~/.tool-versions= (mise
+  reads that file, so per-project versions carry over).
+- Reinstall global npm packages, incl.
+  =npm i -g @agentclientprotocol/claude-agent-acp=.
+- Open a new shell and a fresh Emacs; check =node=, =java= and =C-c A=.
+- Then delete =bin/asdf= and =~/.asdf=, and drop the asdf fallback in
+  =.bashrc=.
 ** TODO Investigate modern completion setups
 Selectrum is deprecated (its author recommends vertico), so the minibuffer
 completion stack needs replacing. Look at what's current before picking:
