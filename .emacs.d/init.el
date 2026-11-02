@@ -620,6 +620,9 @@ Start `ielm' if it's not already running."
     (crux-start-or-switch-to 'ielm "*ielm*"))
 
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  ;; fold ;;; sections like magit: TAB on a heading folds it, S-TAB folds all
+  (setq outline-minor-mode-cycle t)
+  (add-hook 'emacs-lisp-mode-hook #'outline-minor-mode)
   (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'visit-ielm)
   (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
   (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer))
