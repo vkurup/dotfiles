@@ -5,6 +5,8 @@
 .cache
 /.emacs.d/.lsp-session*
 /.emacs.d/.mc-lists.el
+/.emacs.d/.chatgpt-shell.el
+/.emacs.d/.org-id-locations
 /.emacs.d/.smex-items
 /.emacs.d/agent
 /.emacs.d/auto-save-list
@@ -16,12 +18,16 @@
 /.emacs.d/elpy
 /.emacs.d/games
 /.emacs.d/places
+/.emacs.d/projects
 /.emacs.d/projectile*
 /.emacs.d/recentf
+/.emacs.d/request
 /.emacs.d/savefile
+/.emacs.d/server
 /.emacs.d/session*
 /.emacs.d/tmp
 /.emacs.d/tramp
+/.emacs.d/tree-sitter
 /.emacs.d/transient
 /.emacs.d/url/cookies
 /.emacs.d/var
