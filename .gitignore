@@ -25,3 +25,5 @@
 /.emacs.d/transient
 /.emacs.d/url/cookies
 /.emacs.d/var
+# asdf binary (Linux only); remove after the mise migration, see .emacs.d/NOTES.org
+/bin/asdf
