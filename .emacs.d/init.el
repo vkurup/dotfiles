@@ -679,10 +679,6 @@ Start `ielm' if it's not already running."
 
 ;;;; Clojure
 
-(use-package flycheck-clj-kondo
-  :ensure t
-  :defer t)
-
 (use-package flycheck-joker
   :ensure t
   :after clojure-mode)
@@ -701,8 +697,7 @@ Start `ielm' if it's not already running."
   (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'clojure-mode-hook #'clj-refactor-mode)
-  (add-hook 'clojure-mode-hook #'yas-minor-mode)
-  (require 'flycheck-clj-kondo))
+  (add-hook 'clojure-mode-hook #'yas-minor-mode))
 
 (use-package lsp-mode
   :ensure t
