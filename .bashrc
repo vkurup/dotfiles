@@ -86,9 +86,6 @@ show_virtual_env() {
 export -f show_virtual_env
 PS1='$(show_virtual_env)'$PS1
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  export EMACS_SOCKET_NAME="$HOME/.emacs.d/server/server"
-fi
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=emacs
