@@ -78,7 +78,7 @@ parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  PS1="${yellow}\$AWS_PROFILE${white}:\w\$(parse_git_branch)[L\$SHLVL] $ "
+  PS1="${yellow}\$AWS_PROFILE\${TICKET:+(\$TICKET)}${white}:\w\$(parse_git_branch)[L\$SHLVL] $ "
 else
   PS1="${yellow}\${AWS_PROFILE:+\$AWS_PROFILE }${white}\u@\h:\w\$(parse_git_branch)[L\$SHLVL] $ "
 fi
